@@ -23,7 +23,7 @@ let isAdmin = false;
 
 // ============= INICIALIZAÇÃO =============
 document.addEventListener('DOMContentLoaded', function() {
-    // Esconder loading após 2 segundos ou quando Firebase carregar
+    // Esconder loading após Firebase carregar
     setTimeout(() => {
         document.getElementById('loadingScreen').classList.add('hidden');
     }, 2000);
@@ -115,6 +115,13 @@ function configurarEventListeners() {
         await auth.signOut();
     });
 
+    // Botão Admin (visível no menu)
+    document.getElementById('btnAdminPanel').addEventListener('click', async () => {
+        if (isAdmin) {
+            await carregarPainelAdmin();
+        }
+    });
+
     // Fechar painel admin
     document.getElementById('closeAdmin').addEventListener('click', () => {
         document.getElementById('adminPanel').style.display = 'none';
@@ -155,6 +162,20 @@ function configurarEventListeners() {
     // Animação ao scroll
     window.addEventListener('scroll', animarAoScroll);
     animarAoScroll();
+    
+    // Scroll suave
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const destino = document.querySelector(this.getAttribute('href'));
+            if (destino) {
+                destino.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
 }
 
 // ============= AUTENTICAÇÃO =============
@@ -163,7 +184,8 @@ auth.onAuthStateChanged(async (user) => {
     
     if (user) {
         document.getElementById('btnLogin').style.display = 'none';
-        document.getElementById('btnLogout').style.display = 'block';
+        document.getElementById('btnLogout').style.display = 'inline-block';
+        document.getElementById('btnAdminPanel').style.display = 'none'; // Começa escondido
         
         // Verificar se é admin
         try {
@@ -171,15 +193,17 @@ auth.onAuthStateChanged(async (user) => {
             isAdmin = userDoc.exists && userDoc.data().isAdmin;
             
             if (isAdmin) {
-                await carregarPainelAdmin();
+                // MOSTRAR BOTÃO ADMIN NO MENU
+                document.getElementById('btnAdminPanel').style.display = 'inline-block';
             }
         } catch (error) {
             console.error('Erro ao verificar admin:', error);
             isAdmin = false;
         }
     } else {
-        document.getElementById('btnLogin').style.display = 'block';
+        document.getElementById('btnLogin').style.display = 'inline-block';
         document.getElementById('btnLogout').style.display = 'none';
+        document.getElementById('btnAdminPanel').style.display = 'none';
         isAdmin = false;
         document.getElementById('adminPanel').style.display = 'none';
         document.getElementById('mainContent').style.display = 'block';
@@ -195,7 +219,6 @@ async function carregarConteudoSite() {
             document.getElementById('bannerTitulo').textContent = homeDoc.data().titulo || '🌿 Preservando Tradições, Cultivando o Futuro';
             document.getElementById('bannerSubtitulo').textContent = homeDoc.data().subtitulo || 'Transformamos a riqueza do babaçu em desenvolvimento sustentável';
         } else {
-            // Criar documento padrão se não existir
             await db.collection('conteudo').doc('home').set({
                 titulo: '🌿 Preservando Tradições, Cultivando o Futuro',
                 subtitulo: 'Transformamos a riqueza do babaçu em desenvolvimento sustentável'
@@ -262,21 +285,13 @@ async function carregarConteudoSite() {
             </div>
         `;
 
-        // Carregar Produtos
         await carregarProdutos();
-
-        // Carregar Equipe
         await carregarEquipe();
-
-        // Carregar Sustentabilidade
         await carregarSustentabilidade();
-
-        // Animar elementos visíveis
         setTimeout(animarAoScroll, 100);
         
     } catch (error) {
         console.error('Erro ao carregar conteúdo:', error);
-        // Garantir que loading some mesmo com erro
         document.getElementById('loadingScreen').classList.add('hidden');
     }
 }
@@ -288,7 +303,6 @@ async function carregarProdutos() {
         const snapshot = await db.collection('produtos').get();
         
         if (snapshot.empty) {
-            // Criar produtos padrão
             const produtosPadrao = [
                 { nome: 'Óleo de Babaçu Virgem', descricao: 'Extraído artesanalmente, rico em ácido láurico.', preco: '45,00', icone: '🥥' },
                 { nome: 'Sabonete Natural', descricao: 'Hidratante e biodegradável.', preco: '18,00', icone: '🧼' },
@@ -300,7 +314,6 @@ async function carregarProdutos() {
                 await db.collection('produtos').add(prod);
             }
             
-            // Recarregar
             const novoSnapshot = await db.collection('produtos').get();
             renderizarProdutos(novoSnapshot.docs);
         } else {
@@ -659,17 +672,3 @@ function animarAoScroll() {
         }
     });
 }
-
-// ============= SCROLL SUAVE =============
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const destino = document.querySelector(this.getAttribute('href'));
-        if (destino) {
-            destino.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
