@@ -4,600 +4,266 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nucisz S.A/E - Sustentabilidade e Cultura</title>
-    <style>
-        /* Reset e Variáveis de Cores */
-        :root {
-            --verde-principal: #2d5a27;
-            --verde-claro: #4a7c3f;
-            --bege: #f5f0e8;
-            --bege-escuro: #e8dcc8;
-            --marrom: #5c3d2e;
-            --marrom-claro: #8b6914;
-            --branco: #ffffff;
-            --texto: #333333;
-            --sombra: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--texto);
-            background-color: var(--bege);
-        }
-
-        /* Menu Fixo */
-        .menu {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: var(--verde-principal);
-            padding: 1rem 2rem;
-            z-index: 1000;
-            box-shadow: var(--sombra);
-            transition: all 0.3s ease;
-        }
-
-        .menu.scrolled {
-            padding: 0.5rem 2rem;
-            background: rgba(45, 90, 39, 0.95);
-            backdrop-filter: blur(10px);
-        }
-
-        .menu-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            color: var(--branco);
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-            letter-spacing: 2px;
-        }
-
-        .logo span {
-            color: var(--bege-escuro);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--branco);
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-
-        .nav-links a:hover {
-            color: var(--bege-escuro);
-        }
-
-        .menu-mobile {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--branco);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Banner Principal */
-        .banner {
-            margin-top: 70px;
-            height: 80vh;
-            background: linear-gradient(rgba(45, 90, 39, 0.8), rgba(45, 90, 39, 0.9)),
-                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%232d5a27" width="1200" height="800"/><circle cx="200" cy="400" r="50" fill="%234a7c3f" opacity="0.5"/><circle cx="800" cy="200" r="70" fill="%235c3d2e" opacity="0.3"/><circle cx="600" cy="600" r="40" fill="%238b6914" opacity="0.4"/></svg>');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--branco);
-        }
-
-        .banner-content {
-            max-width: 800px;
-            padding: 2rem;
-        }
-
-        .banner h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            letter-spacing: 3px;
-        }
-
-        .banner p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .btn-banner {
-            background: var(--bege-escuro);
-            color: var(--verde-principal);
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-banner:hover {
-            transform: scale(1.05);
-        }
-
-        /* Seções Gerais */
-        .secao {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .secao-titulo {
-            text-align: center;
-            font-size: 2.5rem;
-            color: var(--verde-principal);
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .secao-titulo::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--marrom-claro);
-            margin: 1rem auto;
-            border-radius: 2px;
-        }
-
-        /* Grid Sobre */
-        .grid-sobre {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .card {
-            background: var(--branco);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: var(--sombra);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .card-icone {
-            font-size: 2.5rem;
-            color: var(--verde-principal);
-            margin-bottom: 1rem;
-        }
-
-        .card h3 {
-            color: var(--verde-principal);
-            margin-bottom: 1rem;
-        }
-
-        /* História */
-        .historia-conteudo {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .historia-imagem {
-            background: linear-gradient(135deg, var(--bege-escuro), var(--marrom-claro));
-            padding: 1rem;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        .historia-texto {
-            padding: 2rem;
-        }
-
-        .destaque {
-            background: var(--verde-principal);
-            color: var(--branco);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin: 1.5rem 0;
-        }
-
-        /* Produtos */
-        .grid-produtos {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .produto-card {
-            background: var(--branco);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: var(--sombra);
-            transition: transform 0.3s;
-        }
-
-        .produto-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .produto-imagem {
-            height: 200px;
-            background: linear-gradient(45deg, var(--bege-escuro), var(--marrom-claro));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-
-        .produto-info {
-            padding: 1.5rem;
-        }
-
-        .produto-info h3 {
-            color: var(--verde-principal);
-            margin-bottom: 0.5rem;
-        }
-
-        .produto-preco {
-            color: var(--marrom);
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 1rem;
-        }
-
-        /* Sustentabilidade */
-        .grid-sustentabilidade {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .sustentabilidade-card {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .sustentabilidade-icone {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Contato */
-        .contato-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: start;
-        }
-
-        .contato-info {
-            background: var(--verde-principal);
-            color: var(--branco);
-            padding: 2rem;
-            border-radius: 15px;
-            height: fit-content;
-        }
-
-        .contato-info a {
-            color: var(--bege-escuro);
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .form-contato {
-            background: var(--branco);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: var(--sombra);
-        }
-
-        .form-grupo {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-grupo label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--verde-principal);
-            font-weight: 500;
-        }
-
-        .form-grupo input,
-        .form-grupo textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid var(--bege-escuro);
-            border-radius: 8px;
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-
-        .form-grupo input:focus,
-        .form-grupo textarea:focus {
-            outline: none;
-            border-color: var(--verde-principal);
-        }
-
-        .btn-enviar {
-            background: var(--verde-principal);
-            color: var(--branco);
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            width: 100%;
-        }
-
-        .btn-enviar:hover {
-            background: var(--verde-claro);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--verde-principal);
-            color: var(--branco);
-            text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-        }
-
-        /* Animações */
-        .animar {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .animar.visivel {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsivo */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: var(--verde-principal);
-                flex-direction: column;
-                padding: 1rem;
-                text-align: center;
-            }
-
-            .nav-links.ativo {
-                display: flex;
-            }
-
-            .menu-mobile {
-                display: block;
-            }
-
-            .banner h1 {
-                font-size: 2rem;
-            }
-
-            .historia-conteudo,
-            .contato-container {
-                grid-template-columns: 1fr;
-            }
-
-            .historia-imagem {
-                order: -1;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p>Carregando...</p>
+    </div>
+
     <!-- Menu Fixo -->
     <nav class="menu" id="menu">
         <div class="menu-container">
             <a href="#home" class="logo">NUCI<span>SZ</span> S.A/E</a>
             
-            <button class="menu-mobile" id="menu-toggle">☰</button>
+            <button class="menu-mobile" id="menuToggle">☰</button>
             
-            <ul class="nav-links" id="nav-links">
-                <li><a href="#home" onclick="fecharMenu()">Home</a></li>
-                <li><a href="#sobre" onclick="fecharMenu()">Sobre</a></li>
-                <li><a href="#historia" onclick="fecharMenu()">História</a></li>
-                <li><a href="#produtos" onclick="fecharMenu()">Produtos</a></li>
-                <li><a href="#sustentabilidade" onclick="fecharMenu()">Sustentabilidade</a></li>
-                <li><a href="#contato" onclick="fecharMenu()">Contato</a></li>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#historia">História</a></li>
+                <li><a href="#produtos">Produtos</a></li>
+                <li><a href="#equipe">Equipe</a></li>
+                <li><a href="#sustentabilidade">Sustentabilidade</a></li>
+                <li><a href="#contato">Contato</a></li>
+                <li class="nav-auth">
+                    <button id="btnLogin" class="btn-auth">🔐 Login</button>
+                    <button id="btnLogout" class="btn-auth" style="display:none;">Sair</button>
+                </li>
             </ul>
         </div>
     </nav>
 
-    <!-- Banner Principal -->
-    <section class="banner" id="home">
-        <div class="banner-content animar">
-            <h1>🌿 Preservando Tradições, Cultivando o Futuro</h1>
-            <p>Transformamos a riqueza do babaçu em desenvolvimento sustentável, valorizando a cultura e o trabalho das comunidades tradicionais</p>
-            <a href="#sobre" class="btn-banner">Conheça Nossa História</a>
-        </div>
-    </section>
-
-    <!-- Seção Sobre -->
-    <section class="secao" id="sobre">
-        <h2 class="secao-titulo animar">Sobre a Nucisz S.A/E</h2>
-        <div class="grid-sobre">
-            <div class="card animar">
-                <div class="card-icone">🎯</div>
-                <h3>Missão</h3>
-                <p>Promover o desenvolvimento sustentável através da valorização do babaçu e das comunidades tradicionais, gerando renda e preservando o meio ambiente.</p>
-            </div>
-            <div class="card animar">
-                <div class="card-icone">👁️</div>
-                <h3>Visão</h3>
-                <p>Ser referência em negócios sustentáveis que unem tradição, inovação e respeito à natureza, inspirando mudanças positivas no mundo.</p>
-            </div>
-            <div class="card animar">
-                <div class="card-icone">💚</div>
-                <h3>Valores</h3>
-                <p>Sustentabilidade, respeito às tradições, empoderamento feminino, comércio justo e preservação da biodiversidade.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Seção História -->
-    <section class="secao" id="historia">
-        <h2 class="secao-titulo animar">As Guardiãs do Babaçu</h2>
-        <div class="historia-conteudo">
-            <div class="historia-imagem animar">
-                <span style="font-size: 5rem;">👩‍🌾🌴</span>
-                <p style="margin-top: 1rem; font-style: italic; color: var(--marrom);">"Mulheres que transformam coco em dignidade"</p>
-            </div>
-            <div class="historia-texto animar">
-                <p>As quebradeiras de coco babaçu são mulheres guerreiras que há gerações mantêm viva a tradição de extrair o óleo e os subprodutos do babaçu, palmeira nativa do Brasil.</p>
-                
-                <div class="destaque">
-                    <h3>🌍 Impacto Social e Ambiental</h3>
-                    <p>Mais de 300 mil famílias dependem do babaçu. As quebradeiras protegem as palmeiras do desmatamento e garantem a preservação de milhões de hectares de florestas.</p>
-                </div>
-                
-                <p>O trabalho das quebradeiras vai além da economia: é um ato de resistência cultural, empoderamento feminino e conservação ambiental. Cada coco quebrado representa autonomia financeira para mulheres que historicamente foram marginalizadas.</p>
-                
-                <p><strong>✨ O babaçu é conhecido como a "árvore da vida"</strong> - tudo se aproveita: o óleo para cosméticos e culinária, a casca para carvão e artesanato, as folhas para cobertura de casas.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Seção Produtos -->
-    <section class="secao" id="produtos">
-        <h2 class="secao-titulo animar">Nossos Produtos</h2>
-        <div class="grid-produtos">
-            <div class="produto-card animar">
-                <div class="produto-imagem">🥥</div>
-                <div class="produto-info">
-                    <h3>Óleo de Babaçu Virgem</h3>
-                    <p>Extraído artesanalmente, rico em ácido láurico. Ideal para culinária e cosméticos naturais.</p>
-                    <div class="produto-preco">R$ 45,00</div>
-                </div>
-            </div>
-            <div class="produto-card animar">
-                <div class="produto-imagem">🧼</div>
-                <div class="produto-info">
-                    <h3>Sabonete Natural de Babaçu</h3>
-                    <p>Hidratante e biodegradável, com manteiga de babaçu e ervas da região.</p>
-                    <div class="produto-preco">R$ 18,00</div>
-                </div>
-            </div>
-            <div class="produto-card animar">
-                <div class="produto-imagem">🧺</div>
-                <div class="produto-info">
-                    <h3>Artesanato Sustentável</h3>
-                    <p>Peças únicas feitas com fibras e cascas de babaçu pelas artesãs locais.</p>
-                    <div class="produto-preco">R$ 35,00</div>
-                </div>
-            </div>
-            <div class="produto-card animar">
-                <div class="produto-imagem">💆‍♀️</div>
-                <div class="produto-info">
-                    <h3>Creme Hidratante</h3>
-                    <p>Com manteiga de babaçu e óleos essenciais da Amazônia. Pele nutrida naturalmente.</p>
-                    <div class="produto-preco">R$ 52,00</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Seção Sustentabilidade -->
-    <section class="secao" id="sustentabilidade">
-        <h2 class="secao-titulo animar">Nosso Compromisso Verde</h2>
-        <div class="grid-sustentabilidade">
-            <div class="card sustentabilidade-card animar">
-                <div class="sustentabilidade-icone">🌱</div>
-                <h3>Extrativismo Sustentável</h3>
-                <p>Coleta que preserva as palmeiras e garante a regeneração natural dos babaçuais.</p>
-            </div>
-            <div class="card sustentabilidade-card animar">
-                <div class="sustentabilidade-icone">♻️</div>
-                <h3>Economia Circular</h3>
-                <p>Aproveitamento total do coco: nada se perde, tudo se transforma.</p>
-            </div>
-            <div class="card sustentabilidade-card animar">
-                <div class="sustentabilidade-icone">👩‍👩‍👧‍👦</div>
-                <h3>Comércio Justo</h3>
-                <p>Remuneração digna e direta para as comunidades, sem intermediários.</p>
-            </div>
-            <div class="card sustentabilidade-card animar">
-                <div class="sustentabilidade-icone">🌳</div>
-                <h3>Preservação Florestal</h3>
-                <p>Cada produto vendido contribui para a conservação de áreas de babaçuais nativos.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Seção Contato -->
-    <section class="secao" id="contato">
-        <h2 class="secao-titulo animar">Fale Conosco</h2>
-        <div class="contato-container">
-            <div class="contato-info animar">
-                <h3>🌿 Vamos Conversar?</h3>
-                <p style="margin: 1.5rem 0;">Estamos sempre abertos para parcerias, dúvidas ou apenas um bate-papo sobre sustentabilidade!</p>
-                
-                <div style="margin-top: 2rem;">
-                    <h4>📱 Redes Sociais</h4>
-                    <p style="margin-top: 0.5rem;">
-                        Instagram: <a href="https://instagram.com/nucisz.sae" target="_blank">@nucisz.sae</a>
+    <!-- Modal de Login/Registro -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="authForms">
+                <!-- Formulário de Login -->
+                <form id="loginForm" class="auth-form">
+                    <h2>🔐 Acesso Administrativo</h2>
+                    <div class="form-grupo">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label>Senha</label>
+                        <input type="password" id="loginSenha" required>
+                    </div>
+                    <button type="submit" class="btn-enviar">Entrar</button>
+                    <p class="auth-toggle">
+                        Não tem conta? <a href="#" id="showRegister">Cadastre-se</a>
                     </p>
+                </form>
+
+                <!-- Formulário de Registro -->
+                <form id="registerForm" class="auth-form" style="display:none;">
+                    <h2>📝 Criar Conta</h2>
+                    <div class="form-grupo">
+                        <label>Email</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label>Senha</label>
+                        <input type="password" id="registerSenha" required minlength="6">
+                    </div>
+                    <div class="form-grupo">
+                        <label>Código de Admin</label>
+                        <input type="password" id="adminCode" placeholder="Código secreto">
+                    </div>
+                    <button type="submit" class="btn-enviar">Cadastrar</button>
+                    <p class="auth-toggle">
+                        Já tem conta? <a href="#" id="showLogin">Faça login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Painel Admin (oculto inicialmente) -->
+    <div id="adminPanel" class="admin-panel" style="display:none;">
+        <div class="admin-header">
+            <h2>🔧 Painel Administrativo</h2>
+            <button id="closeAdmin" class="btn-auth">Fechar</button>
+        </div>
+        
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="tab-home">Home</button>
+            <button class="tab-btn" data-tab="tab-sobre">Sobre</button>
+            <button class="tab-btn" data-tab="tab-historia">História</button>
+            <button class="tab-btn" data-tab="tab-produtos">Produtos</button>
+            <button class="tab-btn" data-tab="tab-equipe">Equipe</button>
+            <button class="tab-btn" data-tab="tab-sustentabilidade">Sustentabilidade</button>
+        </div>
+
+        <div class="admin-content">
+            <!-- Tab Home -->
+            <div id="tab-home" class="tab-content active">
+                <h3>Editar Página Inicial</h3>
+                <div class="form-grupo">
+                    <label>Título do Banner</label>
+                    <input type="text" id="editBannerTitulo">
                 </div>
-                
-                <div style="margin-top: 1.5rem;">
-                    <h4>📍 Onde Estamos</h4>
-                    <p style="margin-top: 0.5rem;">Comunidade Tradicional, Maranhão - Brasil</p>
+                <div class="form-grupo">
+                    <label>Subtítulo do Banner</label>
+                    <textarea id="editBannerSubtitulo" rows="3"></textarea>
+                </div>
+                <button onclick="salvarSecao('home')" class="btn-enviar">Salvar Alterações</button>
+            </div>
+
+            <!-- Tab Sobre -->
+            <div id="tab-sobre" class="tab-content">
+                <h3>Editar Seção Sobre</h3>
+                <div class="form-grupo">
+                    <label>Missão</label>
+                    <textarea id="editMissao" rows="3"></textarea>
+                </div>
+                <div class="form-grupo">
+                    <label>Visão</label>
+                    <textarea id="editVisao" rows="3"></textarea>
+                </div>
+                <div class="form-grupo">
+                    <label>Valores</label>
+                    <textarea id="editValores" rows="3"></textarea>
+                </div>
+                <button onclick="salvarSecao('sobre')" class="btn-enviar">Salvar Alterações</button>
+            </div>
+
+            <!-- Tab História -->
+            <div id="tab-historia" class="tab-content">
+                <h3>Editar História</h3>
+                <div class="form-grupo">
+                    <label>Título da Seção</label>
+                    <input type="text" id="editHistoriaTitulo">
+                </div>
+                <div class="form-grupo">
+                    <label>Texto Principal</label>
+                    <textarea id="editHistoriaTexto" rows="6"></textarea>
+                </div>
+                <div class="form-grupo">
+                    <label>Texto de Destaque</label>
+                    <textarea id="editHistoriaDestaque" rows="3"></textarea>
+                </div>
+                <button onclick="salvarSecao('historia')" class="btn-enviar">Salvar Alterações</button>
+            </div>
+
+            <!-- Tab Produtos -->
+            <div id="tab-produtos" class="tab-content">
+                <h3>Gerenciar Produtos</h3>
+                <div id="listaProdutosAdmin"></div>
+                <button onclick="adicionarProduto()" class="btn-enviar" style="margin-top:1rem;">+ Adicionar Produto</button>
+            </div>
+
+            <!-- Tab Equipe -->
+            <div id="tab-equipe" class="tab-content">
+                <h3>Gerenciar Equipe</h3>
+                <div id="listaEquipeAdmin"></div>
+                <div class="form-grupo" style="margin-top:1rem;">
+                    <h4>Adicionar Membro</h4>
+                    <input type="text" id="novoMembroNome" placeholder="Nome">
+                    <input type="text" id="novoMembroFuncao" placeholder="Função">
+                    <input type="file" id="novoMembroFoto" accept="image/*">
+                    <button onclick="adicionarMembro()" class="btn-enviar">Adicionar</button>
                 </div>
             </div>
-            
-            <form class="form-contato animar" id="formContato">
-                <div class="form-grupo">
-                    <label for="nome">Nome completo</label>
-                    <input type="text" id="nome" name="nome" required>
-                </div>
-                <div class="form-grupo">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-grupo">
-                    <label for="mensagem">Mensagem</label>
-                    <textarea id="mensagem" name="mensagem" rows="4" required></textarea>
-                </div>
-                <button type="submit" class="btn-enviar">Enviar Mensagem 🌿</button>
-            </form>
+
+            <!-- Tab Sustentabilidade -->
+            <div id="tab-sustentabilidade" class="tab-content">
+                <h3>Editar Práticas Sustentáveis</h3>
+                <div id="listaPraticasAdmin"></div>
+                <button onclick="adicionarPratica()" class="btn-enviar" style="margin-top:1rem;">+ Adicionar Prática</button>
+            </div>
         </div>
-    </section>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <main id="mainContent">
+        <!-- Banner Principal -->
+        <section class="banner" id="home">
+            <div class="banner-content animar">
+                <h1 id="bannerTitulo">🌿 Preservando Tradições, Cultivando o Futuro</h1>
+                <p id="bannerSubtitulo">Transformamos a riqueza do babaçu em desenvolvimento sustentável</p>
+                <a href="#sobre" class="btn-banner">Conheça Nossa História</a>
+            </div>
+        </section>
+
+        <!-- Seção Sobre -->
+        <section class="secao" id="sobre">
+            <h2 class="secao-titulo animar">Sobre a Nucisz S.A/E</h2>
+            <div class="grid-sobre" id="gridSobre">
+                <!-- Preenchido dinamicamente -->
+            </div>
+        </section>
+
+        <!-- Seção História -->
+        <section class="secao" id="historia">
+            <h2 class="secao-titulo animar" id="historiaTitulo">As Guardiãs do Babaçu</h2>
+            <div class="historia-conteudo" id="historiaConteudo">
+                <!-- Preenchido dinamicamente -->
+            </div>
+        </section>
+
+        <!-- Seção Produtos -->
+        <section class="secao" id="produtos">
+            <h2 class="secao-titulo animar">Nossos Produtos</h2>
+            <div class="grid-produtos" id="gridProdutos">
+                <!-- Preenchido dinamicamente -->
+            </div>
+        </section>
+
+        <!-- Seção Equipe -->
+        <section class="secao" id="equipe">
+            <h2 class="secao-titulo animar">Nossa Equipe</h2>
+            <div class="grid-equipe" id="gridEquipe">
+                <!-- Preenchido dinamicamente -->
+            </div>
+        </section>
+
+        <!-- Seção Sustentabilidade -->
+        <section class="secao" id="sustentabilidade">
+            <h2 class="secao-titulo animar">Nosso Compromisso Verde</h2>
+            <div class="grid-sustentabilidade" id="gridSustentabilidade">
+                <!-- Preenchido dinamicamente -->
+            </div>
+        </section>
+
+        <!-- Seção Contato -->
+        <section class="secao" id="contato">
+            <h2 class="secao-titulo animar">Fale Conosco</h2>
+            <div class="contato-container">
+                <div class="contato-info animar">
+                    <h3>🌿 Vamos Conversar?</h3>
+                    <p>Estamos sempre abertos para parcerias e ideias sustentáveis!</p>
+                    <div style="margin-top: 2rem;">
+                        <h4>📱 Redes Sociais</h4>
+                        <p>Instagram: <a href="https://instagram.com/nucisz.sae" target="_blank">@nucisz.sae</a></p>
+                    </div>
+                </div>
+                
+                <form class="form-contato animar" id="formContato">
+                    <div class="form-grupo">
+                        <label>Nome completo</label>
+                        <input type="text" id="contatoNome" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label>E-mail</label>
+                        <input type="email" id="contatoEmail" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label>Mensagem</label>
+                        <textarea id="contatoMensagem" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-enviar">Enviar Mensagem 🌿</button>
+                </form>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer>
@@ -605,86 +271,6 @@
         <p style="margin-top: 0.5rem; opacity: 0.8;">🌍 Feito com respeito à natureza e às tradições</p>
     </footer>
 
-    <script>
-        // Menu Fixo com efeito de scroll
-        window.addEventListener('scroll', function() {
-            const menu = document.getElementById('menu');
-            if (window.scrollY > 100) {
-                menu.classList.add('scrolled');
-            } else {
-                menu.classList.remove('scrolled');
-            }
-        });
-
-        // Menu Mobile Toggle
-        const menuToggle = document.getElementById('menu-toggle');
-        const navLinks = document.getElementById('nav-links');
-
-        menuToggle.addEventListener('click', function() {
-            navLinks.classList.toggle('ativo');
-        });
-
-        function fecharMenu() {
-            navLinks.classList.remove('ativo');
-        }
-
-        // Fechar menu ao clicar fora
-        document.addEventListener('click', function(event) {
-            const isClickInsideMenu = menu.contains(event.target);
-            if (!isClickInsideMenu && navLinks.classList.contains('ativo')) {
-                navLinks.classList.remove('ativo');
-            }
-        });
-
-        // Animação ao scroll
-        function animarAoScroll() {
-            const elementos = document.querySelectorAll('.animar');
-            
-            elementos.forEach(elemento => {
-                const posicaoTopo = elemento.getBoundingClientRect().top;
-                const alturaTela = window.innerHeight;
-                
-                if (posicaoTopo < alturaTela * 0.85) {
-                    elemento.classList.add('visivel');
-                }
-            });
-        }
-
-        // Scroll suave para links
-        document.querySelectorAll('a[href^="#"]').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const destino = document.querySelector(this.getAttribute('href'));
-                if (destino) {
-                    destino.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Formulário de contato
-        document.getElementById('formContato').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const nome = document.getElementById('nome').value;
-            const email = document.getElementById('email').value;
-            const mensagem = document.getElementById('mensagem').value;
-            
-            // Simulação de envio
-            alert(`✨ Obrigado, ${nome}!\n\nSua mensagem foi recebida com sucesso. Em breve entraremos em contato pelo email: ${email}\n\nJuntos pela sustentabilidade! 🌿`);
-            
-            // Limpar formulário
-            this.reset();
-        });
-
-        // Inicializar animações
-        window.addEventListener('load', animarAoScroll);
-        window.addEventListener('scroll', animarAoScroll);
-        
-        // Animação inicial para elementos visíveis
-        setTimeout(animarAoScroll, 100);
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
