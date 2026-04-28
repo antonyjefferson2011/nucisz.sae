@@ -1,260 +1,220 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nucisz S.A/E - Sustentabilidade e Cultura</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Admin - Sexta-Feira Studies</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Sora', sans-serif; background: #0F172A; color: #F1F5F9; padding: 20px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { color: #0F766E; margin-bottom: 20px; text-align: center; }
+    .card { background: #1E293B; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #334155; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #334155; font-size: 13px; }
+    th { color: #0F766E; }
+    button { padding: 6px 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 11px; margin: 2px; }
+    .btn-save { background: #0F766E; color: white; }
+    .btn-danger { background: #EF4444; color: white; }
+    .btn-edit { background: #3B82F6; color: white; }
+    input { padding: 6px 10px; border-radius: 6px; border: 1px solid #334155; background: #0F172A; color: white; font-size: 12px; width: 100%; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+    .stat-card { background: #1E293B; padding: 16px; border-radius: 12px; text-align: center; }
+    .stat-val { font-size: 28px; font-weight: 800; color: #0F766E; }
+    .stat-label { font-size: 11px; color: #94A3B8; }
+    #login-screen { text-align: center; padding: 100px 20px; }
+    #login-screen input { width: 250px; margin: 10px auto; display: block; padding: 10px; }
+    .hidden { display: none; }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Menu Fixo -->
-    <nav class="menu" id="menu">
-        <div class="menu-container">
-            <a href="#home" class="logo">NUCI<span>SZ</span> S.A/E</a>
-            
-            <button class="menu-mobile" id="menuToggle">☰</button>
-            
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#sobre">Sobre</a></li>
-                <li><a href="#historia">História</a></li>
-                <li><a href="#produtos">Produtos</a></li>
-                <li><a href="#equipe">Equipe</a></li>
-                <li><a href="#sustentabilidade">Sustentabilidade</a></li>
-                <li><a href="#contato">Contato</a></li>
-                <li class="nav-auth">
-                    <button id="btnAdminPanel" class="btn-auth btn-admin" style="display:none;">⚙️ Admin</button>
-                    <button id="btnLogin" class="btn-auth">🔐 Login</button>
-                    <button id="btnLogout" class="btn-auth" style="display:none;">Sair</button>
-                </li>
-            </ul>
-        </div>
-    </nav>
 
-    <!-- Modal de Login/Registro -->
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            
-            <!-- Formulário de Login -->
-            <form id="loginForm" class="auth-form">
-                <h2>🔐 Login</h2>
-                <div class="form-grupo">
-                    <label>Email</label>
-                    <input type="email" id="loginEmail" required>
-                </div>
-                <div class="form-grupo">
-                    <label>Senha</label>
-                    <input type="password" id="loginSenha" required>
-                </div>
-                <button type="submit" class="btn-enviar">Entrar</button>
-                <p class="auth-toggle">
-                    Não tem conta? <a href="#" id="showRegister">Cadastre-se</a>
-                </p>
-            </form>
+<div id="login-screen">
+  <div class="card" style="max-width: 350px; margin: 0 auto;">
+    <h1>🔒 Painel Admin</h1>
+    <p style="color:#94A3B8; margin-bottom: 15px;">Digite a senha de acesso</p>
+    <input type="password" id="senha-input" placeholder="Senha secreta" />
+    <button onclick="verificarSenha()" class="btn-save" style="width:100%; padding:10px; margin-top:10px;">Entrar</button>
+    <p id="login-error" style="color:#EF4444; margin-top:10px; display:none;">Senha incorreta!</p>
+  </div>
+</div>
 
-            <!-- Formulário de Registro -->
-            <form id="registerForm" class="auth-form" style="display:none;">
-                <h2>📝 Criar Conta</h2>
-                <div class="form-grupo">
-                    <label>Email</label>
-                    <input type="email" id="registerEmail" required>
-                </div>
-                <div class="form-grupo">
-                    <label>Senha</label>
-                    <input type="password" id="registerSenha" required minlength="6">
-                </div>
-                <div class="form-grupo">
-                    <label>Código de Admin (opcional)</label>
-                    <input type="password" id="adminCode" placeholder="Deixe em branco se não for admin">
-                </div>
-                <button type="submit" class="btn-enviar">Cadastrar</button>
-                <p class="auth-toggle">
-                    Já tem conta? <a href="#" id="showLogin">Faça login</a>
-                </p>
-            </form>
-        </div>
+<div id="painel-screen" class="hidden">
+  <div class="container">
+    <h1>⚙️ Painel Admin - Sexta-Feira Studies</h1>
+    
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-val" id="total-users">0</div>
+        <div class="stat-label">Usuários</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="total-posts">0</div>
+        <div class="stat-label">Posts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="total-materias">0</div>
+        <div class="stat-label">Matérias</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="total-quizzes">0</div>
+        <div class="stat-label">Quizzes</div>
+      </div>
     </div>
 
-    <!-- Painel Admin -->
-    <div id="adminPanel" class="admin-panel" style="display:none;">
-        <div class="admin-header">
-            <h2>🔧 Painel Administrativo</h2>
-            <button id="closeAdmin" class="btn-auth">✕ Fechar</button>
-        </div>
-        
-        <div class="admin-tabs">
-            <button class="tab-btn active" data-tab="tab-home">Home</button>
-            <button class="tab-btn" data-tab="tab-sobre">Sobre</button>
-            <button class="tab-btn" data-tab="tab-historia">História</button>
-            <button class="tab-btn" data-tab="tab-produtos">Produtos</button>
-            <button class="tab-btn" data-tab="tab-equipe">Equipe</button>
-            <button class="tab-btn" data-tab="tab-sustentabilidade">Sustentabilidade</button>
-        </div>
-
-        <div class="admin-content">
-            <div id="tab-home" class="tab-content active">
-                <h3>Editar Banner Principal</h3>
-                <div class="form-grupo">
-                    <label>Título</label>
-                    <input type="text" id="editBannerTitulo">
-                </div>
-                <div class="form-grupo">
-                    <label>Subtítulo</label>
-                    <textarea id="editBannerSubtitulo" rows="3"></textarea>
-                </div>
-                <button onclick="salvarSecao('home')" class="btn-enviar">Salvar</button>
-            </div>
-
-            <div id="tab-sobre" class="tab-content">
-                <h3>Editar Sobre</h3>
-                <div class="form-grupo">
-                    <label>Missão</label>
-                    <textarea id="editMissao" rows="3"></textarea>
-                </div>
-                <div class="form-grupo">
-                    <label>Visão</label>
-                    <textarea id="editVisao" rows="3"></textarea>
-                </div>
-                <div class="form-grupo">
-                    <label>Valores</label>
-                    <textarea id="editValores" rows="3"></textarea>
-                </div>
-                <button onclick="salvarSecao('sobre')" class="btn-enviar">Salvar</button>
-            </div>
-
-            <div id="tab-historia" class="tab-content">
-                <h3>Editar História</h3>
-                <div class="form-grupo">
-                    <label>Título</label>
-                    <input type="text" id="editHistoriaTitulo">
-                </div>
-                <div class="form-grupo">
-                    <label>Texto Principal</label>
-                    <textarea id="editHistoriaTexto" rows="5"></textarea>
-                </div>
-                <div class="form-grupo">
-                    <label>Texto de Destaque</label>
-                    <textarea id="editHistoriaDestaque" rows="3"></textarea>
-                </div>
-                <button onclick="salvarSecao('historia')" class="btn-enviar">Salvar</button>
-            </div>
-
-            <div id="tab-produtos" class="tab-content">
-                <h3>Gerenciar Produtos</h3>
-                <div id="listaProdutosAdmin"></div>
-                <button onclick="adicionarProduto()" class="btn-enviar" style="margin-top:1rem;">+ Novo Produto</button>
-            </div>
-
-            <div id="tab-equipe" class="tab-content">
-                <h3>Gerenciar Equipe</h3>
-                <div id="listaEquipeAdmin"></div>
-                <div style="margin-top:1rem;padding:1rem;background:#f5f5f5;border-radius:8px;">
-                    <h4>Adicionar Membro</h4>
-                    <div class="form-grupo">
-                        <input type="text" id="novoMembroNome" placeholder="Nome completo">
-                    </div>
-                    <div class="form-grupo">
-                        <input type="text" id="novoMembroFuncao" placeholder="Função/Cargo">
-                    </div>
-                    <div class="form-grupo">
-                        <label>Foto (opcional)</label>
-                        <input type="file" id="novoMembroFoto" accept="image/*">
-                    </div>
-                    <button onclick="adicionarMembro()" class="btn-enviar">Adicionar Membro</button>
-                </div>
-            </div>
-
-            <div id="tab-sustentabilidade" class="tab-content">
-                <h3>Gerenciar Práticas</h3>
-                <div id="listaPraticasAdmin"></div>
-                <button onclick="adicionarPratica()" class="btn-enviar" style="margin-top:1rem;">+ Nova Prática</button>
-            </div>
-        </div>
+    <div class="card">
+      <h3 style="margin-bottom:15px">👥 Usuários</h3>
+      <input type="text" id="search-user" placeholder="🔍 Buscar usuário..." oninput="filtrarUsuarios()" style="margin-bottom:15px;" />
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Avatar</th>
+              <th>@Username</th>
+              <th>Nome</th>
+              <th>Pontos</th>
+              <th>Plano</th>
+              <th>Admin</th>
+              <th>Prof</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="users-table"></tbody>
+        </table>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Conteúdo Principal do Site -->
-    <main id="mainContent">
-        <!-- Banner -->
-        <section class="banner" id="home">
-            <div class="banner-content animar">
-                <h1 id="bannerTitulo">🌿 Preservando Tradições, Cultivando o Futuro</h1>
-                <p id="bannerSubtitulo">Transformamos a riqueza do babaçu em desenvolvimento sustentável</p>
-                <a href="#sobre" class="btn-banner">Conheça Nossa História</a>
-            </div>
-        </section>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC9Lcx3mYGYXavUi_b9c_tRbS3Otm9JQNk",
+  authDomain: "sexta-feira-studies.firebaseapp.com",
+  databaseURL: "https://sexta-feira-studies-default-rtdb.firebaseio.com",
+  projectId: "sexta-feira-studies",
+  storageBucket: "sexta-feira-studies.firebasestorage.app",
+  messagingSenderId: "673251857052",
+  appId: "1:673251857052:web:0ef6929ea93123f7a91359"
+};
 
-        <!-- Sobre -->
-        <section class="secao" id="sobre">
-            <h2 class="secao-titulo animar">Sobre a Nucisz S.A/E</h2>
-            <div class="grid-sobre" id="gridSobre"></div>
-        </section>
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-        <!-- História -->
-        <section class="secao" id="historia">
-            <h2 class="secao-titulo animar" id="historiaTitulo">As Guardiãs do Babaçu</h2>
-            <div class="historia-conteudo" id="historiaConteudo"></div>
-        </section>
+const SENHA = 'admin123';
+let todosUsuarios = {};
 
-        <!-- Produtos -->
-        <section class="secao" id="produtos">
-            <h2 class="secao-titulo animar">Nossos Produtos</h2>
-            <div class="grid-produtos" id="gridProdutos"></div>
-        </section>
+// Verificar senha
+function verificarSenha() {
+  const senha = document.getElementById('senha-input').value;
+  if (senha === SENHA) {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('painel-screen').classList.remove('hidden');
+    carregarDados();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
 
-        <!-- Equipe -->
-        <section class="secao" id="equipe">
-            <h2 class="secao-titulo animar">Nossa Equipe</h2>
-            <div class="grid-equipe" id="gridEquipe"></div>
-        </section>
+// Carregar dados
+async function carregarDados() {
+  const usersSnap = await db.ref('usuarios').once('value');
+  todosUsuarios = usersSnap.val() || {};
+  document.getElementById('total-users').textContent = Object.keys(todosUsuarios).length;
+  
+  const postsSnap = await db.ref('posts').once('value');
+  const posts = postsSnap.val() || {};
+  document.getElementById('total-posts').textContent = Object.keys(posts).length;
+  
+  const matSnap = await db.ref('materias').once('value');
+  const mat = matSnap.val() || {};
+  document.getElementById('total-materias').textContent = Object.keys(mat).length;
+  
+  let totalQuizzes = 0;
+  for (const mId of Object.keys(mat)) {
+    const qSnap = await db.ref('quizzes/' + mId).once('value');
+    const q = qSnap.val() || {};
+    totalQuizzes += Object.keys(q).length;
+  }
+  document.getElementById('total-quizzes').textContent = totalQuizzes;
+  
+  renderizarUsuarios(todosUsuarios);
+}
 
-        <!-- Sustentabilidade -->
-        <section class="secao" id="sustentabilidade">
-            <h2 class="secao-titulo animar">Nosso Compromisso Verde</h2>
-            <div class="grid-sustentabilidade" id="gridSustentabilidade"></div>
-        </section>
+// Renderizar usuários
+function renderizarUsuarios(users) {
+  const tbody = document.getElementById('users-table');
+  const arr = Object.entries(users).sort((a,b) => (b[1].points||0) - (a[1].points||0));
+  
+  tbody.innerHTML = arr.map(([uid, u]) => `
+    <tr id="row-${uid}">
+      <td>${u.avatar && u.avatar.startsWith('http') ? '<img src="' + u.avatar + '" style="width:30px;height:30px;border-radius:50%;object-fit:cover" />' : (u.avatar || '🎓')}</td>
+      <td>@${u.username || '?'}</td>
+      <td>${u.fullname || '-'}</td>
+      <td>
+        <input type="number" value="${u.points || 0}" id="pts-${uid}" style="width:80px;" />
+        <button class="btn-save" onclick="salvarCampo('${uid}','points',document.getElementById('pts-${uid}').value)">💾</button>
+      </td>
+      <td>
+        <select id="plano-${uid}" onchange="salvarCampo('${uid}','plano',this.value)">
+          <option value="gratis" ${u.plano === 'gratis' ? 'selected' : ''}>Grátis</option>
+          <option value="premium" ${u.plano === 'premium' ? 'selected' : ''}>Premium</option>
+          <option value="pro" ${u.plano === 'pro' ? 'selected' : ''}>PRO</option>
+        </select>
+      </td>
+      <td>
+        <select id="admin-${uid}" onchange="salvarCampo('${uid}','adminLevel',this.value)">
+          <option value="0" ${(u.adminLevel||0) === 0 ? 'selected' : ''}>Não</option>
+          <option value="1" ${u.adminLevel === 1 ? 'selected' : ''}>Nível 1</option>
+          <option value="2" ${u.adminLevel === 2 ? 'selected' : ''}>Nível 2</option>
+          <option value="3" ${u.adminLevel === 3 ? 'selected' : ''}>Nível 3</option>
+          <option value="4" ${u.adminLevel === 4 ? 'selected' : ''}>Nível 4</option>
+        </select>
+      </td>
+      <td>
+        <button class="${u.isProf ? 'btn-save' : 'btn-edit'}" onclick="salvarCampo('${uid}','isProf',${!u.isProf})">${u.isProf ? '✅ Sim' : '❌ Não'}</button>
+      </td>
+      <td>
+        <button class="btn-danger" onclick="deletarUsuario('${uid}')">🗑</button>
+      </td>
+    </tr>
+  `).join('');
+}
 
-        <!-- Contato -->
-        <section class="secao" id="contato">
-            <h2 class="secao-titulo animar">Fale Conosco</h2>
-            <div class="contato-container">
-                <div class="contato-info animar">
-                    <h3>🌿 Vamos Conversar?</h3>
-                    <p>Estamos abertos para parcerias e ideias sustentáveis!</p>
-                    <div style="margin-top: 2rem;">
-                        <h4>📱 Redes Sociais</h4>
-                        <p>Instagram: <a href="https://instagram.com/nucisz.sae" target="_blank">@nucisz.sae</a></p>
-                    </div>
-                </div>
-                
-                <form class="form-contato animar" id="formContato">
-                    <div class="form-grupo">
-                        <label>Nome</label>
-                        <input type="text" id="contatoNome" required>
-                    </div>
-                    <div class="form-grupo">
-                        <label>E-mail</label>
-                        <input type="email" id="contatoEmail" required>
-                    </div>
-                    <div class="form-grupo">
-                        <label>Mensagem</label>
-                        <textarea id="contatoMensagem" rows="4" required></textarea>
-                    </div>
-                    <button type="submit" class="btn-enviar">Enviar 🌿</button>
-                </form>
-            </div>
-        </section>
-    </main>
+// Salvar campo
+async function salvarCampo(uid, campo, valor) {
+  if (campo === 'points') valor = parseInt(valor) || 0;
+  if (campo === 'adminLevel') valor = parseInt(valor) || 0;
+  if (campo === 'isProf') valor = valor === true || valor === 'true';
+  
+  await db.ref('usuarios/' + uid).update({ [campo]: valor });
+  alert('✅ Atualizado: ' + campo + ' = ' + valor);
+}
 
-    <footer>
-        <p>&copy; 2024 Nucisz S.A/E - Todos os direitos reservados</p>
-        <p style="margin-top: 0.5rem; opacity: 0.8;">🌍 Feito com respeito à natureza e às tradições</p>
-    </footer>
+// Deletar usuário
+async function deletarUsuario(uid) {
+  if (!confirm('🗑️ Tem certeza que deseja EXCLUIR este usuário PERMANENTEMENTE?')) return;
+  await db.ref('usuarios/' + uid).remove();
+  await db.ref('historico/' + uid).remove();
+  await db.ref('notificacoes/' + uid).remove();
+  document.getElementById('row-' + uid).remove();
+  alert('✅ Usuário excluído!');
+}
 
-    <script src="script.js"></script>
+// Filtrar usuários
+function filtrarUsuarios() {
+  const termo = document.getElementById('search-user').value.toLowerCase();
+  if (!termo) return renderizarUsuarios(todosUsuarios);
+  const filtrado = {};
+  Object.entries(todosUsuarios).forEach(([uid, u]) => {
+    if ((u.username||'').toLowerCase().includes(termo) || (u.fullname||'').toLowerCase().includes(termo)) {
+      filtrado[uid] = u;
+    }
+  });
+  renderizarUsuarios(filtrado);
+}
+</script>
 </body>
 </html>
