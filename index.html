@@ -238,7 +238,6 @@
           <option value="3">3 itens</option>
           <option value="5">5 itens</option>
           <option value="10" selected>10 itens</option>
-          <option value="15">15 itens</option>
         </select>
         <button class="btn btn-roxo" onclick="criarQuizzesIA()" style="flex:1;">🤖 Criar Quizzes</button>
         <button class="btn btn-roxo" onclick="criarTopicosIA()" style="flex:1;">📝 Criar Tópicos</button>
@@ -345,7 +344,7 @@ function switchTab(tab) {
   if (tab === 'chat') carregarChatTab();
 }
 
-// ========== CARREGAR ==========
+// ========== CARREGAR TUDO ==========
 async function carregarTudo() {
   const [uSnap, mSnap, pSnap] = await Promise.all([
     db.ref('usuarios').once('value'),
@@ -377,9 +376,7 @@ async function carregarTudo() {
 }
 
 function copiarID(id) { 
-  navigator.clipboard.writeText(id).then(() => {
-    alert('✅ ID copiado: ' + id);
-  });
+  navigator.clipboard.writeText(id).then(() => alert('✅ ID copiado!'));
 }
 
 // ========== USUÁRIOS ==========
@@ -391,7 +388,7 @@ function renderUsers(arr) {
       <td>${u.fullname||'-'}</td>
       <td><input type="number" id="pts-${uid}" value="${u.points||0}" style="width:70px;margin:0" /><button class="btn btn-verde" onclick="addPontos('${uid}')">💾</button></td>
       <td><select onchange="updateUser('${uid}','plano',this.value)" style="margin:0"><option value="gratis" ${u.plano=='gratis'?'selected':''}>Grátis</option><option value="premium" ${u.plano=='premium'?'selected':''}>Premium</option><option value="pro" ${u.plano=='pro'?'selected':''}>PRO</option></select></td>
-      <td><select onchange="updateUser('${uid}','adminLevel',this.value)" style="margin:0"><option value="0" ${u.adminLevel==0?'selected':''}>-</option><option value="1" ${u.adminLevel==1?'selected':''}>N1</option><option value="2" ${u.adminLevel==2?'selected':''}>N2</option><option value="3" ${u.adminLevel==3?'selected':''}>N3</option><option value="4" ${u.adminLevel==4?'selected':''}>N4</option></select></td>
+      <td><select onchange="updateUser('${uid}','adminLevel',this.value)" style="margin:0"><option value="0">-</option><option value="1" ${u.adminLevel==1?'selected':''}>N1</option><option value="2" ${u.adminLevel==2?'selected':''}>N2</option><option value="3" ${u.adminLevel==3?'selected':''}>N3</option><option value="4" ${u.adminLevel==4?'selected':''}>N4</option></select></td>
       <td><button class="btn ${u.isProf?'btn-verde':'btn-azul'}" onclick="updateUser('${uid}','isProf',${!u.isProf})">${u.isProf?'✅':'❌'}</button></td>
       <td><button class="btn ${u.isQuizzer?'btn-verde':'btn-azul'}" onclick="updateUser('${uid}','isQuizzer',${!u.isQuizzer})">${u.isQuizzer?'✅':'❌'}</button></td>
       <td><button class="btn btn-vermelho" onclick="deleteUser('${uid}')">🗑</button></td>
@@ -401,8 +398,7 @@ function renderUsers(arr) {
 function filtrarUsuarios() {
   const termo = (document.getElementById('search-user')?.value || '').toLowerCase();
   const arr = Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0));
-  const filtrado = termo ? arr.filter(([id,u]) => (u.username||'').toLowerCase().includes(termo) || (u.fullname||'').toLowerCase().includes(termo)) : arr;
-  renderUsers(filtrado);
+  renderUsers(termo ? arr.filter(([id,u]) => (u.username||'').toLowerCase().includes(termo) || (u.fullname||'').toLowerCase().includes(termo)) : arr);
 }
 
 async function updateUser(uid, campo, valor) {
@@ -421,7 +417,7 @@ async function addPontos(uid) {
   await db.ref('usuarios/'+uid).update({points: atual + qtdPontos});
   usersCache[uid].points = atual + qtdPontos;
   document.getElementById('pts-'+uid).value = atual + qtdPontos;
-  alert('✅ +' + qtdPontos + ' pontos! Total: ' + (atual+qtdPontos));
+  alert('✅ +' + qtdPontos + ' pontos!');
 }
 
 async function deleteUser(uid) {
@@ -431,50 +427,49 @@ async function deleteUser(uid) {
   carregarTudo();
 }
 
-// ========== FUNÇÃO PARA CORRIGIR JSON ==========
-function corrigirJSON(str) {
-  // Remove texto antes do primeiro [ e depois do último ]
-  let inicio = str.indexOf('[');
-  let fim = str.lastIndexOf(']');
-  if (inicio === -1 || fim === -1) return null;
+// ========== PARSER JSON ROBUSTO ==========
+function parseJSONdaIA(txt) {
+  // Remove tudo antes do primeiro [ ou {
+  let str = txt.replace(/^[^\[\{]*/, '');
   
-  str = str.substring(inicio, fim + 1);
+  // Encontra o final
+  let ultimoColchete = str.lastIndexOf(']');
+  let ultimaChave = str.lastIndexOf('}');
   
-  // PRIMEIRO: Remove quebras de linha reais e tabs
-  str = str.replace(/\n/g, ' ');
-  str = str.replace(/\r/g, ' ');
-  str = str.replace(/\t/g, ' ');
+  if (str.startsWith('[')) {
+    if (ultimoColchete > 0) str = str.substring(0, ultimoColchete + 1);
+  } else if (str.startsWith('{')) {
+    if (ultimaChave > 0) str = str.substring(0, ultimaChave + 1);
+  }
   
-  // Remove espaços extras
-  str = str.replace(/\s+/g, ' ');
+  // Limpeza pesada
+  str = str.replace(/\n/g, ' ').replace(/\r/g, ' ').replace(/\t/g, ' ');
+  str = str.replace(/,\s*\]/g, ']');
+  str = str.replace(/,\s*\}/g, '}');
+  str = str.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
   
-  // Corrige vírgulas antes de fechar
-  str = str.replace(/,\s*]/g, ']');
-  str = str.replace(/,\s*}/g, '}');
-  
-  // Corrige aspas nas alternativas (problema comum)
-  // Garante que todas as strings usem aspas duplas escapadas
   try {
     return JSON.parse(str);
-  } catch(e1) {
-    console.error('Primeira tentativa falhou:', e1.message);
+  } catch(e) {
+    // Se falhar, tenta completar o JSON
+    let abertos = (str.match(/\[/g) || []).length;
+    let fechados = (str.match(/\]/g) || []).length;
+    while (fechados < abertos) { str += ']'; fechados++; }
     
-    // Segunda tentativa: mais agressiva
+    abertos = (str.match(/\{/g) || []).length;
+    fechados = (str.match(/\}/g) || []).length;
+    while (fechados < abertos) { str += '}'; fechados++; }
+    
     try {
-      // Remove caracteres problemáticos
-      str = str.replace(/[\x00-\x1F\x7F-\x9F]/g, ' ');
-      // Corrige escapes mal formados
-      str = str.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
       return JSON.parse(str);
     } catch(e2) {
-      console.error('Segunda tentativa falhou:', e2.message);
-      console.error('JSON problemático:', str.substring(0, 300));
+      console.error('Falha ao parsear JSON');
       return null;
     }
   }
 }
 
-// ========== IA ==========
+// ========== CRIAR QUIZZES IA ==========
 async function criarQuizzesIA() {
   const mid = document.getElementById('ia-materia-id').value.trim();
   const tema = document.getElementById('ia-tema').value.trim();
@@ -489,7 +484,7 @@ async function criarQuizzesIA() {
   
   const materiaExiste = await db.ref('materias/'+mid).once('value');
   if (!materiaExiste.val()) {
-    resultado.innerHTML='❌ Matéria não encontrada! Verifique o ID.';
+    resultado.innerHTML='❌ Matéria não encontrada!';
     resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
     return;
   }
@@ -499,33 +494,21 @@ async function criarQuizzesIA() {
   
   let criados = 0;
   
-  // Criar em lotes de 3 para evitar erros
-  const lotes = Math.ceil(quantidade / 3);
-  
-  for (let lote = 0; lote < lotes; lote++) {
-    const qtdLote = Math.min(3, quantidade - criados);
-    if (qtdLote <= 0) break;
-    
-    resultado.innerHTML='⏳ Criando lote ' + (lote+1) + '/' + lotes + ' (' + qtdLote + ' quizzes)...';
+  for (let i = 0; i < quantidade; i++) {
+    resultado.innerHTML='⏳ Criando quiz ' + (i+1) + '/' + quantidade + '...';
     
     try {
-      const comando = `Crie ${qtdLote} quizzes sobre "${tema}" com 5 questões cada.
-Responda EXATAMENTE com este formato JSON (tudo em uma linha, sem quebras):
-[{"nome":"Título do Quiz","questoes":[{"pergunta":"Pergunta?","alternativas":["A","B","C","D"],"correta":0}]}]
-
-REGRAS IMPORTANTES:
-1. Escreva TUDO em uma única linha (sem \\n)
-2. Use APENAS aspas duplas
-3. "correta" deve ser 0, 1, 2 ou 3
-4. Não inclua NENHUM texto fora do JSON`;
+      const comando = `Crie 1 quiz sobre "${tema}" com 5 questões.
+Responda APENAS com este JSON (sem texto adicional):
+{"nome":"Título do Quiz","questoes":[{"pergunta":"Pergunta 1?","alternativas":["A","B","C","D"],"correta":0},{"pergunta":"Pergunta 2?","alternativas":["A","B","C","D"],"correta":1}]}`;
       
       const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST', 
+        method: 'POST',
         headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
         body: JSON.stringify({
           model:'llama-3.1-8b-instant',
           messages:[{role:'user',content:comando}],
-          max_tokens:3000,
+          max_tokens:800,
           temperature:0.8
         })
       });
@@ -533,68 +516,61 @@ REGRAS IMPORTANTES:
       if (r.status === 429) {
         resultado.innerHTML='⏳ Limite API. Aguardando 15s...';
         await new Promise(resolve => setTimeout(resolve, 15000));
-        lote--; // Tenta o mesmo lote novamente
+        i--;
         continue;
       }
       
       const d = await r.json();
       const txt = d.choices?.[0]?.message?.content || '';
       
-      console.log('Resposta lote ' + (lote+1) + ':', txt.substring(0, 200));
+      let quizData = parseJSONdaIA(txt);
       
-      const quizzes = corrigirJSON(txt);
+      // Se não for array, tenta embrulhar
+      if (quizData && !Array.isArray(quizData)) {
+        quizData = [quizData];
+      }
       
-      if (quizzes && Array.isArray(quizzes)) {
-        for (const q of quizzes) {
-          if (q.nome && q.questoes && q.questoes.length >= 2) {
-            // Garante que alternativas sejam array de strings
-            const questoes = q.questoes.slice(0, 5).map(quest => ({
-              pergunta: String(quest.pergunta || 'Pergunta?'),
-              alternativas: (Array.isArray(quest.alternativas) ? quest.alternativas : ['A','B','C','D']).map(a => String(a || 'Opção')),
-              correta: [0,1,2,3].includes(parseInt(quest.correta)) ? parseInt(quest.correta) : 0
-            }));
-            
-            if (questoes.length >= 2) {
-              await db.ref('quizzes/'+mid).push({
-                nome: String(q.nome).substring(0, 100),
-                tempo: 30,
-                questoes: questoes,
-                nivel: 1,
-                oficial: true,
-                autorId: 'ia',
-                autorNome: 'Neurinho IA',
-                totalPlays: 0,
-                createdAt: Date.now()
-              });
-              criados++;
-            }
-          }
+      if (quizData && Array.isArray(quizData) && quizData.length > 0) {
+        const q = quizData[0];
+        if (q.nome && q.questoes && q.questoes.length >= 2) {
+          await db.ref('quizzes/'+mid).push({
+            nome: String(q.nome).substring(0, 100),
+            tempo: 30,
+            questoes: q.questoes.slice(0, 5).map(qq => ({
+              pergunta: String(qq.pergunta || 'Pergunta'),
+              alternativas: (qq.alternativas || ['A','B','C','D']).map(a => String(a)),
+              correta: [0,1,2,3].includes(parseInt(qq.correta)) ? parseInt(qq.correta) : 0
+            })),
+            nivel: 1,
+            oficial: true,
+            autorId: 'ia',
+            autorNome: 'Neurinho IA',
+            totalPlays: 0,
+            createdAt: Date.now()
+          });
+          criados++;
         }
       }
       
-      resultado.innerHTML='⏳ Progresso: ' + criados + '/' + quantidade + ' quizzes criados...';
-      
-      // Pausa entre lotes
-      if (lote < lotes - 1) {
-        await new Promise(resolve => setTimeout(resolve, 5000));
-      }
+      // Pausa entre requisições
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
     } catch(err) {
-      console.error('Erro no lote ' + (lote+1) + ':', err);
+      console.error('Erro quiz ' + (i+1) + ':', err);
     }
   }
   
   if (criados > 0) {
-    resultado.innerHTML='✅ ' + criados + ' quizzes criados com sucesso!';
+    resultado.innerHTML='✅ ' + criados + ' quizzes criados!';
     resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
   } else {
     resultado.innerHTML='❌ Nenhum quiz criado. Tente novamente.';
     resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
   }
-  
   carregarTudo();
 }
-  
+
+// ========== CRIAR TÓPICOS IA ==========
 async function criarTopicosIA() {
   const mid = document.getElementById('ia-materia-id').value.trim();
   const tema = document.getElementById('ia-tema').value.trim();
@@ -607,28 +583,15 @@ async function criarTopicosIA() {
     return; 
   }
   
-  const materiaExiste = await db.ref('materias/'+mid).once('value');
-  if (!materiaExiste.val()) {
-    resultado.innerHTML='❌ Matéria não encontrada! Verifique o ID.';
-    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
-    return;
-  }
-  
   resultado.innerHTML='⏳ Gerando ' + quantidade + ' tópicos detalhados...';
   resultado.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px;';
   
   const comando = `Crie ${quantidade} tópicos sobre "${tema}".
-Responda com JSON em uma única linha:
-[{"titulo":"Título","conteudo":"Conteúdo BEM DETALHADO com mínimo 800 caracteres, incluindo definições, exemplos práticos, dicas de estudo e aplicações. Use linguagem didática e clara."}]
-
-REGRAS:
-1. Tudo em uma linha (sem quebras)
-2. Apenas aspas duplas
-3. Conteúdo MUITO completo e detalhado
-4. NADA fora do JSON`;
+Responda APENAS com JSON (sem texto adicional):
+[{"titulo":"Título","conteudo":"Conteúdo BEM DETALHADO com no mínimo 800 caracteres, incluindo definições, exemplos práticos e dicas de estudo. Seja didático e claro."}]`;
   
   const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST', 
+    method: 'POST',
     headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
     body: JSON.stringify({
       model:'llama-3.1-8b-instant',
@@ -641,12 +604,12 @@ REGRAS:
   if (r.status === 429) {
     resultado.innerHTML='⏳ Limite API. Aguardando 10s...';
     await new Promise(resolve => setTimeout(resolve, 10000));
-    return criarTopicosIA(); // Tenta novamente
+    return criarTopicosIA();
   }
   
   const d = await r.json();
   const txt = d.choices?.[0]?.message?.content || '';
-  const topicos = corrigirJSON(txt);
+  const topicos = parseJSONdaIA(txt);
   
   if (!topicos || !Array.isArray(topicos)) { 
     resultado.innerHTML='❌ Erro ao gerar. Tente novamente.'; 
@@ -681,21 +644,19 @@ REGRAS:
 
 async function criarTudoIA() {
   const resultado = document.getElementById('ia-resultado');
-  resultado.innerHTML='⏳ Fase 1: Criando tópicos...';
+  resultado.innerHTML='⏳ Fase 1/2: Criando tópicos...';
   resultado.style.cssText = 'color:#F59E0B;background:#78350F;padding:10px;border-radius:10px;';
-  
   await criarTopicosIA();
   
-  resultado.innerHTML='⏳ Fase 2: Criando quizzes...';
+  resultado.innerHTML='⏳ Fase 2/2: Criando quizzes...';
   resultado.style.cssText = 'color:#F59E0B;background:#78350F;padding:10px;border-radius:10px;';
-  
   await criarQuizzesIA();
 }
 
 // ========== ABAS ==========
 async function carregarMateriasTab() {
   const arr = Object.entries(materiasCache);
-  document.getElementById('materias-table').innerHTML = arr.length ? arr.map(([id,m])=>`<tr><td>${m.icone||'📚'}</td><td>${m.nome||'?'}</td><td>@${m.autorNome||'?'}</td><td>${m.topicosCount||0}</td><td><button class="btn btn-vermelho" onclick="deletarItem('materias','${id}')">🗑</button></td></tr>`).join('') : '<tr><td colspan="5">Nenhuma matéria</td></tr>';
+  document.getElementById('materias-table').innerHTML = arr.length ? arr.map(([id,m])=>`<tr><td>${m.icone||'📚'}</td><td>${m.nome||'?'}</td><td>@${m.autorNome||'?'}</td><td>${m.topicosCount||0}</td><td><button class="btn btn-vermelho" onclick="deletarItem('materias','${id}')">🗑</button></td></tr>`).join('') : '<tr><td colspan="5">Nenhuma</td></tr>';
 }
 
 async function carregarQuizzesTab() {
@@ -706,7 +667,7 @@ async function carregarQuizzesTab() {
       html += `<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td>${q.oficial?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">Não</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('quizzes/${mid}','${qid}')">🗑</button></td></tr>`;
     }
   }
-  document.getElementById('quizzes-table').innerHTML = html || '<tr><td colspan="5">Nenhum quiz</td></tr>';
+  document.getElementById('quizzes-table').innerHTML = html || '<tr><td colspan="5">Nenhum</td></tr>';
 }
 
 async function carregarTopicosTab() {
@@ -717,13 +678,13 @@ async function carregarTopicosTab() {
       html += `<tr><td>${(t.titulo||'?').substring(0,50)}</td><td>${m.nome||'?'}</td><td>@${t.autorNome||'?'}</td><td>${t.verificado?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">❌</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('topicos/${mid}','${tid}')">🗑</button></td></tr>`;
     }
   }
-  document.getElementById('topicos-table').innerHTML = html || '<tr><td colspan="5">Nenhum tópico</td></tr>';
+  document.getElementById('topicos-table').innerHTML = html || '<tr><td colspan="5">Nenhum</td></tr>';
 }
 
 async function carregarPostsTab() {
   const snap = await db.ref('posts').once('value');
   const posts = snap.val()||{};
-  document.getElementById('posts-table').innerHTML = Object.entries(posts).reverse().slice(0,50).map(([id,p])=>`<tr><td>@${p.autorNome||'?'}</td><td>${(p.texto||'').substring(0,60)}</td><td>${new Date(p.createdAt).toLocaleDateString('pt-BR')}</td><td><button class="btn btn-vermelho" onclick="deletarItem('posts','${id}')">🗑</button></td></tr>`).join('') || '<tr><td colspan="4">Nenhum post</td></tr>';
+  document.getElementById('posts-table').innerHTML = Object.entries(posts).reverse().slice(0,50).map(([id,p])=>`<tr><td>@${p.autorNome||'?'}</td><td>${(p.texto||'').substring(0,60)}</td><td>${new Date(p.createdAt).toLocaleDateString('pt-BR')}</td><td><button class="btn btn-vermelho" onclick="deletarItem('posts','${id}')">🗑</button></td></tr>`).join('') || '<tr><td colspan="4">Nenhum</td></tr>';
 }
 
 async function carregarChatTab() {
@@ -733,16 +694,10 @@ async function carregarChatTab() {
 }
 
 async function deletarItem(caminho, id) {
-  if (!confirm('🗑 Tem certeza que deseja excluir?')) return;
+  if (!confirm('🗑 Excluir?')) return;
   await db.ref(caminho+'/'+id).remove();
   carregarTudo();
 }
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') {
-    verificarSenha();
-  }
-});
 </script>
 </body>
 </html>
