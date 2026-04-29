@@ -168,7 +168,6 @@
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-<script>
 // ========== CONFIG ==========
 const firebaseConfig = {
   apiKey: "AIzaSyC9Lcx3mYGYXavUi_b9c_tRbS3Otm9JQNk",
@@ -202,11 +201,20 @@ function verificarSenha() {
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
-  document.getElementById('tab-' + tab).classList.add('active');
+  const btn = document.querySelector(`[onclick="switchTab('${tab}')"]`);
+  if (btn) btn.classList.add('active');
+  const content = document.getElementById('tab-' + tab);
+  if (content) content.classList.add('active');
+  
+  // Carregar dados da aba
+  if (tab === 'materias') carregarMateriasTab();
+  if (tab === 'quizzes') carregarQuizzesTab();
+  if (tab === 'topicos') carregarTopicosTab();
+  if (tab === 'posts') carregarPostsTab();
+  if (tab === 'chat') carregarChatTab();
 }
 
-// ========== CARREGAR ==========
+// ========== CARREGAR TUDO ==========
 async function carregarTudo() {
   const uSnap = await db.ref('usuarios').once('value'); usersCache = uSnap.val() || {};
   const mSnap = await db.ref('materias').once('value'); materiasCache = mSnap.val() || {};
@@ -218,16 +226,18 @@ async function carregarTudo() {
   
   let totalQ = 0, totalT = 0, listaHTML = '';
   for (const [id, m] of Object.entries(materiasCache)) {
-    listaHTML += `<div style="padding:4px 0;border-bottom:1px solid #334155;">📚 <strong>${m.nome||'?'}</strong> — <span class="code" onclick="navigator.clipboard.writeText('${id}');alert('✅ Copiado!')">${id}</span></div>`;
+    listaHTML += `<div style="padding:4px 0;border-bottom:1px solid #334155;">📚 <strong>${m.nome||'?'}</strong> — <span class="code" onclick="copiarID('${id}')">${id}</span></div>`;
     const qSnap = await db.ref('quizzes/'+id).once('value'); totalQ += Object.keys(qSnap.val()||{}).length;
     const tSnap = await db.ref('topicos/'+id).once('value'); totalT += Object.keys(tSnap.val()||{}).length;
   }
   document.getElementById('stat-quizzes').textContent = totalQ;
   document.getElementById('stat-topicos').textContent = totalT;
-  document.getElementById('materias-lista').innerHTML = listaHTML;
+  document.getElementById('materias-lista').innerHTML = listaHTML || 'Nenhuma matéria';
   
   renderUsers(Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0)));
 }
+
+function copiarID(id) { navigator.clipboard.writeText(id); alert('✅ ID copiado!'); }
 
 // ========== USUÁRIOS ==========
 function renderUsers(arr) {
@@ -242,16 +252,17 @@ function renderUsers(arr) {
       <td><button class="${u.isProf?'btn-save':'btn-edit'}" onclick="updateUser('${uid}','isProf',${!u.isProf})">${u.isProf?'✅':'❌'}</button></td>
       <td><button class="${u.isQuizzer?'btn-save':'btn-edit'}" onclick="updateUser('${uid}','isQuizzer',${!u.isQuizzer})">${u.isQuizzer?'✅':'❌'}</button></td>
       <td>
-        <button class="btn-save" onclick="addPontos('${uid}')" title="Adicionar pontos (senha: ${SENHA_PONTOS})">⭐</button>
+        <button class="btn-save" onclick="addPontos('${uid}')">⭐</button>
         <button class="btn-danger" onclick="deleteUser('${uid}')">🗑</button>
       </td>
     </tr>`).join('');
 }
 
 function filtrarUsuarios() {
-  const t = document.getElementById('search-user').value.toLowerCase();
-  if (!t) return renderUsers(Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0)));
-  renderUsers(Object.entries(usersCache).filter(([id,u])=> (u.username||'').toLowerCase().includes(t) || (u.fullname||'').toLowerCase().includes(t)).sort((a,b)=>(b[1].points||0)-(a[1].points||0)));
+  const t = (document.getElementById('search-user')?.value || '').toLowerCase();
+  const arr = Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0));
+  if (!t) return renderUsers(arr);
+  renderUsers(arr.filter(([id,u])=> (u.username||'').toLowerCase().includes(t) || (u.fullname||'').toLowerCase().includes(t)));
 }
 
 async function updateUser(uid, campo, valor) {
@@ -269,29 +280,29 @@ async function addPontos(uid) {
   const atual = usersCache[uid]?.points || 0;
   await db.ref('usuarios/'+uid).update({points: atual + pts});
   usersCache[uid].points = atual + pts;
-  document.getElementById('pts-'+uid).value = atual + pts;
+  const inputEl = document.getElementById('pts-'+uid);
+  if (inputEl) inputEl.value = atual + pts;
   alert('✅ +' + pts + ' pontos! Total: ' + (atual+pts));
 }
 
 async function deleteUser(uid) {
   if (!confirm('🗑 Excluir permanentemente @' + (usersCache[uid]?.username || uid) + '?')) return;
   await db.ref('usuarios/'+uid).remove();
-  await db.ref('historico/'+uid).remove();
-  await db.ref('notificacoes/'+uid).remove();
   delete usersCache[uid];
   document.getElementById('row-'+uid)?.remove();
   document.getElementById('stat-users').textContent = Object.keys(usersCache).length;
-  alert('✅ Usuário excluído!');
+  alert('✅ Excluído!');
 }
 
-// ========== IA ==========
+// ========== IA GERADORA (PROMPTS MELHORADOS) ==========
 async function callGroq(prompt) {
   const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
-    body: JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:prompt}],max_tokens:4000,temperature:0.9})
+    body: JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:prompt}],max_tokens:4096,temperature:0.9})
   });
   const d = await r.json();
   const txt = d.choices?.[0]?.message?.content || '';
+  console.log('IA respondeu:', txt.substring(0,200)+'...');
   const m = txt.match(/\[[\s\S]*\]/);
   return m ? JSON.parse(m[0]) : null;
 }
@@ -302,54 +313,83 @@ async function criarQuizzesIA() {
   const qtd = parseInt(document.getElementById('ia-qtd').value);
   const s = document.getElementById('ia-resultado');
   if (!mid||!tema) { s.innerHTML='❌ Preencha ID e Tema!'; return; }
-  s.innerHTML='⏳ Gerando '+qtd+' quizzes...';
-  const quizzes = await callGroq(`Crie ${qtd} quizzes sobre "${tema}" no formato JSON: [{"nome":"Nome","nivel":1,"questoes":[{"pergunta":"?","alternativas":["A","B","C","D"],"correta":0}]}]. Cada quiz com 5 questões. Retorne APENAS JSON.`);
-  if (!quizzes) { s.innerHTML='❌ Erro ao gerar.'; return; }
+  s.innerHTML='⏳ Gerando ' + qtd + ' quizzes sobre "' + tema + '"... (pode levar 30s)';
+  
+  const prompt = `Crie ${qtd} quizzes educacionais sobre "${tema}". Formato JSON exato:\n[\n  {\n    "nome": "Nome criativo do quiz",\n    "nivel": 1,\n    "questoes": [\n      {\n        "pergunta": "Pergunta completa?",\n        "alternativas": ["Resposta A", "Resposta B", "Resposta C", "Resposta D"],\n        "correta": 0\n      }\n    ]\n  }\n]\n\nREGRAS:\n- Cada quiz deve ter EXATAMENTE 5 questões\n- Cada questão deve ter EXATAMENTE 4 alternativas\n- correta: 0 para A, 1 para B, 2 para C, 3 para D\n- NÃO inclua explicações, só o JSON\n- As perguntas devem ser educacionais e variadas\n- As alternativas devem ser plausíveis\n- Retorne APENAS o JSON puro, sem markdown`;
+  
+  const quizzes = await callGroq(prompt);
+  if (!quizzes || !quizzes.length) { s.innerHTML='❌ Erro ao gerar. Tente novamente.'; return; }
+  
   let n=0;
   for (const q of quizzes) {
-    if (q.nome&&q.questoes) { await db.ref('quizzes/'+mid).push({nome:q.nome,tempo:30,questoes:q.questoes,nivel:q.nivel||1,oficial:true,autorId:'ia',autorNome:'Neurinho IA',totalPlays:0,createdAt:Date.now()}); n++; }
+    if (q.nome && q.questoes && q.questoes.length >= 3) {
+      await db.ref('quizzes/'+mid).push({
+        nome: q.nome, tempo: 30, questoes: q.questoes.slice(0,5),
+        nivel: q.nivel||1, oficial: true,
+        autorId: 'ia', autorNome: 'Neurinho IA',
+        totalPlays: 0, createdAt: Date.now()
+      });
+      n++;
+    }
   }
-  s.innerHTML='✅ '+n+' quizzes criados!';
+  s.innerHTML='✅ ' + n + ' quizzes criados com sucesso! 🎮';
   carregarTudo();
 }
 
 async function criarTopicosIA() {
   const mid = document.getElementById('ia-materia-id').value.trim();
   const tema = document.getElementById('ia-tema').value.trim();
-  const qtd = parseInt(prompt('Quantos tópicos?','5'));
+  const qtd = parseInt(prompt('Quantos tópicos? (recomendo 3-5)', '5'));
   const s = document.getElementById('ia-resultado');
   if (!mid||!tema) { s.innerHTML='❌ Preencha ID e Tema!'; return; }
-  s.innerHTML='⏳ Gerando '+qtd+' tópicos...';
-  const topicos = await callGroq(`Crie ${qtd} tópicos sobre "${tema}" no formato JSON: [{"titulo":"Título","conteudo":"Conteúdo completo"}]. Retorne APENAS JSON.`);
-  if (!topicos) { s.innerHTML='❌ Erro ao gerar.'; return; }
+  s.innerHTML='⏳ Gerando ' + qtd + ' tópicos sobre "' + tema + '"... (pode levar 30s)';
+  
+  const prompt = `Crie ${qtd} tópicos de estudo COMPLETOS e DETALHADOS sobre "${tema}". Formato JSON exato:\n[\n  {\n    "titulo": "Título do tópico",\n    "conteudo": "Conteúdo COMPLETO e DETALHADO do tópico. Mínimo 3 parágrafos longos com explicações, exemplos, fórmulas (se aplicável) e dicas de estudo. Seja didático e completo como um professor faria."\n  }\n]\n\nREGRAS:\n- Cada conteúdo deve ter NO MÍNIMO 500 caracteres\n- Seja didático e completo\n- Use linguagem de professor explicando para aluno\n- Inclua exemplos práticos\n- NÃO use markdown, apenas texto puro com quebras de linha\n- Retorne APENAS o JSON puro`;
+  
+  const topicos = await callGroq(prompt);
+  if (!topicos || !topicos.length) { s.innerHTML='❌ Erro ao gerar. Tente novamente.'; return; }
+  
   let n=0;
   for (const t of topicos) {
-    if (t.titulo&&t.conteudo) { await db.ref('topicos/'+mid).push({titulo:t.titulo,conteudo:t.conteudo,autorId:'ia',autorNome:'Neurinho IA',verificado:true,createdAt:Date.now()}); n++; }
+    if (t.titulo && t.conteudo && t.conteudo.length > 100) {
+      await db.ref('topicos/'+mid).push({
+        titulo: t.titulo, conteudo: t.conteudo,
+        autorId: 'ia', autorNome: 'Neurinho IA',
+        verificado: true, createdAt: Date.now()
+      });
+      n++;
+    }
   }
-  const snap = await db.ref('materias/'+mid+'/topicosCount').once('value');
-  await db.ref('materias/'+mid).update({topicosCount:(snap.val()||0)+n});
-  s.innerHTML='✅ '+n+' tópicos criados!';
+  
+  if (n > 0) {
+    const snap = await db.ref('materias/'+mid+'/topicosCount').once('value');
+    await db.ref('materias/'+mid).update({topicosCount: (snap.val()||0)+n});
+  }
+  
+  s.innerHTML='✅ ' + n + ' tópicos criados com sucesso! 📝';
   carregarTudo();
 }
 
 async function criarTudoIA() {
   const mid = document.getElementById('ia-materia-id').value.trim();
   const tema = document.getElementById('ia-tema').value.trim();
-  const qtd = parseInt(document.getElementById('ia-qtd').value);
   const s = document.getElementById('ia-resultado');
   if (!mid||!tema) { s.innerHTML='❌ Preencha ID e Tema!'; return; }
-  s.innerHTML='⏳ Gerando quizzes...';
-  await criarQuizzesIA();
-  s.innerHTML='⏳ Gerando tópicos...';
+  
+  s.innerHTML='⏳ Criando tópicos...';
   await criarTopicosIA();
-  s.innerHTML='✅ TUDO criado com sucesso! 🎉';
+  
+  s.innerHTML='⏳ Criando quizzes...';
+  await criarQuizzesIA();
+  
+  s.innerHTML='✅ TUDO criado com sucesso! 🎉 quizzes + tópicos prontos!';
   carregarTudo();
 }
 
 // ========== CARREGAR ABAS ==========
 async function carregarMateriasTab() {
   const arr = Object.entries(materiasCache);
-  document.getElementById('materias-table').innerHTML = arr.map(([id,m])=>`<tr><td>${m.icone||'📚'}</td><td>${m.nome||'?'}</td><td>@${m.autorNome||'?'}</td><td>${m.topicosCount||0}</td><td><button class="btn-danger" onclick="deletarItem('materias','${id}')">🗑</button></td></tr>`).join('');
+  document.getElementById('materias-table').innerHTML = arr.length ? arr.map(([id,m])=>`<tr><td>${m.icone||'📚'}</td><td>${m.nome||'?'}</td><td>@${m.autorNome||'?'}</td><td>${m.topicosCount||0}</td><td><button class="btn-danger" onclick="deletarItem('materias','${id}')">🗑</button></td></tr>`).join('') : '<tr><td colspan="5">Nenhuma matéria</td></tr>';
 }
 
 async function carregarQuizzesTab() {
@@ -358,7 +398,7 @@ async function carregarQuizzesTab() {
     const snap = await db.ref('quizzes/'+mid).once('value');
     const qs = snap.val()||{};
     for (const [qid,q] of Object.entries(qs)) {
-      html += `<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td>${q.oficial?'<span class="badge badge-green">✅ Sim</span>':'<span class="badge badge-red">Não</span>'}</td><td><button class="btn-danger" onclick="deletarItem('quizzes/${mid}','${qid}')">🗑</button></td></tr>`;
+      html += `<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td>${q.oficial?'<span class="badge badge-green">✅</span>':'<span class="badge badge-red">Não</span>'}</td><td><button class="btn-danger" onclick="deletarItem('quizzes/${mid}','${qid}')">🗑</button></td></tr>`;
     }
   }
   document.getElementById('quizzes-table').innerHTML = html || '<tr><td colspan="5">Nenhum quiz</td></tr>';
@@ -370,7 +410,7 @@ async function carregarTopicosTab() {
     const snap = await db.ref('topicos/'+mid).once('value');
     const ts = snap.val()||{};
     for (const [tid,t] of Object.entries(ts)) {
-      html += `<tr><td>${t.titulo||'?'}</td><td>${m.nome||'?'}</td><td>@${t.autorNome||'?'}</td><td>${t.verificado?'<span class="badge badge-green">✅</span>':'<span class="badge badge-red">❌</span>'}</td><td><button class="btn-danger" onclick="deletarItem('topicos/${mid}','${tid}')">🗑</button></td></tr>`;
+      html += `<tr><td>${(t.titulo||'?').substring(0,50)}</td><td>${m.nome||'?'}</td><td>@${t.autorNome||'?'}</td><td>${t.verificado?'<span class="badge badge-green">✅</span>':'<span class="badge badge-red">❌</span>'}</td><td><button class="btn-danger" onclick="deletarItem('topicos/${mid}','${tid}')">🗑</button></td></tr>`;
     }
   }
   document.getElementById('topicos-table').innerHTML = html || '<tr><td colspan="5">Nenhum tópico</td></tr>';
@@ -379,13 +419,13 @@ async function carregarTopicosTab() {
 async function carregarPostsTab() {
   const snap = await db.ref('posts').once('value');
   const posts = snap.val()||{};
-  document.getElementById('posts-table').innerHTML = Object.entries(posts).reverse().map(([id,p])=>`<tr><td>@${p.autorNome||'?'}</td><td>${(p.texto||'').substring(0,60)}...</td><td>${new Date(p.createdAt).toLocaleDateString()}</td><td><button class="btn-danger" onclick="deletarItem('posts','${id}')">🗑</button></td></tr>`).join('');
+  document.getElementById('posts-table').innerHTML = Object.entries(posts).reverse().slice(0,50).map(([id,p])=>`<tr><td>@${p.autorNome||'?'}</td><td>${(p.texto||'').substring(0,60)}</td><td>${new Date(p.createdAt).toLocaleDateString('pt-BR')}</td><td><button class="btn-danger" onclick="deletarItem('posts','${id}')">🗑</button></td></tr>`).join('') || '<tr><td colspan="4">Nenhum post</td></tr>';
 }
 
 async function carregarChatTab() {
   const snap = await db.ref('chat_rooms').once('value');
   const rooms = snap.val()||{};
-  document.getElementById('chat-list').innerHTML = Object.entries(rooms).map(([id,r])=>`<div style="padding:8px;border-bottom:1px solid #334155;display:flex;justify-content:space-between;"># ${r.nome||'?'} <button class="btn-danger" onclick="deletarItem('chat_rooms','${id}')">🗑</button></div>`).join('');
+  document.getElementById('chat-list').innerHTML = Object.entries(rooms).map(([id,r])=>`<div style="padding:8px;border-bottom:1px solid #334155;display:flex;justify-content:space-between;"># ${r.nome||'?'} <button class="btn-danger" onclick="deletarItem('chat_rooms','${id}')">🗑</button></div>`).join('') || 'Nenhuma sala';
 }
 
 async function deletarItem(path, id) {
@@ -393,9 +433,9 @@ async function deletarItem(path, id) {
   await db.ref(path+'/'+id).remove();
   alert('✅ Excluído!');
   carregarTudo();
+  switchTab(document.querySelector('.tab-btn.active')?.textContent.includes('Matérias')?'materias':'ia');
 }
 
-console.log('✅ Painel Admin pronto!');
-</script>
+console.log('✅ Painel Admin PRONTO!');
 </body>
 </html>
