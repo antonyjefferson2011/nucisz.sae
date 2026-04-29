@@ -3,897 +3,320 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin · Sexta-Feira Studies</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,500;0,700;1,300&display=swap" rel="stylesheet">
+  <title>Painel Admin - Sexta-Feira Studies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #080C14;
-      --surface: #0D1520;
-      --surface2: #111D2E;
-      --border: #1C2E45;
-      --border2: #243447;
-      --accent: #00C9A7;
-      --accent2: #0097E6;
+      --bg: #0F172A;
+      --card: #1E293B;
+      --text: #F1F5F9;
+      --text2: #94A3B8;
+      --border: #334155;
+      --primary: #0F766E;
+      --primary-light: #14B8A6;
+      --danger: #EF4444;
+      --blue: #3B82F6;
       --purple: #8B5CF6;
       --gold: #F59E0B;
-      --red: #EF4444;
-      --text: #E2EBF5;
-      --muted: #4A6580;
-      --muted2: #7A95AE;
-      --mono: 'Space Mono', monospace;
-      --sans: 'DM Sans', sans-serif;
     }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: var(--sans);
+      font-family: 'Sora', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      overflow-x: hidden;
     }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: -40%;
-      left: -20%;
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, rgba(0,201,167,0.04) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── LOGIN ── */
+    
+    /* LOGIN */
     #login-screen {
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
       padding: 20px;
-      position: relative;
-      z-index: 1;
     }
-
-    .login-wrap {
+    .login-box {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 40px 30px;
       width: 100%;
       max-width: 380px;
-    }
-
-    .login-logo {
       text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .login-logo .logo-mark {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 16px;
-      font-size: 26px;
-      margin-bottom: 12px;
-      box-shadow: 0 0 30px rgba(0,201,167,0.25);
-    }
-
-    .login-logo h1 {
-      font-family: var(--mono);
-      font-size: 18px;
-      color: var(--text);
-      letter-spacing: -0.5px;
-    }
-
-    .login-logo p {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 4px;
-      font-family: var(--mono);
-      letter-spacing: 0.05em;
-    }
-
-    .login-card {
-      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
-
-    .field-label {
-      font-size: 11px;
-      font-family: var(--mono);
-      color: var(--muted2);
-      letter-spacing: 0.08em;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .field-input {
+    .login-box h1 { color: var(--primary-light); font-size: 22px; margin-bottom: 5px; }
+    .login-box p { color: var(--text2); font-size: 13px; margin-bottom: 25px; }
+    .login-box input {
       width: 100%;
-      padding: 12px 14px;
+      padding: 14px 16px;
       background: var(--bg);
-      border: 1px solid var(--border2);
-      border-radius: 10px;
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: 13px;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      color: white;
+      font-size: 15px;
+      font-family: 'Sora', sans-serif;
       outline: none;
+      transition: border 0.2s;
     }
-
-    .field-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(0,201,167,0.1);
-    }
-
-    .btn-primary {
+    .login-box input:focus { border-color: var(--primary); }
+    .login-box button {
       width: 100%;
-      padding: 13px;
-      background: var(--accent);
-      color: #000;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
       border: none;
-      border-radius: 10px;
-      font-family: var(--mono);
-      font-size: 13px;
+      border-radius: 12px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      margin-top: 16px;
-      transition: all 0.2s;
-      letter-spacing: 0.03em;
+      margin-top: 12px;
+      font-family: 'Sora', sans-serif;
+      transition: background 0.2s;
     }
-
-    .btn-primary:hover { background: #00e0ba; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,201,167,0.3); }
-    .btn-primary:active { transform: translateY(0); }
-
-    .login-error {
-      display: none;
-      font-size: 12px;
-      color: var(--red);
+    .login-box button:hover { background: var(--primary-light); }
+    .login-error { color: var(--danger); font-size: 13px; margin-top: 10px; display: none; }
+    
+    /* PAINEL */
+    #painel-screen { display: none; padding: 20px; max-width: 1100px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 25px; }
+    .header h1 { color: var(--primary-light); font-size: 24px; }
+    .header .stats { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+    .stat-item {
+      background: var(--card);
+      padding: 15px 20px;
+      border-radius: 14px;
       text-align: center;
-      margin-top: 10px;
-      font-family: var(--mono);
-    }
-
-    /* ── PAINEL ── */
-    #painel-screen { display: none; }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(8,12,20,0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 24px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .topbar-brand .icon {
-      width: 30px;
-      height: 30px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-    }
-
-    .topbar-brand span {
-      font-family: var(--mono);
-      font-size: 13px;
-      color: var(--text);
-      letter-spacing: -0.3px;
-    }
-
-    .topbar-brand span em {
-      color: var(--accent);
-      font-style: normal;
-    }
-
-    .topbar-badge {
-      font-family: var(--mono);
-      font-size: 10px;
-      background: rgba(0,201,167,0.12);
-      border: 1px solid rgba(0,201,167,0.2);
-      color: var(--accent);
-      padding: 3px 8px;
-      border-radius: 20px;
-    }
-
-    .main-wrap {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 28px 20px;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ── STATS ── */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-
-    @media (max-width: 768px) {
-      .stats-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-
-    .stat-card {
-      background: var(--surface);
+      min-width: 100px;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.2s;
     }
-
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), transparent);
-    }
-
-    .stat-card:hover { border-color: var(--border2); }
-
-    .stat-icon {
-      font-size: 18px;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .stat-val {
-      font-family: var(--mono);
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .stat-label {
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-    }
-
-    /* ── TABS ── */
-    .tabs-nav {
+    .stat-item .num { font-size: 24px; font-weight: 800; color: var(--primary-light); }
+    .stat-item .lbl { font-size: 11px; color: var(--text2); margin-top: 3px; }
+    
+    /* TABS */
+    .tabs {
       display: flex;
-      gap: 4px;
+      gap: 6px;
       margin-bottom: 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 6px;
-      overflow-x: auto;
-      scrollbar-width: none;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-
-    .tabs-nav::-webkit-scrollbar { display: none; }
-
     .tab-btn {
-      padding: 8px 16px;
-      border-radius: 9px;
-      border: none;
-      background: transparent;
-      color: var(--muted);
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text2);
       cursor: pointer;
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Sora', sans-serif;
       transition: all 0.2s;
     }
-
-    .tab-btn:hover { color: var(--text); background: var(--surface2); }
-
-    .tab-btn.active {
-      background: var(--accent);
-      color: #000;
-    }
-
+    .tab-btn:hover { border-color: var(--primary); color: white; }
+    .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    
     .tab-content { display: none; }
-    .tab-content.active { display: block; animation: fadeUp 0.25s ease; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── CARDS ── */
+    .tab-content.active { display: block; }
+    
+    /* CARDS */
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: var(--card);
       border-radius: 16px;
       padding: 20px;
-      margin-bottom: 16px;
+      margin-bottom: 15px;
+      border: 1px solid var(--border);
     }
-
-    .card-title {
-      font-family: var(--mono);
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .card-title span {
-      width: 6px;
-      height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    /* ── FORM ELEMENTS ── */
-    label {
-      display: block;
-      font-size: 11px;
-      font-family: var(--mono);
-      color: var(--muted2);
-      letter-spacing: 0.06em;
-      margin-bottom: 6px;
-      margin-top: 12px;
-    }
-
-    label:first-child { margin-top: 0; }
-
-    input[type="text"], input[type="password"], input[type="number"], select, textarea {
+    .card h3 { margin-bottom: 15px; font-size: 17px; color: var(--primary-light); }
+    
+    /* INPUTS */
+    input, select, textarea {
       width: 100%;
       padding: 10px 12px;
       background: var(--bg);
-      border: 1px solid var(--border2);
-      border-radius: 9px;
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: white;
+      font-size: 13px;
+      font-family: 'Sora', sans-serif;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      appearance: none;
+      margin-bottom: 8px;
+      transition: border 0.2s;
     }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(0,201,167,0.08);
-    }
-
-    select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234A6580' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 32px;
-    }
-
-    /* ── BUTTONS ── */
+    input:focus, select:focus { border-color: var(--primary); }
+    select { cursor: pointer; }
+    
+    /* BOTÕES */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
       padding: 8px 14px;
       border-radius: 8px;
       border: none;
       cursor: pointer;
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      transition: all 0.18s;
-      white-space: nowrap;
-    }
-
-    .btn:hover { transform: translateY(-1px); opacity: 0.9; }
-    .btn:active { transform: translateY(0); }
-
-    .btn-accent { background: var(--accent); color: #000; }
-    .btn-blue { background: var(--accent2); color: #fff; }
-    .btn-purple { background: var(--purple); color: #fff; }
-    .btn-gold { background: var(--gold); color: #000; }
-    .btn-red { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.25); }
-    .btn-red:hover { background: var(--red); color: #fff; }
-    .btn-ghost { background: var(--surface2); color: var(--muted2); border: 1px solid var(--border); }
-    .btn-ghost:hover { color: var(--text); border-color: var(--border2); }
-
-    .btn-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 14px;
-      flex-wrap: wrap;
-    }
-
-    .btn-row .btn { flex: 1; justify-content: center; padding: 12px; font-size: 12px; }
-
-    /* ── RESULT BOX ── */
-    #ia-resultado {
-      margin-top: 14px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      font-family: var(--mono);
+      font-weight: 600;
       font-size: 12px;
-      text-align: center;
-      display: none;
-      transition: all 0.3s;
+      font-family: 'Sora', sans-serif;
+      transition: all 0.2s;
+      margin: 2px;
     }
-
-    #ia-resultado.loading {
-      display: block;
-      background: rgba(0,201,167,0.08);
-      border: 1px solid rgba(0,201,167,0.2);
-      color: var(--accent);
-    }
-
-    #ia-resultado.success {
-      display: block;
-      background: rgba(0,201,167,0.08);
-      border: 1px solid rgba(0,201,167,0.2);
-      color: var(--accent);
-    }
-
-    #ia-resultado.error {
-      display: block;
-      background: rgba(239,68,68,0.08);
-      border: 1px solid rgba(239,68,68,0.2);
-      color: var(--red);
-    }
-
-    /* ── TABLE ── */
-    .scroll-x {
-      overflow-x: auto;
-      overflow-y: auto;
-      max-height: 480px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-    }
-
-    thead th {
-      position: sticky;
-      top: 0;
-      background: var(--surface);
-      padding: 10px 12px;
-      text-align: left;
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-      z-index: 2;
-    }
-
-    tbody tr { transition: background 0.15s; }
-    tbody tr:hover { background: rgba(255,255,255,0.02); }
-
-    tbody td {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-      color: var(--text);
-    }
-
-    tbody tr:last-child td { border-bottom: none; }
-
-    .empty-row td {
-      padding: 30px 12px;
-      text-align: center;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 11px;
-    }
-
-    /* ── BADGES ── */
-    .badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 20px;
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-    }
-
-    .badge-green { background: rgba(0,201,167,0.12); color: var(--accent); border: 1px solid rgba(0,201,167,0.2); }
-    .badge-red { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
-    .badge-blue { background: rgba(0,151,230,0.12); color: var(--accent2); border: 1px solid rgba(0,151,230,0.2); }
-    .badge-gold { background: rgba(245,158,11,0.12); color: var(--gold); border: 1px solid rgba(245,158,11,0.2); }
-    .badge-purple { background: rgba(139,92,246,0.12); color: var(--purple); border: 1px solid rgba(139,92,246,0.2); }
-
-    /* ── CODE TAG ── */
-    .code-tag {
-      font-family: var(--mono);
-      font-size: 10px;
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-verde { background: var(--primary); color: white; }
+    .btn-azul { background: var(--blue); color: white; }
+    .btn-roxo { background: var(--purple); color: white; }
+    .btn-dourado { background: var(--gold); color: black; font-weight: 700; }
+    .btn-vermelho { background: var(--danger); color: white; }
+    
+    /* TABELAS */
+    .table-wrap { overflow-x: auto; max-height: 400px; overflow-y: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { background: var(--bg); padding: 10px; text-align: left; color: var(--primary-light); font-size: 11px; position: sticky; top: 0; z-index: 1; }
+    td { padding: 10px; border-bottom: 1px solid var(--border); }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    
+    .code {
       background: var(--bg);
-      border: 1px solid var(--border2);
-      padding: 3px 7px;
+      padding: 3px 8px;
       border-radius: 5px;
       cursor: pointer;
-      color: var(--accent);
-      transition: all 0.15s;
-      user-select: none;
-    }
-
-    .code-tag:hover {
-      background: var(--surface2);
-      border-color: var(--accent);
-    }
-
-    /* ── MATERIAS LIST ── */
-    .materia-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .materia-row:last-child { border-bottom: none; }
-
-    .materia-info { display: flex; align-items: center; gap: 10px; font-size: 13px; }
-    .materia-info strong { color: var(--text); font-weight: 500; }
-
-    /* ── SEARCH ── */
-    .search-wrap {
-      position: relative;
-      margin-bottom: 14px;
-    }
-
-    .search-wrap input {
-      padding-left: 36px;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      font-size: 13px;
-      pointer-events: none;
-    }
-
-    /* ── INLINE INPUTS IN TABLES ── */
-    tbody td input[type="number"],
-    tbody td select {
-      padding: 6px 8px;
+      font-family: monospace;
       font-size: 11px;
+      color: var(--primary-light);
     }
-
-    tbody td input[type="number"] { width: 80px; }
-    tbody td select { width: auto; min-width: 80px; }
-
-    /* ── USER AVATAR ── */
-    .user-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .user-avatar-placeholder {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: var(--surface2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-    }
-
-    /* ── CHAT LIST ── */
-    .chat-room-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .chat-room-row:last-child { border-bottom: none; }
-
-    .room-name {
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--text);
-    }
-
-    .room-name::before {
-      content: '# ';
-      color: var(--accent);
-    }
-
-    /* ── PROGRESS BAR ── */
-    .progress-bar {
-      height: 3px;
-      background: var(--border);
-      border-radius: 2px;
-      margin-top: 6px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 2px;
-      transition: width 0.4s ease;
-    }
-
-    /* ── TOAST ── */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--text);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      z-index: 9999;
-      transform: translateY(10px);
-      opacity: 0;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      max-width: 300px;
-    }
-
-    .toast.show { transform: translateY(0); opacity: 1; }
-
+    .code:hover { background: var(--border); }
+    
+    .badge { padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+    .badge-sim { background: #064E3B; color: #34D399; }
+    .badge-nao { background: #7F1D1D; color: #FCA5A5; }
+    
     .hidden { display: none !important; }
+    #ia-resultado { margin-top: 12px; font-size: 13px; text-align: center; padding: 10px; border-radius: 10px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
-<!-- ── LOGIN ── -->
+<!-- LOGIN -->
 <div id="login-screen">
-  <div class="login-wrap">
-    <div class="login-logo">
-      <div class="logo-mark">⚙️</div>
-      <h1>Admin<em>·</em>Panel</h1>
-      <p>SEXTA-FEIRA STUDIES</p>
-    </div>
-    <div class="login-card">
-      <label class="field-label">SENHA DE ACESSO</label>
-      <input class="field-input" type="password" id="senha-input" placeholder="••••••••"
-        onkeydown="if(event.key==='admin123') verificarSenha()" />
-      <button class="btn-primary" onclick="verificarSenha()">→ Entrar</button>
-      <p class="login-error" id="login-error">Senha incorreta. Tente novamente.</p>
-    </div>
+  <div class="login-box">
+    <h1>🔒 Painel Admin</h1>
+    <p>Sexta-Feira Studies</p>
+    <input type="password" id="senha-input" placeholder="Senha de acesso" onkeydown="if(event.key==='Enter')verificarSenha()" />
+    <button onclick="verificarSenha()">🚀 Entrar</button>
+    <p class="login-error" id="login-error">Senha incorreta!</p>
   </div>
 </div>
 
-<!-- ── TOAST ── -->
-<div class="toast" id="toast"></div>
-
-<!-- ── PAINEL ── -->
+<!-- PAINEL -->
 <div id="painel-screen">
-
-  <header class="topbar">
-    <div class="topbar-brand">
-      <div class="icon">⚙️</div>
-      <span>Sexta-Feira <em>Admin</em></span>
+  <div class="header">
+    <h1>⚙️ Painel Administrativo</h1>
+    <div class="stats">
+      <div class="stat-item"><div class="num" id="s-users">0</div><div class="lbl">Usuários</div></div>
+      <div class="stat-item"><div class="num" id="s-posts">0</div><div class="lbl">Posts</div></div>
+      <div class="stat-item"><div class="num" id="s-materias">0</div><div class="lbl">Matérias</div></div>
+      <div class="stat-item"><div class="num" id="s-quizzes">0</div><div class="lbl">Quizzes</div></div>
+      <div class="stat-item"><div class="num" id="s-topicos">0</div><div class="lbl">Tópicos</div></div>
     </div>
-    <div class="topbar-badge">PAINEL DE CONTROLE</div>
-  </header>
+  </div>
 
-  <div class="main-wrap">
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('ia')">🤖 Gerador IA</button>
+    <button class="tab-btn" onclick="switchTab('usuarios')">👥 Usuários</button>
+    <button class="tab-btn" onclick="switchTab('materias')">📚 Matérias</button>
+    <button class="tab-btn" onclick="switchTab('quizzes')">🎮 Quizzes</button>
+    <button class="tab-btn" onclick="switchTab('topicos')">📝 Tópicos</button>
+    <button class="tab-btn" onclick="switchTab('posts')">💬 Posts</button>
+    <button class="tab-btn" onclick="switchTab('chat')">💭 Chat</button>
+  </div>
 
-    <!-- Stats -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <span class="stat-icon">👥</span>
-        <div class="stat-val" id="stat-users">—</div>
-        <div class="stat-label">Usuários</div>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon">💬</span>
-        <div class="stat-val" id="stat-posts">—</div>
-        <div class="stat-label">Posts</div>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon">📚</span>
-        <div class="stat-val" id="stat-materias">—</div>
-        <div class="stat-label">Matérias</div>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon">🎮</span>
-        <div class="stat-val" id="stat-quizzes">—</div>
-        <div class="stat-label">Quizzes</div>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon">📝</span>
-        <div class="stat-val" id="stat-topicos">—</div>
-        <div class="stat-label">Tópicos</div>
-      </div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs-nav">
-      <button class="tab-btn active" onclick="switchTab('ia')">🤖 GERADOR IA</button>
-      <button class="tab-btn" onclick="switchTab('usuarios')">👥 USUÁRIOS</button>
-      <button class="tab-btn" onclick="switchTab('materias')">📚 MATÉRIAS</button>
-      <button class="tab-btn" onclick="switchTab('quizzes')">🎮 QUIZZES</button>
-      <button class="tab-btn" onclick="switchTab('topicos')">📝 TÓPICOS</button>
-      <button class="tab-btn" onclick="switchTab('posts')">💬 POSTS</button>
-      <button class="tab-btn" onclick="switchTab('chat')">💭 CHAT</button>
-    </div>
-
-    <!-- ── IA ── -->
-    <div id="tab-ia" class="tab-content active">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+  <!-- TAB IA -->
+  <div id="tab-ia" class="tab-content active">
+    <div class="card">
+      <h3>🤖 Gerador IA</h3>
+      <div class="grid-2">
         <div>
-          <div class="card">
-            <div class="card-title"><span></span>Gerador com IA</div>
-            <label>ID DA MATÉRIA</label>
-            <input type="text" id="ia-materia-id" placeholder="Cole o ID da matéria..." />
-            <label>TEMA / ASSUNTO</label>
-            <input type="text" id="ia-tema" placeholder="Ex: Revolução Francesa" />
-            <label>QUANTIDADE</label>
-            <select id="ia-qtd">
-              <option value="3">3</option>
-              <option value="5" selected>5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-            </select>
-            <label>QTDE DE TÓPICOS</label>
-            <select id="ia-qtd-topicos">
-              <option value="3" selected>3</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-            </select>
-            <div class="btn-row">
-              <button class="btn btn-purple" onclick="criarQuizzesIA()">🎮 Quizzes</button>
-              <button class="btn btn-blue" onclick="criarTopicosIA()">📝 Tópicos</button>
-              <button class="btn btn-gold" onclick="criarTudoIA()">🚀 Tudo</button>
-            </div>
-            <div id="ia-resultado"></div>
-          </div>
+          <label style="color:var(--text2);font-size:12px;">ID da Matéria</label>
+          <input type="text" id="ia-materia-id" placeholder="Cole o ID..." />
         </div>
-
         <div>
-          <div class="card" style="height:100%;">
-            <div class="card-title"><span></span>IDs das Matérias</div>
-            <div id="materias-lista" style="max-height:340px;overflow-y:auto;"></div>
-          </div>
+          <label style="color:var(--text2);font-size:12px;">Tema</label>
+          <input type="text" id="ia-tema" placeholder="Ex: Revolução Francesa" />
         </div>
       </div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <select id="ia-qtd" style="width:auto;"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option></select>
+        <button class="btn btn-roxo" onclick="criarQuizzesIA()" style="flex:1;">🤖 Quizzes</button>
+        <button class="btn btn-roxo" onclick="criarTopicosIA()" style="flex:1;">📝 Tópicos</button>
+        <button class="btn btn-dourado" onclick="criarTudoIA()" style="flex:1;">🚀 TUDO</button>
+      </div>
+      <div id="ia-resultado"></div>
     </div>
+    <div class="card">
+      <h3>📚 IDs das Matérias (clique para copiar)</h3>
+      <div id="materias-lista" style="max-height:250px;overflow-y:auto;font-size:12px;"></div>
+    </div>
+  </div>
 
-    <!-- ── USUÁRIOS ── -->
-    <div id="tab-usuarios" class="tab-content">
-      <div class="card">
-        <div class="card-title"><span></span>Gerenciar Usuários</div>
-        <div class="search-wrap">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="search-user" placeholder="Buscar por @username ou nome..." oninput="filtrarUsuarios()" />
-        </div>
-        <div class="scroll-x">
-          <table>
-            <thead>
-              <tr>
-                <th>AVT</th>
-                <th>USERNAME</th>
-                <th>NOME</th>
-                <th>PONTOS</th>
-                <th>PLANO</th>
-                <th>ADMIN LVL</th>
-                <th>PROF</th>
-                <th>QUIZZER</th>
-                <th>AÇÕES</th>
-              </tr>
-            </thead>
-            <tbody id="users-table"></tbody>
-          </table>
-        </div>
+  <!-- TAB USUÁRIOS -->
+  <div id="tab-usuarios" class="tab-content">
+    <div class="card">
+      <h3>👥 Gerenciar Usuários</h3>
+      <input type="text" id="search-user" placeholder="🔍 Buscar por nome ou @usuario..." oninput="filtrarUsuarios()" />
+      <div class="table-wrap" style="margin-top:10px;">
+        <table>
+          <thead><tr><th>Avatar</th><th>@</th><th>Nome</th><th>Pontos</th><th>Plano</th><th>Admin</th><th>Prof</th><th>Quizzer</th><th>Ações</th></tr></thead>
+          <tbody id="users-table"></tbody>
+        </table>
       </div>
     </div>
+  </div>
 
-    <!-- ── MATÉRIAS ── -->
-    <div id="tab-materias" class="tab-content">
-      <div class="card">
-        <div class="card-title"><span></span>Matérias</div>
-        <div class="scroll-x">
-          <table>
-            <thead>
-              <tr><th>ÍCONE</th><th>NOME</th><th>AUTOR</th><th>TÓPICOS</th><th>AÇÕES</th></tr>
-            </thead>
-            <tbody id="materias-table"></tbody>
-          </table>
-        </div>
-      </div>
+  <!-- TAB MATÉRIAS -->
+  <div id="tab-materias" class="tab-content">
+    <div class="card">
+      <h3>📚 Matérias</h3>
+      <div class="table-wrap"><table><thead><tr><th>Ícone</th><th>Nome</th><th>Autor</th><th>Tópicos</th><th>Ações</th></tr></thead><tbody id="materias-table"></tbody></table></div>
     </div>
+  </div>
 
-    <!-- ── QUIZZES ── -->
-    <div id="tab-quizzes" class="tab-content">
-      <div class="card">
-        <div class="card-title"><span></span>Quizzes</div>
-        <div class="scroll-x">
-          <table>
-            <thead>
-              <tr><th>NOME</th><th>MATÉRIA</th><th>QUESTÕES</th><th>OFICIAL</th><th>AUTOR</th><th>AÇÕES</th></tr>
-            </thead>
-            <tbody id="quizzes-table"></tbody>
-          </table>
-        </div>
-      </div>
+  <!-- TAB QUIZZES -->
+  <div id="tab-quizzes" class="tab-content">
+    <div class="card">
+      <h3>🎮 Quizzes</h3>
+      <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Matéria</th><th>Qtd</th><th>Oficial</th><th>Ações</th></tr></thead><tbody id="quizzes-table"></tbody></table></div>
     </div>
+  </div>
 
-    <!-- ── TÓPICOS ── -->
-    <div id="tab-topicos" class="tab-content">
-      <div class="card">
-        <div class="card-title"><span></span>Tópicos</div>
-        <div class="scroll-x">
-          <table>
-            <thead>
-              <tr><th>TÍTULO</th><th>MATÉRIA</th><th>AUTOR</th><th>VERIFICADO</th><th>AÇÕES</th></tr>
-            </thead>
-            <tbody id="topicos-table"></tbody>
-          </table>
-        </div>
-      </div>
+  <!-- TAB TÓPICOS -->
+  <div id="tab-topicos" class="tab-content">
+    <div class="card">
+      <h3>📝 Tópicos</h3>
+      <div class="table-wrap"><table><thead><tr><th>Título</th><th>Matéria</th><th>Autor</th><th>Verificado</th><th>Ações</th></tr></thead><tbody id="topicos-table"></tbody></table></div>
     </div>
+  </div>
 
-    <!-- ── POSTS ── -->
-    <div id="tab-posts" class="tab-content">
-      <div class="card">
-        <div class="card-title"><span></span>Posts</div>
-        <div class="scroll-x">
-          <table>
-            <thead>
-              <tr><th>AUTOR</th><th>TEXTO</th><th>DATA</th><th>AÇÕES</th></tr>
-            </thead>
-            <tbody id="posts-table"></tbody>
-          </table>
-        </div>
-      </div>
+  <!-- TAB POSTS -->
+  <div id="tab-posts" class="tab-content">
+    <div class="card">
+      <h3>💬 Posts</h3>
+      <div class="table-wrap"><table><thead><tr><th>Autor</th><th>Texto</th><th>Data</th><th>Ações</th></tr></thead><tbody id="posts-table"></tbody></table></div>
     </div>
+  </div>
 
-    <!-- ── CHAT ── -->
-    <div id="tab-chat" class="tab-content">
-      <div class="card">
-        <div class="card-title"><span></span>Salas de Chat</div>
-        <div id="chat-list"></div>
-      </div>
+  <!-- TAB CHAT -->
+  <div id="tab-chat" class="tab-content">
+    <div class="card">
+      <h3>💭 Salas de Chat</h3>
+      <div id="chat-list" style="max-height:300px;overflow-y:auto;"></div>
     </div>
-
   </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
-// ─── CONFIG ───────────────────────────────────────────────
+// ========== CONFIG ==========
 const firebaseConfig = {
   apiKey: "AIzaSyC9Lcx3mYGYXavUi_b9c_tRbS3Otm9JQNk",
   authDomain: "sexta-feira-studies.firebaseapp.com",
@@ -903,32 +326,17 @@ const firebaseConfig = {
   messagingSenderId: "673251857052",
   appId: "1:673251857052:web:0ef6929ea93123f7a91359"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-
 const GROQ_KEY = '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';
-const SENHA_ACESSO = 'admin123';
-const SENHA_PONTOS = '54321';
+const SENHA = 'admin123';
+const SENHA_PTS = '54321';
+let usersCache = {}, materiasCache = {};
 
-let usersCache = {};
-let materiasCache = {};
-let abaAtiva = 'ia';
-
-// ─── TOAST ───────────────────────────────────────────────
-function toast(msg, tipo = 'ok') {
-  const el = document.getElementById('toast');
-  const icons = { ok: '✅', err: '❌', info: 'ℹ️', warn: '⚠️' };
-  el.textContent = icons[tipo] + ' ' + msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3000);
-}
-
-// ─── LOGIN ───────────────────────────────────────────────
+// ========== LOGIN ==========
 function verificarSenha() {
-  const val = document.getElementById('senha-input').value;
-  if (val === SENHA_ACESSO) {
-    document.getElementById('login-screen').classList.add('hidden');
+  if (document.getElementById('senha-input').value === SENHA) {
+    document.getElementById('login-screen').style.display = 'none';
     document.getElementById('painel-screen').style.display = 'block';
     carregarTudo();
   } else {
@@ -936,16 +344,12 @@ function verificarSenha() {
   }
 }
 
-// ─── TABS ─────────────────────────────────────────────────
+// ========== TABS ==========
 function switchTab(tab) {
-  abaAtiva = tab;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  const btn = [...document.querySelectorAll('.tab-btn')].find(b => b.getAttribute('onclick') === `switchTab('${tab}')`);
-  if (btn) btn.classList.add('active');
-  const content = document.getElementById('tab-' + tab);
-  if (content) content.classList.add('active');
-
+  document.querySelector(`[onclick="switchTab('${tab}')"]`)?.classList.add('active');
+  document.getElementById('tab-' + tab)?.classList.add('active');
   if (tab === 'materias') carregarMateriasTab();
   if (tab === 'quizzes') carregarQuizzesTab();
   if (tab === 'topicos') carregarTopicosTab();
@@ -953,476 +357,185 @@ function switchTab(tab) {
   if (tab === 'chat') carregarChatTab();
 }
 
-// ─── CARREGAR TUDO ────────────────────────────────────────
+// ========== CARREGAR ==========
 async function carregarTudo() {
-  try {
-    const [uSnap, mSnap, pSnap] = await Promise.all([
-      db.ref('usuarios').once('value'),
-      db.ref('materias').once('value'),
-      db.ref('posts').once('value')
+  const [uSnap, mSnap, pSnap] = await Promise.all([
+    db.ref('usuarios').once('value'),
+    db.ref('materias').once('value'),
+    db.ref('posts').once('value')
+  ]);
+  usersCache = uSnap.val() || {};
+  materiasCache = mSnap.val() || {};
+  
+  document.getElementById('s-users').textContent = Object.keys(usersCache).length;
+  document.getElementById('s-posts').textContent = Object.keys(pSnap.val() || {}).length;
+  document.getElementById('s-materias').textContent = Object.keys(materiasCache).length;
+  
+  let tQ = 0, tT = 0, lista = '';
+  for (const [id, m] of Object.entries(materiasCache)) {
+    lista += `<div style="padding:5px 0;border-bottom:1px solid var(--border);">📚 <strong>${m.nome||'?'}</strong> — <span class="code" onclick="copiarID('${id}')">${id}</span></div>`;
+    const [qSnap, tSnap] = await Promise.all([
+      db.ref('quizzes/'+id).once('value'),
+      db.ref('topicos/'+id).once('value')
     ]);
-
-    usersCache = uSnap.val() || {};
-    materiasCache = mSnap.val() || {};
-
-    document.getElementById('stat-users').textContent = Object.keys(usersCache).length;
-    document.getElementById('stat-posts').textContent = Object.keys(pSnap.val() || {}).length;
-    document.getElementById('stat-materias').textContent = Object.keys(materiasCache).length;
-
-    let totalQ = 0, totalT = 0;
-    let listaHTML = '';
-
-    for (const [id, m] of Object.entries(materiasCache)) {
-      listaHTML += `
-        <div class="materia-row">
-          <div class="materia-info">
-            <span>${m.icone || '📚'}</span>
-            <strong>${m.nome || '?'}</strong>
-          </div>
-          <span class="code-tag" onclick="copiarID('${id}')">${id.substring(0, 16)}…</span>
-        </div>`;
-
-      const [qSnap, tSnap] = await Promise.all([
-        db.ref('quizzes/' + id).once('value'),
-        db.ref('topicos/' + id).once('value')
-      ]);
-      totalQ += Object.keys(qSnap.val() || {}).length;
-      totalT += Object.keys(tSnap.val() || {}).length;
-    }
-
-    document.getElementById('stat-quizzes').textContent = totalQ;
-    document.getElementById('stat-topicos').textContent = totalT;
-    document.getElementById('materias-lista').innerHTML = listaHTML || '<p style="color:var(--muted);font-size:12px;font-family:var(--mono);">Nenhuma matéria cadastrada</p>';
-
-    renderUsers(Object.entries(usersCache).sort((a, b) => (b[1].points || 0) - (a[1].points || 0)));
-  } catch (e) {
-    toast('Erro ao carregar dados: ' + e.message, 'err');
+    tQ += Object.keys(qSnap.val()||{}).length;
+    tT += Object.keys(tSnap.val()||{}).length;
   }
+  document.getElementById('s-quizzes').textContent = tQ;
+  document.getElementById('s-topicos').textContent = tT;
+  document.getElementById('materias-lista').innerHTML = lista || 'Nenhuma matéria';
+  
+  renderUsers(Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0)));
 }
 
-function copiarID(id) {
-  navigator.clipboard.writeText(id).then(() => toast('ID copiado!', 'ok'));
-}
+function copiarID(id) { navigator.clipboard.writeText(id); alert('✅ ID copiado!'); }
 
-// ─── USUÁRIOS ─────────────────────────────────────────────
+// ========== USUÁRIOS ==========
 function renderUsers(arr) {
-  if (!arr.length) {
-    document.getElementById('users-table').innerHTML = '<tr class="empty-row"><td colspan="9">Nenhum usuário encontrado</td></tr>';
-    return;
-  }
-
-  document.getElementById('users-table').innerHTML = arr.map(([uid, u]) => {
-    const avatarHTML = u.avatar?.startsWith('http')
-      ? `<img src="${u.avatar}" class="user-avatar" />`
-      : `<div class="user-avatar-placeholder">${u.avatar || '🎓'}</div>`;
-
-    return `
-      <tr id="row-${uid}">
-        <td>${avatarHTML}</td>
-        <td style="font-family:var(--mono);font-size:11px;color:var(--accent);">@${u.username || '?'}</td>
-        <td>${u.fullname || '—'}</td>
-        <td>
-          <input type="number" id="pts-${uid}" value="${u.points || 0}" style="width:80px" />
-        </td>
-        <td>
-          <select id="plano-${uid}" onchange="updateUser('${uid}','plano',this.value)">
-            <option value="gratis" ${u.plano === 'gratis' ? 'selected' : ''}>Grátis</option>
-            <option value="premium" ${u.plano === 'premium' ? 'selected' : ''}>Premium</option>
-            <option value="pro" ${u.plano === 'pro' ? 'selected' : ''}>PRO</option>
-          </select>
-        </td>
-        <td>
-          <select id="admin-${uid}" onchange="updateUser('${uid}','adminLevel',this.value)">
-            <option value="0" ${!u.adminLevel ? 'selected' : ''}>—</option>
-            ${[1,2,3,4].map(n => `<option value="${n}" ${u.adminLevel == n ? 'selected' : ''}>N${n}</option>`).join('')}
-          </select>
-        </td>
-        <td>
-          <button class="btn ${u.isProf ? 'btn-accent' : 'btn-ghost'}" onclick="toggleBool('${uid}','isProf',${!u.isProf})">
-            ${u.isProf ? '✅' : '❌'}
-          </button>
-        </td>
-        <td>
-          <button class="btn ${u.isQuizzer ? 'btn-accent' : 'btn-ghost'}" onclick="toggleBool('${uid}','isQuizzer',${!u.isQuizzer})">
-            ${u.isQuizzer ? '✅' : '❌'}
-          </button>
-        </td>
-        <td style="display:flex;gap:6px;flex-wrap:wrap;">
-          <button class="btn btn-gold" onclick="addPontos('${uid}')" title="Adicionar pontos">⭐</button>
-          <button class="btn btn-red" onclick="deleteUser('${uid}')" title="Excluir">🗑</button>
-        </td>
-      </tr>`;
-  }).join('');
+  document.getElementById('users-table').innerHTML = arr.map(([uid, u]) => `
+    <tr>
+      <td>${u.avatar?.startsWith('http')?'<img src="'+u.avatar+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover">':(u.avatar||'🎓')}</td>
+      <td>@${u.username||'?'}</td>
+      <td>${u.fullname||'-'}</td>
+      <td><input type="number" id="pts-${uid}" value="${u.points||0}" style="width:70px" /><button class="btn btn-verde" onclick="addPontos('${uid}')">💾</button></td>
+      <td><select onchange="updateUser('${uid}','plano',this.value)"><option value="gratis" ${u.plano=='gratis'?'selected':''}>Grátis</option><option value="premium" ${u.plano=='premium'?'selected':''}>Premium</option><option value="pro" ${u.plano=='pro'?'selected':''}>PRO</option></select></td>
+      <td><select onchange="updateUser('${uid}','adminLevel',this.value)"><option value="0">-</option><option value="1" ${u.adminLevel==1?'selected':''}>N1</option><option value="2" ${u.adminLevel==2?'selected':''}>N2</option><option value="3" ${u.adminLevel==3?'selected':''}>N3</option><option value="4" ${u.adminLevel==4?'selected':''}>N4</option></select></td>
+      <td><button class="btn ${u.isProf?'btn-verde':'btn-azul'}" onclick="updateUser('${uid}','isProf',${!u.isProf})">${u.isProf?'✅':'❌'}</button></td>
+      <td><button class="btn ${u.isQuizzer?'btn-verde':'btn-azul'}" onclick="updateUser('${uid}','isQuizzer',${!u.isQuizzer})">${u.isQuizzer?'✅':'❌'}</button></td>
+      <td><button class="btn btn-vermelho" onclick="deleteUser('${uid}')">🗑</button></td>
+    </tr>`).join('');
 }
 
 function filtrarUsuarios() {
-  const t = (document.getElementById('search-user')?.value || '').toLowerCase().trim();
-  const arr = Object.entries(usersCache).sort((a, b) => (b[1].points || 0) - (a[1].points || 0));
-  renderUsers(t ? arr.filter(([, u]) => (u.username || '').toLowerCase().includes(t) || (u.fullname || '').toLowerCase().includes(t)) : arr);
+  const t = (document.getElementById('search-user')?.value || '').toLowerCase();
+  const arr = Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0));
+  renderUsers(t ? arr.filter(([id,u])=> (u.username||'').toLowerCase().includes(t) || (u.fullname||'').toLowerCase().includes(t)) : arr);
 }
 
 async function updateUser(uid, campo, valor) {
   if (campo === 'adminLevel') valor = parseInt(valor);
-  await db.ref('usuarios/' + uid).update({ [campo]: valor });
+  if (campo === 'isProf' || campo === 'isQuizzer') valor = valor === 'true' || valor === true;
+  await db.ref('usuarios/'+uid).update({[campo]: valor});
   usersCache[uid][campo] = valor;
-  toast('Atualizado!', 'ok');
-}
-
-async function toggleBool(uid, campo, novoValor) {
-  await db.ref('usuarios/' + uid).update({ [campo]: novoValor });
-  usersCache[uid][campo] = novoValor;
-  renderUsers(Object.entries(usersCache).sort((a, b) => (b[1].points || 0) - (a[1].points || 0)));
-  toast('Atualizado!', 'ok');
 }
 
 async function addPontos(uid) {
   const senha = prompt('🔒 Senha para adicionar pontos:');
-  if (senha !== SENHA_PONTOS) { toast('Senha incorreta!', 'err'); return; }
-  const ptsStr = prompt('Quantos pontos adicionar?');
-  const pts = parseInt(ptsStr);
+  if (senha !== SENHA_PTS) return alert('❌ Senha incorreta!');
+  const pts = parseInt(prompt('Quantos pontos?'));
   if (!pts || pts <= 0) return;
   const atual = usersCache[uid]?.points || 0;
-  await db.ref('usuarios/' + uid).update({ points: atual + pts });
+  await db.ref('usuarios/'+uid).update({points: atual + pts});
   usersCache[uid].points = atual + pts;
-  const el = document.getElementById('pts-' + uid);
-  if (el) el.value = atual + pts;
-  toast(`+${pts} pontos adicionados!`, 'ok');
+  document.getElementById('pts-'+uid).value = atual + pts;
+  alert('✅ +' + pts + ' pontos! Total: ' + (atual+pts));
 }
 
 async function deleteUser(uid) {
-  const nome = usersCache[uid]?.username || uid;
-  if (!confirm(`⚠️ Excluir permanentemente @${nome}? Isso não pode ser desfeito.`)) return;
-  await db.ref('usuarios/' + uid).remove();
+  if (!confirm('🗑 Excluir @' + (usersCache[uid]?.username || uid) + '?')) return;
+  await db.ref('usuarios/'+uid).remove();
   delete usersCache[uid];
-  document.getElementById('row-' + uid)?.remove();
-  document.getElementById('stat-users').textContent = Object.keys(usersCache).length;
-  toast('Usuário excluído.', 'warn');
+  carregarTudo();
 }
 
-// ─── IA: CALL GROQ ────────────────────────────────────────
-async function callGroq(promptText) {
+// ========== IA ==========
+async function callGroq(prompt) {
   const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + GROQ_KEY
-    },
-    body: JSON.stringify({
-      model: 'llama-3.1-8b-instant',
-      messages: [
-        {
-          role: 'system',
-          content: 'Você é um gerador de conteúdo educacional. Responda SEMPRE com JSON puro e válido, sem markdown, sem explicações, sem texto antes ou depois do JSON.'
-        },
-        { role: 'user', content: promptText }
-      ],
-      max_tokens: 4096,
-      temperature: 0.7
-    })
+    method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+    body: JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:prompt}],max_tokens:4096,temperature:0.9})
   });
-
-  if (!r.ok) {
-    const errText = await r.text();
-    throw new Error('Groq API erro ' + r.status + ': ' + errText.substring(0, 100));
-  }
-
   const d = await r.json();
   const txt = d.choices?.[0]?.message?.content || '';
-
-  // Múltiplas estratégias de extração de JSON
-  let parsed = null;
-
-  // 1. Tenta direto
-  try { parsed = JSON.parse(txt.trim()); } catch (_) {}
-
-  // 2. Extrai o maior bloco JSON do texto
-  if (!parsed) {
-    const m = txt.match(/\[[\s\S]*\]/);
-    if (m) {
-      try { parsed = JSON.parse(m[0]); } catch (_) {}
-    }
-  }
-
-  // 3. Tenta remover backticks de markdown
-  if (!parsed) {
-    const clean = txt.replace(/```json|```/g, '').trim();
-    try { parsed = JSON.parse(clean); } catch (_) {}
-  }
-
-  if (!parsed) {
-    console.error('Texto recebido da IA:', txt.substring(0, 500));
-    throw new Error('IA não retornou JSON válido. Tente novamente.');
-  }
-
-  return parsed;
+  const m = txt.match(/\[[\s\S]*\]/);
+  return m ? JSON.parse(m[0]) : null;
 }
 
-// Atualiza o elemento de resultado
-function setResultado(msg, tipo) {
-  const el = document.getElementById('ia-resultado');
-  el.className = tipo; // 'loading', 'success', 'error'
-  el.textContent = msg;
-}
-
-// ─── IA: QUIZZES ──────────────────────────────────────────
 async function criarQuizzesIA() {
   const mid = document.getElementById('ia-materia-id').value.trim();
   const tema = document.getElementById('ia-tema').value.trim();
   const qtd = parseInt(document.getElementById('ia-qtd').value);
-
-  if (!mid || !tema) { setResultado('❌ Preencha o ID da matéria e o tema!', 'error'); return; }
-
-  setResultado(`⏳ Gerando ${qtd} quiz(zes) sobre "${tema}"...`, 'loading');
-
-  const promptText = `Crie exatamente ${qtd} quizzes educacionais sobre "${tema}".
-
-Retorne APENAS este JSON, sem nenhum texto antes ou depois:
-[
-  {
-    "nome": "Título criativo do quiz",
-    "nivel": 1,
-    "questoes": [
-      {
-        "pergunta": "Pergunta completa e clara?",
-        "alternativas": ["Alternativa A", "Alternativa B", "Alternativa C", "Alternativa D"],
-        "correta": 0
-      }
-    ]
-  }
-]
-
-REGRAS OBRIGATÓRIAS:
-- Cada quiz deve ter EXATAMENTE 5 questões
-- Cada questão deve ter EXATAMENTE 4 alternativas
-- O campo "correta" é o índice da resposta correta: 0=A, 1=B, 2=C, 3=D
-- Questões educacionais, variadas e com alternativas plausíveis
-- Retorne SOMENTE o array JSON, sem markdown, sem explicação`;
-
-  try {
-    const quizzes = await callGroq(promptText);
-
-    if (!Array.isArray(quizzes) || quizzes.length === 0) {
-      throw new Error('A IA retornou um formato inesperado.');
+  const s = document.getElementById('ia-resultado');
+  if (!mid||!tema) { s.innerHTML='❌ Preencha ID e Tema!'; s.style.color='#EF4444'; return; }
+  s.innerHTML='⏳ Gerando ' + qtd + ' quizzes...'; s.style.color='#94A3B8';
+  const prompt = `Crie ${qtd} quizzes sobre "${tema}". JSON: [{"nome":"Nome","nivel":1,"questoes":[{"pergunta":"?","alternativas":["A","B","C","D"],"correta":0}]}]. Cada quiz 5 questões. Só JSON.`;
+  const quizzes = await callGroq(prompt);
+  if (!quizzes) { s.innerHTML='❌ Erro. Tente novamente.'; s.style.color='#EF4444'; return; }
+  let n=0;
+  for (const q of quizzes) {
+    if (q.nome&&q.questoes) {
+      await db.ref('quizzes/'+mid).push({nome:q.nome,tempo:30,questoes:q.questoes.slice(0,5),nivel:q.nivel||1,oficial:true,autorId:'ia',autorNome:'Neurinho IA',totalPlays:0,createdAt:Date.now()});
+      n++;
     }
-
-    let n = 0;
-    for (const q of quizzes) {
-      if (q.nome && Array.isArray(q.questoes) && q.questoes.length >= 3) {
-        // Garante 5 questões e 4 alternativas cada
-        const questoesValidas = q.questoes
-          .filter(qq => qq.pergunta && Array.isArray(qq.alternativas) && qq.alternativas.length === 4)
-          .slice(0, 5);
-
-        if (questoesValidas.length >= 3) {
-          await db.ref('quizzes/' + mid).push({
-            nome: q.nome,
-            tempo: 30,
-            questoes: questoesValidas,
-            nivel: q.nivel || 1,
-            oficial: true,
-            autorId: 'ia',
-            autorNome: 'Neurinho IA',
-            totalPlays: 0,
-            createdAt: Date.now()
-          });
-          n++;
-        }
-      }
-    }
-
-    if (n === 0) throw new Error('Nenhum quiz válido foi gerado. Tente novamente.');
-
-    setResultado(`✅ ${n} quiz(zes) criados com sucesso!`, 'success');
-    await carregarTudo();
-    return n;
-  } catch (err) {
-    setResultado('❌ ' + err.message, 'error');
-    console.error(err);
-    throw err;
   }
+  s.innerHTML='✅ ' + n + ' quizzes criados!'; s.style.color='#34D399';
+  carregarTudo();
 }
 
-// ─── IA: TÓPICOS ──────────────────────────────────────────
 async function criarTopicosIA() {
   const mid = document.getElementById('ia-materia-id').value.trim();
   const tema = document.getElementById('ia-tema').value.trim();
-  const qtd = parseInt(document.getElementById('ia-qtd-topicos').value);  // FIX: sem prompt()
-
-  if (!mid || !tema) { setResultado('❌ Preencha o ID da matéria e o tema!', 'error'); return; }
-
-  setResultado(`⏳ Gerando ${qtd} tópico(s) sobre "${tema}"...`, 'loading');
-
-  const promptText = `Crie exatamente ${qtd} tópicos de estudo completos sobre "${tema}".
-
-Retorne APENAS este JSON, sem nenhum texto antes ou depois:
-[
-  {
-    "titulo": "Título do tópico",
-    "conteudo": "Conteúdo completo e didático com no mínimo 3 parágrafos. Explique como um professor faria, com exemplos práticos e explicações claras. Use quebras de linha para separar parágrafos. Mínimo 500 caracteres."
+  const qtd = parseInt(prompt('Quantos tópicos?','5'));
+  const s = document.getElementById('ia-resultado');
+  if (!mid||!tema) { s.innerHTML='❌ Preencha ID e Tema!'; s.style.color='#EF4444'; return; }
+  s.innerHTML='⏳ Gerando ' + qtd + ' tópicos...'; s.style.color='#94A3B8';
+  const prompt = `Crie ${qtd} tópicos sobre "${tema}". JSON: [{"titulo":"Título","conteudo":"Conteúdo COMPLETO com no MÍNIMO 500 caracteres, bem didático, com exemplos e explicações."}]. Só JSON.`;
+  const topicos = await callGroq(prompt);
+  if (!topicos) { s.innerHTML='❌ Erro.'; s.style.color='#EF4444'; return; }
+  let n=0;
+  for (const t of topicos) {
+    if (t.titulo&&t.conteudo&&t.conteudo.length>100) {
+      await db.ref('topicos/'+mid).push({titulo:t.titulo,conteudo:t.conteudo,autorId:'ia',autorNome:'Neurinho IA',verificado:true,createdAt:Date.now()});
+      n++;
+    }
   }
-]
-
-REGRAS OBRIGATÓRIAS:
-- Cada tópico deve ter no mínimo 500 caracteres no campo conteudo
-- Seja didático e completo, como um livro didático
-- Use linguagem acessível para estudantes
-- NÃO use markdown no conteúdo, apenas texto simples com quebras de linha
-- Retorne SOMENTE o array JSON, sem markdown, sem explicação`;
-
-  try {
-    const topicos = await callGroq(promptText);
-
-    if (!Array.isArray(topicos) || topicos.length === 0) {
-      throw new Error('A IA retornou um formato inesperado.');
-    }
-
-    let n = 0;
-    for (const t of topicos) {
-      if (t.titulo && t.conteudo && t.conteudo.length > 100) {
-        await db.ref('topicos/' + mid).push({
-          titulo: t.titulo,
-          conteudo: t.conteudo,
-          autorId: 'ia',
-          autorNome: 'Neurinho IA',
-          verificado: true,
-          createdAt: Date.now()
-        });
-        n++;
-      }
-    }
-
-    if (n > 0) {
-      const snap = await db.ref('materias/' + mid + '/topicosCount').once('value');
-      await db.ref('materias/' + mid).update({ topicosCount: (snap.val() || 0) + n });
-    }
-
-    if (n === 0) throw new Error('Nenhum tópico válido foi gerado. Tente novamente.');
-
-    setResultado(`✅ ${n} tópico(s) criados com sucesso!`, 'success');
-    await carregarTudo();
-    return n;
-  } catch (err) {
-    setResultado('❌ ' + err.message, 'error');
-    console.error(err);
-    throw err;
-  }
+  if (n>0) { const snap = await db.ref('materias/'+mid+'/topicosCount').once('value'); await db.ref('materias/'+mid).update({topicosCount:(snap.val()||0)+n}); }
+  s.innerHTML='✅ ' + n + ' tópicos criados!'; s.style.color='#34D399';
+  carregarTudo();
 }
 
-// ─── IA: TUDO ─────────────────────────────────────────────
 async function criarTudoIA() {
-  const mid = document.getElementById('ia-materia-id').value.trim();
-  const tema = document.getElementById('ia-tema').value.trim();
-  if (!mid || !tema) { setResultado('❌ Preencha o ID da matéria e o tema!', 'error'); return; }
-
-  setResultado('⏳ Gerando tópicos...', 'loading');
-
-  let nT = 0, nQ = 0;
-
-  try {
-    nT = await criarTopicosIA();
-  } catch (_) {}
-
-  setResultado('⏳ Gerando quizzes...', 'loading');
-
-  try {
-    nQ = await criarQuizzesIA();
-  } catch (_) {}
-
-  setResultado(`✅ Criado: ${nT} tópico(s) + ${nQ} quiz(zes)! 🎉`, 'success');
-  await carregarTudo();
+  const s = document.getElementById('ia-resultado');
+  s.innerHTML='⏳ Criando tudo...'; s.style.color='#94A3B8';
+  await criarTopicosIA();
+  await criarQuizzesIA();
+  s.innerHTML='✅ TUDO pronto!'; s.style.color='#34D399';
 }
 
-// ─── ABAS: CARREGAR ───────────────────────────────────────
+// ========== ABAS ==========
 async function carregarMateriasTab() {
   const arr = Object.entries(materiasCache);
-  document.getElementById('materias-table').innerHTML = arr.length
-    ? arr.map(([id, m]) => `
-        <tr>
-          <td>${m.icone || '📚'}</td>
-          <td style="font-weight:500;">${m.nome || '?'}</td>
-          <td style="color:var(--muted2);">@${m.autorNome || '?'}</td>
-          <td><span class="badge badge-blue">${m.topicosCount || 0}</span></td>
-          <td><button class="btn btn-red" onclick="deletarItem('materias','${id}','materias')">🗑</button></td>
-        </tr>`).join('')
-    : '<tr class="empty-row"><td colspan="5">Nenhuma matéria cadastrada</td></tr>';
+  document.getElementById('materias-table').innerHTML = arr.length ? arr.map(([id,m])=>`<tr><td>${m.icone||'📚'}</td><td>${m.nome||'?'}</td><td>@${m.autorNome||'?'}</td><td>${m.topicosCount||0}</td><td><button class="btn btn-vermelho" onclick="del('materias','${id}')">🗑</button></td></tr>`).join('') : '<tr><td colspan="5">Nenhuma</td></tr>';
 }
-
 async function carregarQuizzesTab() {
-  let html = '';
-  for (const [mid, m] of Object.entries(materiasCache)) {
-    const snap = await db.ref('quizzes/' + mid).once('value');
-    for (const [qid, q] of Object.entries(snap.val() || {})) {
-      html += `
-        <tr>
-          <td style="font-weight:500;">${q.nome || '?'}</td>
-          <td><span class="badge badge-blue">${m.nome || '?'}</span></td>
-          <td style="font-family:var(--mono);font-size:11px;">${q.questoes?.length || 0}</td>
-          <td>${q.oficial ? '<span class="badge badge-green">OFICIAL</span>' : '<span class="badge badge-red">NÃO</span>'}</td>
-          <td style="color:var(--muted2);font-size:11px;">@${q.autorNome || '?'}</td>
-          <td><button class="btn btn-red" onclick="deletarItem('quizzes/${mid}','${qid}','quizzes')">🗑</button></td>
-        </tr>`;
-    }
+  let h='';
+  for (const [mid,m] of Object.entries(materiasCache)) {
+    const snap = await db.ref('quizzes/'+mid).once('value');
+    for (const [qid,q] of Object.entries(snap.val()||{})) h += `<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td>${q.oficial?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">Não</span>'}</td><td><button class="btn btn-vermelho" onclick="del('quizzes/${mid}','${qid}')">🗑</button></td></tr>`;
   }
-  document.getElementById('quizzes-table').innerHTML = html || '<tr class="empty-row"><td colspan="6">Nenhum quiz cadastrado</td></tr>';
+  document.getElementById('quizzes-table').innerHTML = h || '<tr><td colspan="5">Nenhum</td></tr>';
 }
-
 async function carregarTopicosTab() {
-  let html = '';
-  for (const [mid, m] of Object.entries(materiasCache)) {
-    const snap = await db.ref('topicos/' + mid).once('value');
-    for (const [tid, t] of Object.entries(snap.val() || {})) {
-      html += `
-        <tr>
-          <td style="font-weight:500;">${(t.titulo || '?').substring(0, 55)}</td>
-          <td><span class="badge badge-blue">${m.nome || '?'}</span></td>
-          <td style="color:var(--muted2);font-size:11px;">@${t.autorNome || '?'}</td>
-          <td>${t.verificado ? '<span class="badge badge-green">✅ SIM</span>' : '<span class="badge badge-red">❌ NÃO</span>'}</td>
-          <td><button class="btn btn-red" onclick="deletarItem('topicos/${mid}','${tid}','topicos')">🗑</button></td>
-        </tr>`;
-    }
+  let h='';
+  for (const [mid,m] of Object.entries(materiasCache)) {
+    const snap = await db.ref('topicos/'+mid).once('value');
+    for (const [tid,t] of Object.entries(snap.val()||{})) h += `<tr><td>${(t.titulo||'?').substring(0,50)}</td><td>${m.nome||'?'}</td><td>@${t.autorNome||'?'}</td><td>${t.verificado?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">❌</span>'}</td><td><button class="btn btn-vermelho" onclick="del('topicos/${mid}','${tid}')">🗑</button></td></tr>`;
   }
-  document.getElementById('topicos-table').innerHTML = html || '<tr class="empty-row"><td colspan="5">Nenhum tópico cadastrado</td></tr>';
+  document.getElementById('topicos-table').innerHTML = h || '<tr><td colspan="5">Nenhum</td></tr>';
 }
-
 async function carregarPostsTab() {
   const snap = await db.ref('posts').once('value');
-  const posts = snap.val() || {};
-  const arr = Object.entries(posts).reverse().slice(0, 50);
-  document.getElementById('posts-table').innerHTML = arr.length
-    ? arr.map(([id, p]) => `
-        <tr>
-          <td style="font-family:var(--mono);font-size:11px;color:var(--accent);">@${p.autorNome || '?'}</td>
-          <td style="color:var(--muted2);">${(p.texto || '').substring(0, 80)}</td>
-          <td style="font-family:var(--mono);font-size:10px;color:var(--muted);">${p.createdAt ? new Date(p.createdAt).toLocaleDateString('pt-BR') : '—'}</td>
-          <td><button class="btn btn-red" onclick="deletarItem('posts','${id}','posts')">🗑</button></td>
-        </tr>`).join('')
-    : '<tr class="empty-row"><td colspan="4">Nenhum post</td></tr>';
+  const posts = snap.val()||{};
+  document.getElementById('posts-table').innerHTML = Object.entries(posts).reverse().slice(0,50).map(([id,p])=>`<tr><td>@${p.autorNome||'?'}</td><td>${(p.texto||'').substring(0,60)}</td><td>${new Date(p.createdAt).toLocaleDateString('pt-BR')}</td><td><button class="btn btn-vermelho" onclick="del('posts','${id}')">🗑</button></td></tr>`).join('') || '<tr><td colspan="4">Nenhum</td></tr>';
 }
-
 async function carregarChatTab() {
   const snap = await db.ref('chat_rooms').once('value');
-  const rooms = snap.val() || {};
-  const arr = Object.entries(rooms);
-  document.getElementById('chat-list').innerHTML = arr.length
-    ? arr.map(([id, r]) => `
-        <div class="chat-room-row">
-          <span class="room-name">${r.nome || '?'}</span>
-          <button class="btn btn-red" onclick="deletarItem('chat_rooms','${id}','chat')">🗑</button>
-        </div>`).join('')
-    : '<p style="color:var(--muted);font-family:var(--mono);font-size:12px;">Nenhuma sala de chat</p>';
+  const rooms = snap.val()||{};
+  document.getElementById('chat-list').innerHTML = Object.entries(rooms).map(([id,r])=>`<div style="padding:8px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"># ${r.nome||'?'} <button class="btn btn-vermelho" onclick="del('chat_rooms','${id}')">🗑</button></div>`).join('') || 'Nenhuma sala';
 }
-
-// ─── DELETAR ITEM ─────────────────────────────────────────
-async function deletarItem(path, id, abaReload) {
-  if (!confirm('Excluir permanentemente? Isso não pode ser desfeito.')) return;
-  try {
-    await db.ref(path + '/' + id).remove();
-    toast('Item excluído.', 'warn');
-    await carregarTudo();
-    if (abaReload) switchTab(abaReload);
-  } catch (e) {
-    toast('Erro ao excluir: ' + e.message, 'err');
-  }
+async function del(path, id) {
+  if (!confirm('🗑 Excluir?')) return;
+  await db.ref(path+'/'+id).remove();
+  carregarTudo();
 }
 </script>
 </body>
