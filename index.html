@@ -9,6 +9,7 @@
     body { font-family: 'Sora', sans-serif; background: #0F172A; color: #F1F5F9; padding: 20px; }
     .container { max-width: 900px; margin: 0 auto; }
     h1 { color: #0F766E; margin-bottom: 20px; text-align: center; }
+    h3 { margin-bottom: 15px; }
     .card { background: #1E293B; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #334155; }
     table { width: 100%; border-collapse: collapse; }
     th, td { padding: 10px; text-align: left; border-bottom: 1px solid #334155; font-size: 13px; }
@@ -17,7 +18,8 @@
     .btn-save { background: #0F766E; color: white; }
     .btn-danger { background: #EF4444; color: white; }
     .btn-edit { background: #3B82F6; color: white; }
-    input { padding: 6px 10px; border-radius: 6px; border: 1px solid #334155; background: #0F172A; color: white; font-size: 12px; width: 100%; }
+    .btn-ia { background: #8B5CF6; color: white; }
+    input, select, textarea { padding: 8px 10px; border-radius: 8px; border: 1px solid #334155; background: #0F172A; color: white; font-size: 12px; width: 100%; margin: 5px 0; }
     .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
     .stat-card { background: #1E293B; padding: 16px; border-radius: 12px; text-align: center; }
     .stat-val { font-size: 28px; font-weight: 800; color: #0F766E; }
@@ -25,6 +27,7 @@
     #login-screen { text-align: center; padding: 100px 20px; }
     #login-screen input { width: 250px; margin: 10px auto; display: block; padding: 10px; }
     .hidden { display: none; }
+    #ia-resultado { margin-top: 12px; font-size: 13px; color: #94A3B8; text-align: center; }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -44,42 +47,56 @@
   <div class="container">
     <h1>⚙️ Painel Admin - Sexta-Feira Studies</h1>
     
+    <!-- Estatísticas -->
     <div class="stats">
-      <div class="stat-card">
-        <div class="stat-val" id="total-users">0</div>
-        <div class="stat-label">Usuários</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val" id="total-posts">0</div>
-        <div class="stat-label">Posts</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val" id="total-materias">0</div>
-        <div class="stat-label">Matérias</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val" id="total-quizzes">0</div>
-        <div class="stat-label">Quizzes</div>
-      </div>
+      <div class="stat-card"><div class="stat-val" id="total-users">0</div><div class="stat-label">Usuários</div></div>
+      <div class="stat-card"><div class="stat-val" id="total-posts">0</div><div class="stat-label">Posts</div></div>
+      <div class="stat-card"><div class="stat-val" id="total-materias">0</div><div class="stat-label">Matérias</div></div>
+      <div class="stat-card"><div class="stat-val" id="total-quizzes">0</div><div class="stat-label">Quizzes</div></div>
     </div>
 
+    <!-- 🤖 GERADOR IA -->
     <div class="card">
-      <h3 style="margin-bottom:15px">👥 Usuários</h3>
-      <input type="text" id="search-user" placeholder="🔍 Buscar usuário..." oninput="filtrarUsuarios()" style="margin-bottom:15px;" />
-      <div style="overflow-x:auto;">
+      <h3 style="color:#8B5CF6;">🤖 Gerador IA (Criar Quizzes e Tópicos Automaticamente)</h3>
+      
+      <label style="font-size:12px;color:#94A3B8;">ID da Matéria:</label>
+      <input type="text" id="ia-materia-id" placeholder="Ex: -Oabc123def456..." />
+      
+      <label style="font-size:12px;color:#94A3B8;">Tema:</label>
+      <input type="text" id="ia-tema" placeholder="Ex: Revolução Francesa, Álgebra Linear..." />
+      
+      <label style="font-size:12px;color:#94A3B8;">Quantos quizzes?</label>
+      <select id="ia-qtd">
+        <option value="5">5 Quizzes</option>
+        <option value="10" selected>10 Quizzes</option>
+        <option value="20">20 Quizzes</option>
+      </select>
+      
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn-ia" onclick="criarQuizzesComIA()" style="flex:1;padding:12px;font-size:13px;">
+          🤖 Gerar Quizzes
+        </button>
+        <button class="btn-ia" onclick="criarTopicosComIA()" style="flex:1;padding:12px;font-size:13px;">
+          📝 Gerar Tópicos
+        </button>
+      </div>
+      
+      <div id="ia-resultado"></div>
+    </div>
+
+    <!-- Lista de Matérias para pegar ID -->
+    <div class="card">
+      <h3 style="color:#0F766E;">📚 Matérias (IDs para copiar)</h3>
+      <div id="materias-lista" style="max-height:200px;overflow-y:auto;font-size:12px;"></div>
+    </div>
+
+    <!-- Usuários -->
+    <div class="card">
+      <h3 style="color:#0F766E;">👥 Usuários</h3>
+      <input type="text" id="search-user" placeholder="🔍 Buscar usuário..." oninput="filtrarUsuarios()" />
+      <div style="overflow-x:auto;margin-top:10px;">
         <table>
-          <thead>
-            <tr>
-              <th>Avatar</th>
-              <th>@Username</th>
-              <th>Nome</th>
-              <th>Pontos</th>
-              <th>Plano</th>
-              <th>Admin</th>
-              <th>Prof</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Avatar</th><th>@Username</th><th>Nome</th><th>Pontos</th><th>Plano</th><th>Admin</th><th>Prof</th><th>Ações</th></tr></thead>
           <tbody id="users-table"></tbody>
         </table>
       </div>
@@ -90,6 +107,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
+// Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC9Lcx3mYGYXavUi_b9c_tRbS3Otm9JQNk",
   authDomain: "sexta-feira-studies.firebaseapp.com",
@@ -99,17 +117,16 @@ const firebaseConfig = {
   messagingSenderId: "673251857052",
   appId: "1:673251857052:web:0ef6929ea93123f7a91359"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-const SENHA = 'AeTStudio';
+const SENHA = 'admin123';
+const GROQ_API_KEY = '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';
 let todosUsuarios = {};
 
-// Verificar senha
+// Login
 function verificarSenha() {
-  const senha = document.getElementById('senha-input').value;
-  if (senha === SENHA) {
+  if (document.getElementById('senha-input').value === SENHA) {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('painel-screen').classList.remove('hidden');
     carregarDados();
@@ -125,95 +142,146 @@ async function carregarDados() {
   document.getElementById('total-users').textContent = Object.keys(todosUsuarios).length;
   
   const postsSnap = await db.ref('posts').once('value');
-  const posts = postsSnap.val() || {};
-  document.getElementById('total-posts').textContent = Object.keys(posts).length;
+  document.getElementById('total-posts').textContent = Object.keys(postsSnap.val() || {}).length;
   
   const matSnap = await db.ref('materias').once('value');
   const mat = matSnap.val() || {};
   document.getElementById('total-materias').textContent = Object.keys(mat).length;
   
   let totalQuizzes = 0;
-  for (const mId of Object.keys(mat)) {
+  let materiasHTML = '';
+  for (const [mId, m] of Object.entries(mat)) {
+    materiasHTML += '<div style="padding:4px 0;border-bottom:1px solid #334155;">📚 <strong>' + (m.nome || 'Sem nome') + '</strong> — ID: <code style="background:#0F172A;padding:2px 6px;border-radius:4px;cursor:pointer" onclick="copiarID(\'' + mId + '\')">' + mId + '</code></div>';
     const qSnap = await db.ref('quizzes/' + mId).once('value');
-    const q = qSnap.val() || {};
-    totalQuizzes += Object.keys(q).length;
+    totalQuizzes += Object.keys(qSnap.val() || {}).length;
   }
   document.getElementById('total-quizzes').textContent = totalQuizzes;
+  document.getElementById('materias-lista').innerHTML = materiasHTML;
   
   renderizarUsuarios(todosUsuarios);
+}
+
+function copiarID(id) {
+  navigator.clipboard.writeText(id);
+  alert('✅ ID copiado: ' + id);
 }
 
 // Renderizar usuários
 function renderizarUsuarios(users) {
   const tbody = document.getElementById('users-table');
   const arr = Object.entries(users).sort((a,b) => (b[1].points||0) - (a[1].points||0));
-  
   tbody.innerHTML = arr.map(([uid, u]) => `
     <tr id="row-${uid}">
       <td>${u.avatar && u.avatar.startsWith('http') ? '<img src="' + u.avatar + '" style="width:30px;height:30px;border-radius:50%;object-fit:cover" />' : (u.avatar || '🎓')}</td>
       <td>@${u.username || '?'}</td>
       <td>${u.fullname || '-'}</td>
-      <td>
-        <input type="number" value="${u.points || 0}" id="pts-${uid}" style="width:80px;" />
-        <button class="btn-save" onclick="salvarCampo('${uid}','points',document.getElementById('pts-${uid}').value)">💾</button>
-      </td>
-      <td>
-        <select id="plano-${uid}" onchange="salvarCampo('${uid}','plano',this.value)">
-          <option value="gratis" ${u.plano === 'gratis' ? 'selected' : ''}>Grátis</option>
-          <option value="premium" ${u.plano === 'premium' ? 'selected' : ''}>Premium</option>
-          <option value="pro" ${u.plano === 'pro' ? 'selected' : ''}>PRO</option>
-        </select>
-      </td>
-      <td>
-        <select id="admin-${uid}" onchange="salvarCampo('${uid}','adminLevel',this.value)">
-          <option value="0" ${(u.adminLevel||0) === 0 ? 'selected' : ''}>Não</option>
-          <option value="1" ${u.adminLevel === 1 ? 'selected' : ''}>Nível 1</option>
-          <option value="2" ${u.adminLevel === 2 ? 'selected' : ''}>Nível 2</option>
-          <option value="3" ${u.adminLevel === 3 ? 'selected' : ''}>Nível 3</option>
-          <option value="4" ${u.adminLevel === 4 ? 'selected' : ''}>Nível 4</option>
-        </select>
-      </td>
-      <td>
-        <button class="${u.isProf ? 'btn-save' : 'btn-edit'}" onclick="salvarCampo('${uid}','isProf',${!u.isProf})">${u.isProf ? '✅ Sim' : '❌ Não'}</button>
-      </td>
-      <td>
-        <button class="btn-danger" onclick="deletarUsuario('${uid}')">🗑</button>
-      </td>
-    </tr>
-  `).join('');
+      <td><input type="number" value="${u.points || 0}" id="pts-${uid}" style="width:80px;" /><button class="btn-save" onclick="salvarCampo('${uid}','points',document.getElementById('pts-${uid}').value)">💾</button></td>
+      <td><select id="plano-${uid}" onchange="salvarCampo('${uid}','plano',this.value)"><option value="gratis" ${u.plano==='gratis'?'selected':''}>Grátis</option><option value="premium" ${u.plano==='premium'?'selected':''}>Premium</option><option value="pro" ${u.plano==='pro'?'selected':''}>PRO</option></select></td>
+      <td><select id="admin-${uid}" onchange="salvarCampo('${uid}','adminLevel',this.value)"><option value="0" ${(u.adminLevel||0)===0?'selected':''}>Não</option><option value="1" ${u.adminLevel===1?'selected':''}>N1</option><option value="2" ${u.adminLevel===2?'selected':''}>N2</option><option value="3" ${u.adminLevel===3?'selected':''}>N3</option><option value="4" ${u.adminLevel===4?'selected':''}>N4</option></select></td>
+      <td><button class="${u.isProf?'btn-save':'btn-edit'}" onclick="salvarCampo('${uid}','isProf',${!u.isProf})">${u.isProf?'✅':'❌'}</button></td>
+      <td><button class="btn-danger" onclick="deletarUsuario('${uid}')">🗑</button></td>
+    </tr>`).join('');
 }
 
-// Salvar campo
 async function salvarCampo(uid, campo, valor) {
   if (campo === 'points') valor = parseInt(valor) || 0;
   if (campo === 'adminLevel') valor = parseInt(valor) || 0;
   if (campo === 'isProf') valor = valor === true || valor === 'true';
-  
   await db.ref('usuarios/' + uid).update({ [campo]: valor });
-  alert('✅ Atualizado: ' + campo + ' = ' + valor);
+  alert('✅ Atualizado!');
 }
 
-// Deletar usuário
 async function deletarUsuario(uid) {
-  if (!confirm('🗑️ Tem certeza que deseja EXCLUIR este usuário PERMANENTEMENTE?')) return;
+  if (!confirm('🗑️ Excluir permanentemente?')) return;
   await db.ref('usuarios/' + uid).remove();
-  await db.ref('historico/' + uid).remove();
-  await db.ref('notificacoes/' + uid).remove();
   document.getElementById('row-' + uid).remove();
-  alert('✅ Usuário excluído!');
 }
 
-// Filtrar usuários
 function filtrarUsuarios() {
   const termo = document.getElementById('search-user').value.toLowerCase();
   if (!termo) return renderizarUsuarios(todosUsuarios);
   const filtrado = {};
   Object.entries(todosUsuarios).forEach(([uid, u]) => {
-    if ((u.username||'').toLowerCase().includes(termo) || (u.fullname||'').toLowerCase().includes(termo)) {
-      filtrado[uid] = u;
-    }
+    if ((u.username||'').toLowerCase().includes(termo) || (u.fullname||'').toLowerCase().includes(termo)) filtrado[uid] = u;
   });
   renderizarUsuarios(filtrado);
+}
+
+// ========== GERADOR IA ==========
+async function gerarQuizzesIA(tema, quantidade) {
+  const prompt = `Crie ${quantidade} quizzes sobre "${tema}" no formato JSON:\n[\n  {\n    "nome": "Nome do Quiz",\n    "nivel": 1,\n    "questoes": [\n      {\n        "pergunta": "Pergunta?",\n        "alternativas": ["A", "B", "C", "D"],\n        "correta": 0\n      }\n    ]\n  }\n]\nCada quiz com 5 questões de múltipla escolha. Retorne APENAS JSON.`;
+  
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_API_KEY },
+    body: JSON.stringify({ model: 'llama-3.1-8b-instant', messages: [{ role: 'user', content: prompt }], max_tokens: 4000, temperature: 0.9 })
+  });
+  const data = await response.json();
+  const texto = data.choices?.[0]?.message?.content || '';
+  const jsonMatch = texto.match(/\[[\s\S]*\]/);
+  return jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+}
+
+async function gerarTopicosIA(tema, quantidade) {
+  const prompt = `Crie ${quantidade} tópicos sobre "${tema}" no formato JSON:\n[\n  {\n    "titulo": "Título",\n    "conteudo": "Conteúdo completo com parágrafos e exemplos."\n  }\n]\nRetorne APENAS JSON.`;
+  
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_API_KEY },
+    body: JSON.stringify({ model: 'llama-3.1-8b-instant', messages: [{ role: 'user', content: prompt }], max_tokens: 4000, temperature: 0.9 })
+  });
+  const data = await response.json();
+  const texto = data.choices?.[0]?.message?.content || '';
+  const jsonMatch = texto.match(/\[[\s\S]*\]/);
+  return jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+}
+
+async function criarQuizzesComIA() {
+  const materiaId = document.getElementById('ia-materia-id').value.trim();
+  const tema = document.getElementById('ia-tema').value.trim();
+  const qtd = parseInt(document.getElementById('ia-qtd').value);
+  const status = document.getElementById('ia-resultado');
+  
+  if (!materiaId || !tema) { status.innerHTML = '❌ Preencha ID e Tema!'; return; }
+  status.innerHTML = '⏳ Gerando ' + qtd + ' quizzes sobre "' + tema + '"...';
+  
+  const quizzes = await gerarQuizzesIA(tema, qtd);
+  if (!quizzes) { status.innerHTML = '❌ Erro ao gerar. Tente novamente.'; return; }
+  
+  let salvos = 0;
+  for (const q of quizzes) {
+    if (q.nome && q.questoes) {
+      await db.ref('quizzes/' + materiaId).push({ nome: q.nome, tempo: 30, questoes: q.questoes, nivel: q.nivel||1, oficial: true, autorId: 'ia', autorNome: 'Neurinho IA', totalPlays: 0, createdAt: Date.now() });
+      salvos++;
+    }
+  }
+  status.innerHTML = '✅ ' + salvos + ' quizzes criados com sucesso!';
+  carregarDados();
+}
+
+async function criarTopicosComIA() {
+  const materiaId = document.getElementById('ia-materia-id').value.trim();
+  const tema = document.getElementById('ia-tema').value.trim();
+  const qtd = parseInt(prompt('Quantos tópicos?', '5'));
+  const status = document.getElementById('ia-resultado');
+  
+  if (!materiaId || !tema) { status.innerHTML = '❌ Preencha ID e Tema!'; return; }
+  status.innerHTML = '⏳ Gerando ' + qtd + ' tópicos sobre "' + tema + '"...';
+  
+  const topicos = await gerarTopicosIA(tema, qtd);
+  if (!topicos) { status.innerHTML = '❌ Erro ao gerar.'; return; }
+  
+  let salvos = 0;
+  for (const t of topicos) {
+    if (t.titulo && t.conteudo) {
+      await db.ref('topicos/' + materiaId).push({ titulo: t.titulo, conteudo: t.conteudo, autorId: 'ia', autorNome: 'Neurinho IA', verificado: true, createdAt: Date.now() });
+      const snap = await db.ref('materias/' + materiaId + '/topicosCount').once('value');
+      await db.ref('materias/' + materiaId).update({ topicosCount: (snap.val()||0)+1 });
+      salvos++;
+    }
+  }
+  status.innerHTML = '✅ ' + salvos + ' tópicos criados com sucesso!';
+  carregarDados();
 }
 </script>
 </body>
