@@ -446,13 +446,70 @@ async function deleteUser(uid) {
 // ========== IA ==========
 async function callGroq(conteudo) {
   const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
-    body: JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:conteudo}],max_tokens:4096,temperature:0.9})
+    method: 'POST', 
+    headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+    body: JSON.stringify({
+      model:'llama-3.1-8b-instant',
+      messages:[{role:'user',content:conteudo}],
+      max_tokens:4096,
+      temperature:0.9
+    })
   });
+  
   const d = await r.json();
   const txt = d.choices?.[0]?.message?.content || '';
-  const m = txt.match(/\[[\s\S]*\]/);
-  return m ? JSON.parse(m[0]) : null;
+  
+  console.log('Resposta bruta da IA:', txt); // Debug
+  
+  // Tenta encontrar o JSON de várias formas
+  let jsonStr = null;
+  
+  // Método 1: Procurar por [ ... ]
+  const match1 = txt.match(/\[\s*\{[\s\S]*\}\s*\]/);
+  if (match1) jsonStr = match1[0];
+  
+  // Método 2: Se não achar, procura qualquer coisa entre colchetes
+  if (!jsonStr) {
+    const match2 = txt.match(/\[[\s\S]*?\]/);
+    if (match2) jsonStr = match2[0];
+  }
+  
+  if (!jsonStr) {
+    console.error('Não encontrou JSON na resposta:', txt);
+    return null;
+  }
+  
+  // LIMPEZA DO JSON: Remove caracteres problemáticos
+  jsonStr = jsonStr
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ') // Remove control chars
+    .replace(/\n/g, '\\n')     // Escapa quebras de linha
+    .replace(/\r/g, '\\r')     // Escapa carriage return
+    .replace(/\t/g, '\\t')     // Escapa tabs
+    .replace(/\\'/g, "'")      // Corrige aspas escapadas
+    .replace(/\\"/g, '"')      // Corrige aspas duplas escapadas
+    .replace(/\\(?!["\\/bfnrtu])/g, ''); // Remove escapes inválidos
+  
+  console.log('JSON limpo:', jsonStr); // Debug
+  
+  try {
+    return JSON.parse(jsonStr);
+  } catch(e) {
+    console.error('Erro ao parsear JSON:', e);
+    console.error('JSON problemático:', jsonStr);
+    
+    // Última tentativa: mais agressiva
+    try {
+      const cleanJson = jsonStr
+        .replace(/\\/g, '')     // Remove todas as barras
+        .replace(/\n/g, ' ')    // Substitui quebras por espaço
+        .replace(/\r/g, '')
+        .replace(/\t/g, ' ');
+      return JSON.parse(cleanJson);
+    } catch(e2) {
+      console.error('Falha total ao parsear:', e2);
+      return null;
+    }
+  }
 }
 
 async function criarQuizzesIA() {
@@ -467,29 +524,32 @@ async function criarQuizzesIA() {
     return; 
   }
   
-  // Verificar se matéria existe
   const materiaExiste = await db.ref('materias/'+mid).once('value');
   if (!materiaExiste.val()) {
-    resultado.innerHTML='❌ Matéria com ID <code>'+mid+'</code> não encontrada! Verifique o ID.';
+    resultado.innerHTML='❌ Matéria não encontrada! Verifique o ID.';
     resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
     return;
   }
   
-  resultado.innerHTML='⏳ Gerando ' + quantidade + ' quizzes sobre "' + tema + '"...';
+  resultado.innerHTML='⏳ Gerando ' + quantidade + ' quizzes...';
   resultado.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px;';
   
-  const comando = `Crie ${quantidade} quizzes sobre "${tema}". Retorne APENAS um array JSON válido neste formato: [{"nome":"Nome do Quiz","nivel":1,"questoes":[{"pergunta":"Pergunta?","alternativas":["A","B","C","D"],"correta":0}]}]. Cada quiz deve ter 5 questões. NÃO inclua texto fora do JSON.`;
+  // Prompt melhorado para evitar problemas
+  const comando = `Crie EXATAMENTE ${quantidade} quizzes sobre "${tema}". 
+IMPORTANTE: Retorne APENAS um array JSON. Não use quebras de linha dentro dos textos.
+Formato: [{"nome":"Titulo","nivel":1,"questoes":[{"pergunta":"Pergunta?","alternativas":["A","B","C","D"],"correta":0}]}]`;
+  
   const quizzes = await callGroq(comando);
   
   if (!quizzes || !Array.isArray(quizzes)) { 
-    resultado.innerHTML='❌ Erro ao gerar quizzes. Tente novamente.'; 
+    resultado.innerHTML='❌ Erro ao gerar. Tente novamente.'; 
     resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; 
     return; 
   }
   
   let criados = 0;
   for (const q of quizzes) {
-    if (q.nome && q.questoes && q.questoes.length > 0) {
+    if (q.nome && q.questoes?.length > 0) {
       await db.ref('quizzes/'+mid).push({
         nome: q.nome,
         tempo: 30,
@@ -505,7 +565,7 @@ async function criarQuizzesIA() {
     }
   }
   
-  resultado.innerHTML='✅ ' + criados + ' quizzes criados com sucesso na matéria!';
+  resultado.innerHTML='✅ ' + criados + ' quizzes criados!';
   resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
   carregarTudo();
 }
@@ -522,29 +582,33 @@ async function criarTopicosIA() {
     return; 
   }
   
-  // Verificar se matéria existe
   const materiaExiste = await db.ref('materias/'+mid).once('value');
   if (!materiaExiste.val()) {
-    resultado.innerHTML='❌ Matéria com ID <code>'+mid+'</code> não encontrada! Verifique o ID.';
+    resultado.innerHTML='❌ Matéria não encontrada! Verifique o ID.';
     resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
     return;
   }
   
-  resultado.innerHTML='⏳ Gerando ' + quantidade + ' tópicos sobre "' + tema + '"...';
+  resultado.innerHTML='⏳ Gerando ' + quantidade + ' tópicos...';
   resultado.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px;';
   
-  const comando = `Crie ${quantidade} tópicos de estudo sobre "${tema}". Retorne APENAS um array JSON válido neste formato: [{"titulo":"Título do Tópico","conteudo":"Conteúdo COMPLETO e DIDÁTICO com no MÍNIMO 500 caracteres, incluindo exemplos e explicações detalhadas."}]. NÃO inclua texto fora do JSON.`;
+  // Prompt melhorado
+  const comando = `Crie EXATAMENTE ${quantidade} tópicos sobre "${tema}".
+IMPORTANTE: Retorne APENAS um array JSON. Não use quebras de linha ou tabulações nos textos.
+Cada tópico deve ter título e conteúdo didático.
+Formato: [{"titulo":"Titulo","conteudo":"Conteudo completo com explicacoes e exemplos"}]`;
+  
   const topicos = await callGroq(comando);
   
   if (!topicos || !Array.isArray(topicos)) { 
-    resultado.innerHTML='❌ Erro ao gerar tópicos. Tente novamente.'; 
+    resultado.innerHTML='❌ Erro ao gerar. Tente novamente.'; 
     resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; 
     return; 
   }
   
   let criados = 0;
   for (const t of topicos) {
-    if (t.titulo && t.conteudo && t.conteudo.length > 100) {
+    if (t.titulo && t.conteudo?.length > 50) {
       await db.ref('topicos/'+mid).push({
         titulo: t.titulo,
         conteudo: t.conteudo,
@@ -562,11 +626,10 @@ async function criarTopicosIA() {
     await db.ref('materias/'+mid).update({topicosCount: (snap.val()||0) + criados});
   }
   
-  resultado.innerHTML='✅ ' + criados + ' tópicos criados com sucesso na matéria!';
+  resultado.innerHTML='✅ ' + criados + ' tópicos criados!';
   resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
   carregarTudo();
 }
-
 async function criarTudoIA() {
   const resultado = document.getElementById('ia-resultado');
   resultado.innerHTML='⏳ Criando tópicos e quizzes... Aguarde!';
