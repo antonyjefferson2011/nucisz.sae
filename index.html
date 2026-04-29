@@ -27,7 +27,6 @@
       min-height: 100vh;
     }
     
-    /* LOGIN */
     #login-screen {
       display: flex;
       align-items: center;
@@ -77,7 +76,6 @@
     .login-box button:hover { background: var(--primary-light); }
     .login-error { color: var(--danger); font-size: 13px; margin-top: 10px; display: none; }
     
-    /* PAINEL */
     #painel-screen { display: none; padding: 20px; max-width: 1100px; margin: 0 auto; }
     .header { text-align: center; margin-bottom: 25px; }
     .header h1 { color: var(--primary-light); font-size: 24px; }
@@ -93,7 +91,6 @@
     .stat-item .num { font-size: 24px; font-weight: 800; color: var(--primary-light); }
     .stat-item .lbl { font-size: 11px; color: var(--text2); margin-top: 3px; }
     
-    /* TABS */
     .tabs {
       display: flex;
       gap: 6px;
@@ -119,7 +116,6 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     
-    /* CARDS */
     .card {
       background: var(--card);
       border-radius: 16px;
@@ -129,7 +125,6 @@
     }
     .card h3 { margin-bottom: 15px; font-size: 17px; color: var(--primary-light); }
     
-    /* INPUTS */
     input, select, textarea {
       width: 100%;
       padding: 10px 12px;
@@ -146,7 +141,6 @@
     input:focus, select:focus { border-color: var(--primary); }
     select { cursor: pointer; }
     
-    /* BOTÕES */
     .btn {
       padding: 8px 14px;
       border-radius: 8px;
@@ -165,7 +159,6 @@
     .btn-dourado { background: var(--gold); color: black; font-weight: 700; }
     .btn-vermelho { background: var(--danger); color: white; }
     
-    /* TABELAS */
     .table-wrap { overflow-x: auto; max-height: 400px; overflow-y: auto; border-radius: 10px; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; }
     th { background: var(--bg); padding: 10px; text-align: left; color: var(--primary-light); font-size: 11px; position: sticky; top: 0; z-index: 1; }
@@ -195,7 +188,6 @@
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <h1>🔒 Painel Admin</h1>
@@ -206,7 +198,6 @@
   </div>
 </div>
 
-<!-- PAINEL -->
 <div id="painel-screen">
   <div class="header">
     <h1>⚙️ Painel Administrativo</h1>
@@ -219,7 +210,6 @@
     </div>
   </div>
 
-  <!-- TABS -->
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('ia')">🤖 Gerador IA</button>
     <button class="tab-btn" onclick="switchTab('usuarios')">👥 Usuários</button>
@@ -230,7 +220,6 @@
     <button class="tab-btn" onclick="switchTab('chat')">💭 Chat</button>
   </div>
 
-  <!-- TAB IA -->
   <div id="tab-ia" class="tab-content active">
     <div class="card">
       <h3>🤖 Gerador IA</h3>
@@ -245,7 +234,12 @@
         </div>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;">
-        <select id="ia-qtd" style="width:auto;"><option value="5">5 itens</option><option value="10" selected>10 itens</option><option value="15">15 itens</option><option value="20">20 itens</option></select>
+        <select id="ia-qtd" style="width:auto;">
+          <option value="3">3 itens</option>
+          <option value="5">5 itens</option>
+          <option value="10" selected>10 itens</option>
+          <option value="15">15 itens</option>
+        </select>
         <button class="btn btn-roxo" onclick="criarQuizzesIA()" style="flex:1;">🤖 Criar Quizzes</button>
         <button class="btn btn-roxo" onclick="criarTopicosIA()" style="flex:1;">📝 Criar Tópicos</button>
         <button class="btn btn-dourado" onclick="criarTudoIA()" style="flex:1;">🚀 Criar TUDO</button>
@@ -258,7 +252,6 @@
     </div>
   </div>
 
-  <!-- TAB USUÁRIOS -->
   <div id="tab-usuarios" class="tab-content">
     <div class="card">
       <h3>👥 Gerenciar Usuários</h3>
@@ -272,7 +265,6 @@
     </div>
   </div>
 
-  <!-- TAB MATÉRIAS -->
   <div id="tab-materias" class="tab-content">
     <div class="card">
       <h3>📚 Matérias</h3>
@@ -280,7 +272,6 @@
     </div>
   </div>
 
-  <!-- TAB QUIZZES -->
   <div id="tab-quizzes" class="tab-content">
     <div class="card">
       <h3>🎮 Quizzes</h3>
@@ -288,7 +279,6 @@
     </div>
   </div>
 
-  <!-- TAB TÓPICOS -->
   <div id="tab-topicos" class="tab-content">
     <div class="card">
       <h3>📝 Tópicos</h3>
@@ -296,7 +286,6 @@
     </div>
   </div>
 
-  <!-- TAB POSTS -->
   <div id="tab-posts" class="tab-content">
     <div class="card">
       <h3>💬 Posts</h3>
@@ -304,7 +293,6 @@
     </div>
   </div>
 
-  <!-- TAB CHAT -->
   <div id="tab-chat" class="tab-content">
     <div class="card">
       <h3>💭 Salas de Chat</h3>
@@ -427,7 +415,7 @@ async function updateUser(uid, campo, valor) {
 async function addPontos(uid) {
   const senhaDigitada = prompt('🔒 Senha para adicionar pontos:');
   if (senhaDigitada !== SENHA_PTS) return alert('❌ Senha incorreta!');
-  const qtdPontos = parseInt(window.prompt('Quantos pontos?'));
+  const qtdPontos = parseInt(prompt('Quantos pontos?'));
   if (!qtdPontos || qtdPontos <= 0) return;
   const atual = usersCache[uid]?.points || 0;
   await db.ref('usuarios/'+uid).update({points: atual + qtdPontos});
@@ -443,75 +431,38 @@ async function deleteUser(uid) {
   carregarTudo();
 }
 
-// ========== IA ==========
-async function callGroq(conteudo) {
-  const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST', 
-    headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
-    body: JSON.stringify({
-      model:'llama-3.1-8b-instant',
-      messages:[{role:'user',content:conteudo}],
-      max_tokens:4096,
-      temperature:0.9
-    })
-  });
+// ========== FUNÇÃO PARA CORRIGIR JSON ==========
+function corrigirJSON(str) {
+  // Remove texto antes do primeiro [
+  let inicio = str.indexOf('[');
+  let fim = str.lastIndexOf(']');
+  if (inicio === -1 || fim === -1) return null;
   
-  const d = await r.json();
-  const txt = d.choices?.[0]?.message?.content || '';
+  str = str.substring(inicio, fim + 1);
   
-  console.log('Resposta bruta da IA:', txt); // Debug
+  // Corrige vírgulas extras
+  str = str.replace(/,\s*]/g, ']');
+  str = str.replace(/,\s*}/g, '}');
   
-  // Tenta encontrar o JSON de várias formas
-  let jsonStr = null;
+  // Escapa caracteres especiais dentro de strings
+  str = str.replace(/\n/g, '\\n');
+  str = str.replace(/\r/g, '\\r');
+  str = str.replace(/\t/g, '\\t');
   
-  // Método 1: Procurar por [ ... ]
-  const match1 = txt.match(/\[\s*\{[\s\S]*\}\s*\]/);
-  if (match1) jsonStr = match1[0];
+  // Remove caracteres de controle
+  str = str.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
   
-  // Método 2: Se não achar, procura qualquer coisa entre colchetes
-  if (!jsonStr) {
-    const match2 = txt.match(/\[[\s\S]*?\]/);
-    if (match2) jsonStr = match2[0];
-  }
-  
-  if (!jsonStr) {
-    console.error('Não encontrou JSON na resposta:', txt);
-    return null;
-  }
-  
-  // LIMPEZA DO JSON: Remove caracteres problemáticos
-  jsonStr = jsonStr
-    .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ') // Remove control chars
-    .replace(/\n/g, '\\n')     // Escapa quebras de linha
-    .replace(/\r/g, '\\r')     // Escapa carriage return
-    .replace(/\t/g, '\\t')     // Escapa tabs
-    .replace(/\\'/g, "'")      // Corrige aspas escapadas
-    .replace(/\\"/g, '"')      // Corrige aspas duplas escapadas
-    .replace(/\\(?!["\\/bfnrtu])/g, ''); // Remove escapes inválidos
-  
-  console.log('JSON limpo:', jsonStr); // Debug
-  
+  // Tenta fazer o parse
   try {
-    return JSON.parse(jsonStr);
+    return JSON.parse(str);
   } catch(e) {
-    console.error('Erro ao parsear JSON:', e);
-    console.error('JSON problemático:', jsonStr);
-    
-    // Última tentativa: mais agressiva
-    try {
-      const cleanJson = jsonStr
-        .replace(/\\/g, '')     // Remove todas as barras
-        .replace(/\n/g, ' ')    // Substitui quebras por espaço
-        .replace(/\r/g, '')
-        .replace(/\t/g, ' ');
-      return JSON.parse(cleanJson);
-    } catch(e2) {
-      console.error('Falha total ao parsear:', e2);
-      return null;
-    }
+    console.error('Erro no JSON:', e.message);
+    console.error('JSON:', str.substring(0, 500));
+    return null;
   }
 }
 
+// ========== IA ==========
 async function criarQuizzesIA() {
   const mid = document.getElementById('ia-materia-id').value.trim();
   const tema = document.getElementById('ia-tema').value.trim();
@@ -534,39 +485,77 @@ async function criarQuizzesIA() {
   resultado.innerHTML='⏳ Gerando ' + quantidade + ' quizzes...';
   resultado.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px;';
   
-  // Prompt melhorado para evitar problemas
-  const comando = `Crie EXATAMENTE ${quantidade} quizzes sobre "${tema}". 
-IMPORTANTE: Retorne APENAS um array JSON. Não use quebras de linha dentro dos textos.
-Formato: [{"nome":"Titulo","nivel":1,"questoes":[{"pergunta":"Pergunta?","alternativas":["A","B","C","D"],"correta":0}]}]`;
-  
-  const quizzes = await callGroq(comando);
-  
-  if (!quizzes || !Array.isArray(quizzes)) { 
-    resultado.innerHTML='❌ Erro ao gerar. Tente novamente.'; 
-    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; 
-    return; 
-  }
-  
   let criados = 0;
-  for (const q of quizzes) {
-    if (q.nome && q.questoes?.length > 0) {
-      await db.ref('quizzes/'+mid).push({
-        nome: q.nome,
-        tempo: 30,
-        questoes: q.questoes.slice(0,5),
-        nivel: q.nivel || 1,
-        oficial: true,
-        autorId: 'ia',
-        autorNome: 'Neurinho IA',
-        totalPlays: 0,
-        createdAt: Date.now()
+  
+  // Cria quizzes um por um para maior confiabilidade
+  for (let i = 0; i < quantidade; i++) {
+    try {
+      resultado.innerHTML='⏳ Criando quiz ' + (i+1) + '/' + quantidade + '...';
+      
+      const comando = `Crie 1 quiz sobre "${tema}" com 5 questões.
+Responda APENAS com este JSON (sem texto adicional):
+[{"nome":"Título do Quiz","questoes":[{"pergunta":"Pergunta 1?","alternativas":["Opção A","Opção B","Opção C","Opção D"],"correta":0},{"pergunta":"Pergunta 2?","alternativas":["Opção A","Opção B","Opção C","Opção D"],"correta":1}]}]`;
+      
+      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST', 
+        headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+        body: JSON.stringify({
+          model:'llama-3.1-8b-instant',
+          messages:[{role:'user',content:comando}],
+          max_tokens:2000,
+          temperature:0.9
+        })
       });
-      criados++;
+      
+      if (r.status === 429) {
+        resultado.innerHTML='⏳ Limite da API. Aguardando 10s... (' + (i+1) + '/' + quantidade + ')';
+        await new Promise(resolve => setTimeout(resolve, 10000));
+        i--; // Tenta novamente
+        continue;
+      }
+      
+      const d = await r.json();
+      const txt = d.choices?.[0]?.message?.content || '';
+      const quizzes = corrigirJSON(txt);
+      
+      if (quizzes && Array.isArray(quizzes) && quizzes.length > 0) {
+        const q = quizzes[0];
+        if (q.nome && q.questoes && q.questoes.length >= 2) {
+          await db.ref('quizzes/'+mid).push({
+            nome: String(q.nome).substring(0, 100),
+            tempo: 30,
+            questoes: q.questoes.slice(0, 5).map(quest => ({
+              pergunta: String(quest.pergunta || 'Pergunta'),
+              alternativas: (quest.alternativas || ['A','B','C','D']).map(a => String(a)),
+              correta: Math.min(Math.max(parseInt(quest.correta) || 0, 0), 3)
+            })),
+            nivel: 1,
+            oficial: true,
+            autorId: 'ia',
+            autorNome: 'Neurinho IA',
+            totalPlays: 0,
+            createdAt: Date.now()
+          });
+          criados++;
+        }
+      }
+      
+      // Pausa entre requisições
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+    } catch(err) {
+      console.error('Erro no quiz ' + (i+1) + ':', err);
     }
   }
   
-  resultado.innerHTML='✅ ' + criados + ' quizzes criados!';
-  resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
+  if (criados > 0) {
+    resultado.innerHTML='✅ ' + criados + ' quizzes criados com sucesso!';
+    resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
+  } else {
+    resultado.innerHTML='❌ Nenhum quiz criado. Tente novamente.';
+    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
+  }
+  
   carregarTudo();
 }
 
@@ -592,13 +581,24 @@ async function criarTopicosIA() {
   resultado.innerHTML='⏳ Gerando ' + quantidade + ' tópicos...';
   resultado.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px;';
   
-  // Prompt melhorado
-  const comando = `Crie EXATAMENTE ${quantidade} tópicos sobre "${tema}".
-IMPORTANTE: Retorne APENAS um array JSON. Não use quebras de linha ou tabulações nos textos.
-Cada tópico deve ter título e conteúdo didático.
-Formato: [{"titulo":"Titulo","conteudo":"Conteudo completo com explicacoes e exemplos"}]`;
+  const comando = `Crie ${quantidade} tópicos sobre "${tema}".
+Responda APENAS com este JSON (sem texto adicional):
+[{"titulo":"Título","conteudo":"Conteúdo didático completo com exemplos e explicações"}]`;
   
-  const topicos = await callGroq(comando);
+  const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST', 
+    headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+    body: JSON.stringify({
+      model:'llama-3.1-8b-instant',
+      messages:[{role:'user',content:comando}],
+      max_tokens:4096,
+      temperature:0.9
+    })
+  });
+  
+  const d = await r.json();
+  const txt = d.choices?.[0]?.message?.content || '';
+  const topicos = corrigirJSON(txt);
   
   if (!topicos || !Array.isArray(topicos)) { 
     resultado.innerHTML='❌ Erro ao gerar. Tente novamente.'; 
@@ -610,8 +610,8 @@ Formato: [{"titulo":"Titulo","conteudo":"Conteudo completo com explicacoes e exe
   for (const t of topicos) {
     if (t.titulo && t.conteudo?.length > 50) {
       await db.ref('topicos/'+mid).push({
-        titulo: t.titulo,
-        conteudo: t.conteudo,
+        titulo: String(t.titulo).substring(0, 200),
+        conteudo: String(t.conteudo).substring(0, 5000),
         autorId: 'ia',
         autorNome: 'Neurinho IA',
         verificado: true,
@@ -630,12 +630,17 @@ Formato: [{"titulo":"Titulo","conteudo":"Conteudo completo com explicacoes e exe
   resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
   carregarTudo();
 }
+
 async function criarTudoIA() {
   const resultado = document.getElementById('ia-resultado');
-  resultado.innerHTML='⏳ Criando tópicos e quizzes... Aguarde!';
+  resultado.innerHTML='⏳ Fase 1: Criando tópicos...';
   resultado.style.cssText = 'color:#F59E0B;background:#78350F;padding:10px;border-radius:10px;';
   
   await criarTopicosIA();
+  
+  resultado.innerHTML='⏳ Fase 2: Criando quizzes...';
+  resultado.style.cssText = 'color:#F59E0B;background:#78350F;padding:10px;border-radius:10px;';
+  
   await criarQuizzesIA();
 }
 
@@ -685,7 +690,6 @@ async function deletarItem(caminho, id) {
   carregarTudo();
 }
 
-// Enter no login
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') {
     verificarSenha();
