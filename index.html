@@ -433,32 +433,44 @@ async function deleteUser(uid) {
 
 // ========== FUNÇÃO PARA CORRIGIR JSON ==========
 function corrigirJSON(str) {
-  // Remove texto antes do primeiro [
+  // Remove texto antes do primeiro [ e depois do último ]
   let inicio = str.indexOf('[');
   let fim = str.lastIndexOf(']');
   if (inicio === -1 || fim === -1) return null;
   
   str = str.substring(inicio, fim + 1);
   
-  // Corrige vírgulas extras
+  // PRIMEIRO: Remove quebras de linha reais e tabs
+  str = str.replace(/\n/g, ' ');
+  str = str.replace(/\r/g, ' ');
+  str = str.replace(/\t/g, ' ');
+  
+  // Remove espaços extras
+  str = str.replace(/\s+/g, ' ');
+  
+  // Corrige vírgulas antes de fechar
   str = str.replace(/,\s*]/g, ']');
   str = str.replace(/,\s*}/g, '}');
   
-  // Escapa caracteres especiais dentro de strings
-  str = str.replace(/\n/g, '\\n');
-  str = str.replace(/\r/g, '\\r');
-  str = str.replace(/\t/g, '\\t');
-  
-  // Remove caracteres de controle
-  str = str.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
-  
-  // Tenta fazer o parse
+  // Corrige aspas nas alternativas (problema comum)
+  // Garante que todas as strings usem aspas duplas escapadas
   try {
     return JSON.parse(str);
-  } catch(e) {
-    console.error('Erro no JSON:', e.message);
-    console.error('JSON:', str.substring(0, 500));
-    return null;
+  } catch(e1) {
+    console.error('Primeira tentativa falhou:', e1.message);
+    
+    // Segunda tentativa: mais agressiva
+    try {
+      // Remove caracteres problemáticos
+      str = str.replace(/[\x00-\x1F\x7F-\x9F]/g, ' ');
+      // Corrige escapes mal formados
+      str = str.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
+      return JSON.parse(str);
+    } catch(e2) {
+      console.error('Segunda tentativa falhou:', e2.message);
+      console.error('JSON problemático:', str.substring(0, 300));
+      return null;
+    }
   }
 }
 
@@ -487,14 +499,25 @@ async function criarQuizzesIA() {
   
   let criados = 0;
   
-  // Cria quizzes um por um para maior confiabilidade
-  for (let i = 0; i < quantidade; i++) {
+  // Criar em lotes de 3 para evitar erros
+  const lotes = Math.ceil(quantidade / 3);
+  
+  for (let lote = 0; lote < lotes; lote++) {
+    const qtdLote = Math.min(3, quantidade - criados);
+    if (qtdLote <= 0) break;
+    
+    resultado.innerHTML='⏳ Criando lote ' + (lote+1) + '/' + lotes + ' (' + qtdLote + ' quizzes)...';
+    
     try {
-      resultado.innerHTML='⏳ Criando quiz ' + (i+1) + '/' + quantidade + '...';
-      
-      const comando = `Crie 1 quiz sobre "${tema}" com 5 questões.
-Responda APENAS com este JSON (sem texto adicional):
-[{"nome":"Título do Quiz","questoes":[{"pergunta":"Pergunta 1?","alternativas":["Opção A","Opção B","Opção C","Opção D"],"correta":0},{"pergunta":"Pergunta 2?","alternativas":["Opção A","Opção B","Opção C","Opção D"],"correta":1}]}]`;
+      const comando = `Crie ${qtdLote} quizzes sobre "${tema}" com 5 questões cada.
+Responda EXATAMENTE com este formato JSON (tudo em uma linha, sem quebras):
+[{"nome":"Título do Quiz","questoes":[{"pergunta":"Pergunta?","alternativas":["A","B","C","D"],"correta":0}]}]
+
+REGRAS IMPORTANTES:
+1. Escreva TUDO em uma única linha (sem \\n)
+2. Use APENAS aspas duplas
+3. "correta" deve ser 0, 1, 2 ou 3
+4. Não inclua NENHUM texto fora do JSON`;
       
       const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST', 
@@ -502,49 +525,62 @@ Responda APENAS com este JSON (sem texto adicional):
         body: JSON.stringify({
           model:'llama-3.1-8b-instant',
           messages:[{role:'user',content:comando}],
-          max_tokens:2000,
-          temperature:0.9
+          max_tokens:3000,
+          temperature:0.8
         })
       });
       
       if (r.status === 429) {
-        resultado.innerHTML='⏳ Limite da API. Aguardando 10s... (' + (i+1) + '/' + quantidade + ')';
-        await new Promise(resolve => setTimeout(resolve, 10000));
-        i--; // Tenta novamente
+        resultado.innerHTML='⏳ Limite API. Aguardando 15s...';
+        await new Promise(resolve => setTimeout(resolve, 15000));
+        lote--; // Tenta o mesmo lote novamente
         continue;
       }
       
       const d = await r.json();
       const txt = d.choices?.[0]?.message?.content || '';
+      
+      console.log('Resposta lote ' + (lote+1) + ':', txt.substring(0, 200));
+      
       const quizzes = corrigirJSON(txt);
       
-      if (quizzes && Array.isArray(quizzes) && quizzes.length > 0) {
-        const q = quizzes[0];
-        if (q.nome && q.questoes && q.questoes.length >= 2) {
-          await db.ref('quizzes/'+mid).push({
-            nome: String(q.nome).substring(0, 100),
-            tempo: 30,
-            questoes: q.questoes.slice(0, 5).map(quest => ({
-              pergunta: String(quest.pergunta || 'Pergunta'),
-              alternativas: (quest.alternativas || ['A','B','C','D']).map(a => String(a)),
-              correta: Math.min(Math.max(parseInt(quest.correta) || 0, 0), 3)
-            })),
-            nivel: 1,
-            oficial: true,
-            autorId: 'ia',
-            autorNome: 'Neurinho IA',
-            totalPlays: 0,
-            createdAt: Date.now()
-          });
-          criados++;
+      if (quizzes && Array.isArray(quizzes)) {
+        for (const q of quizzes) {
+          if (q.nome && q.questoes && q.questoes.length >= 2) {
+            // Garante que alternativas sejam array de strings
+            const questoes = q.questoes.slice(0, 5).map(quest => ({
+              pergunta: String(quest.pergunta || 'Pergunta?'),
+              alternativas: (Array.isArray(quest.alternativas) ? quest.alternativas : ['A','B','C','D']).map(a => String(a || 'Opção')),
+              correta: [0,1,2,3].includes(parseInt(quest.correta)) ? parseInt(quest.correta) : 0
+            }));
+            
+            if (questoes.length >= 2) {
+              await db.ref('quizzes/'+mid).push({
+                nome: String(q.nome).substring(0, 100),
+                tempo: 30,
+                questoes: questoes,
+                nivel: 1,
+                oficial: true,
+                autorId: 'ia',
+                autorNome: 'Neurinho IA',
+                totalPlays: 0,
+                createdAt: Date.now()
+              });
+              criados++;
+            }
+          }
         }
       }
       
-      // Pausa entre requisições
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      resultado.innerHTML='⏳ Progresso: ' + criados + '/' + quantidade + ' quizzes criados...';
+      
+      // Pausa entre lotes
+      if (lote < lotes - 1) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+      }
       
     } catch(err) {
-      console.error('Erro no quiz ' + (i+1) + ':', err);
+      console.error('Erro no lote ' + (lote+1) + ':', err);
     }
   }
   
@@ -558,7 +594,7 @@ Responda APENAS com este JSON (sem texto adicional):
   
   carregarTudo();
 }
-
+  
 async function criarTopicosIA() {
   const mid = document.getElementById('ia-materia-id').value.trim();
   const tema = document.getElementById('ia-tema').value.trim();
@@ -578,12 +614,18 @@ async function criarTopicosIA() {
     return;
   }
   
-  resultado.innerHTML='⏳ Gerando ' + quantidade + ' tópicos...';
+  resultado.innerHTML='⏳ Gerando ' + quantidade + ' tópicos detalhados...';
   resultado.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px;';
   
   const comando = `Crie ${quantidade} tópicos sobre "${tema}".
-Responda APENAS com este JSON (sem texto adicional):
-[{"titulo":"Título","conteudo":"Conteúdo didático completo com exemplos e explicações"}]`;
+Responda com JSON em uma única linha:
+[{"titulo":"Título","conteudo":"Conteúdo BEM DETALHADO com mínimo 800 caracteres, incluindo definições, exemplos práticos, dicas de estudo e aplicações. Use linguagem didática e clara."}]
+
+REGRAS:
+1. Tudo em uma linha (sem quebras)
+2. Apenas aspas duplas
+3. Conteúdo MUITO completo e detalhado
+4. NADA fora do JSON`;
   
   const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST', 
@@ -592,9 +634,15 @@ Responda APENAS com este JSON (sem texto adicional):
       model:'llama-3.1-8b-instant',
       messages:[{role:'user',content:comando}],
       max_tokens:4096,
-      temperature:0.9
+      temperature:0.8
     })
   });
+  
+  if (r.status === 429) {
+    resultado.innerHTML='⏳ Limite API. Aguardando 10s...';
+    await new Promise(resolve => setTimeout(resolve, 10000));
+    return criarTopicosIA(); // Tenta novamente
+  }
   
   const d = await r.json();
   const txt = d.choices?.[0]?.message?.content || '';
@@ -608,10 +656,10 @@ Responda APENAS com este JSON (sem texto adicional):
   
   let criados = 0;
   for (const t of topicos) {
-    if (t.titulo && t.conteudo?.length > 50) {
+    if (t.titulo && t.conteudo?.length > 100) {
       await db.ref('topicos/'+mid).push({
         titulo: String(t.titulo).substring(0, 200),
-        conteudo: String(t.conteudo).substring(0, 5000),
+        conteudo: String(t.conteudo).substring(0, 8000),
         autorId: 'ia',
         autorNome: 'Neurinho IA',
         verificado: true,
@@ -626,7 +674,7 @@ Responda APENAS com este JSON (sem texto adicional):
     await db.ref('materias/'+mid).update({topicosCount: (snap.val()||0) + criados});
   }
   
-  resultado.innerHTML='✅ ' + criados + ' tópicos criados!';
+  resultado.innerHTML='✅ ' + criados + ' tópicos detalhados criados!';
   resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
   carregarTudo();
 }
