@@ -429,10 +429,8 @@ async function deleteUser(uid) {
 
 // ========== PARSER JSON ROBUSTO ==========
 function parseJSONdaIA(txt) {
-  // Remove tudo antes do primeiro [ ou {
   let str = txt.replace(/^[^\[\{]*/, '');
   
-  // Encontra o final
   let ultimoColchete = str.lastIndexOf(']');
   let ultimaChave = str.lastIndexOf('}');
   
@@ -442,7 +440,6 @@ function parseJSONdaIA(txt) {
     if (ultimaChave > 0) str = str.substring(0, ultimaChave + 1);
   }
   
-  // Limpeza pesada
   str = str.replace(/\n/g, ' ').replace(/\r/g, ' ').replace(/\t/g, ' ');
   str = str.replace(/,\s*\]/g, ']');
   str = str.replace(/,\s*\}/g, '}');
@@ -451,7 +448,6 @@ function parseJSONdaIA(txt) {
   try {
     return JSON.parse(str);
   } catch(e) {
-    // Se falhar, tenta completar o JSON
     let abertos = (str.match(/\[/g) || []).length;
     let fechados = (str.match(/\]/g) || []).length;
     while (fechados < abertos) { str += ']'; fechados++; }
@@ -525,7 +521,6 @@ Responda APENAS com este JSON (sem texto adicional):
       
       let quizData = parseJSONdaIA(txt);
       
-      // Se não for array, tenta embrulhar
       if (quizData && !Array.isArray(quizData)) {
         quizData = [quizData];
       }
@@ -542,7 +537,7 @@ Responda APENAS com este JSON (sem texto adicional):
               correta: [0,1,2,3].includes(parseInt(qq.correta)) ? parseInt(qq.correta) : 0
             })),
             nivel: 1,
-            oficial: true,
+            oficial: false, // 👈 NÃO OFICIAL (precisa revisão)
             autorId: 'ia',
             autorNome: 'Neurinho IA',
             totalPlays: 0,
@@ -552,7 +547,6 @@ Responda APENAS com este JSON (sem texto adicional):
         }
       }
       
-      // Pausa entre requisições
       await new Promise(resolve => setTimeout(resolve, 2000));
       
     } catch(err) {
@@ -561,7 +555,7 @@ Responda APENAS com este JSON (sem texto adicional):
   }
   
   if (criados > 0) {
-    resultado.innerHTML='✅ ' + criados + ' quizzes criados!';
+    resultado.innerHTML='✅ ' + criados + ' quizzes criados! (Não oficiais)';
     resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
   } else {
     resultado.innerHTML='❌ Nenhum quiz criado. Tente novamente.';
@@ -625,7 +619,7 @@ Responda APENAS com JSON (sem texto adicional):
         conteudo: String(t.conteudo).substring(0, 8000),
         autorId: 'ia',
         autorNome: 'Neurinho IA',
-        verificado: true,
+        verificado: false, // 👈 NÃO VERIFICADO (precisa revisão)
         createdAt: Date.now()
       });
       criados++;
@@ -637,11 +631,12 @@ Responda APENAS com JSON (sem texto adicional):
     await db.ref('materias/'+mid).update({topicosCount: (snap.val()||0) + criados});
   }
   
-  resultado.innerHTML='✅ ' + criados + ' tópicos detalhados criados!';
+  resultado.innerHTML='✅ ' + criados + ' tópicos criados! (Não verificados)';
   resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
   carregarTudo();
 }
 
+// ========== CRIAR TUDO ==========
 async function criarTudoIA() {
   const resultado = document.getElementById('ia-resultado');
   resultado.innerHTML='⏳ Fase 1/2: Criando tópicos...';
@@ -664,7 +659,7 @@ async function carregarQuizzesTab() {
   for (const [mid, m] of Object.entries(materiasCache)) {
     const snap = await db.ref('quizzes/'+mid).once('value');
     for (const [qid, q] of Object.entries(snap.val()||{})) {
-      html += `<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td>${q.oficial?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">Não</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('quizzes/${mid}','${qid}')">🗑</button></td></tr>`;
+      html += `<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td>${q.oficial?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">❌ Não</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('quizzes/${mid}','${qid}')">🗑</button></td></tr>`;
     }
   }
   document.getElementById('quizzes-table').innerHTML = html || '<tr><td colspan="5">Nenhum</td></tr>';
@@ -675,7 +670,7 @@ async function carregarTopicosTab() {
   for (const [mid, m] of Object.entries(materiasCache)) {
     const snap = await db.ref('topicos/'+mid).once('value');
     for (const [tid, t] of Object.entries(snap.val()||{})) {
-      html += `<tr><td>${(t.titulo||'?').substring(0,50)}</td><td>${m.nome||'?'}</td><td>@${t.autorNome||'?'}</td><td>${t.verificado?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">❌</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('topicos/${mid}','${tid}')">🗑</button></td></tr>`;
+      html += `<tr><td>${(t.titulo||'?').substring(0,50)}</td><td>${m.nome||'?'}</td><td>@${t.autorNome||'?'}</td><td>${t.verificado?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">❌ Não</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('topicos/${mid}','${tid}')">🗑</button></td></tr>`;
     }
   }
   document.getElementById('topicos-table').innerHTML = html || '<tr><td colspan="5">Nenhum</td></tr>';
