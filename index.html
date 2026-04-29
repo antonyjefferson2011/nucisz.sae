@@ -236,8 +236,8 @@
       <h3>🤖 Gerador IA</h3>
       <div class="grid-2">
         <div>
-          <label style="color:var(--text2);font-size:12px;">ID da Matéria</label>
-          <input type="text" id="ia-materia-id" placeholder="Cole o ID..." />
+          <label style="color:var(--text2);font-size:12px;">ID da Matéria (obrigatório)</label>
+          <input type="text" id="ia-materia-id" placeholder="Cole o ID da matéria..." style="font-family:monospace;font-size:12px" />
         </div>
         <div>
           <label style="color:var(--text2);font-size:12px;">Tema</label>
@@ -245,10 +245,10 @@
         </div>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;">
-        <select id="ia-qtd" style="width:auto;"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option></select>
-        <button class="btn btn-roxo" onclick="criarQuizzesIA()" style="flex:1;">🤖 Quizzes</button>
-        <button class="btn btn-roxo" onclick="criarTopicosIA()" style="flex:1;">📝 Tópicos</button>
-        <button class="btn btn-dourado" onclick="criarTudoIA()" style="flex:1;">🚀 TUDO</button>
+        <select id="ia-qtd" style="width:auto;"><option value="5">5 itens</option><option value="10" selected>10 itens</option><option value="15">15 itens</option><option value="20">20 itens</option></select>
+        <button class="btn btn-roxo" onclick="criarQuizzesIA()" style="flex:1;">🤖 Criar Quizzes</button>
+        <button class="btn btn-roxo" onclick="criarTopicosIA()" style="flex:1;">📝 Criar Tópicos</button>
+        <button class="btn btn-dourado" onclick="criarTudoIA()" style="flex:1;">🚀 Criar TUDO</button>
       </div>
       <div id="ia-resultado"></div>
     </div>
@@ -371,24 +371,28 @@ async function carregarTudo() {
   document.getElementById('s-posts').textContent = Object.keys(pSnap.val() || {}).length;
   document.getElementById('s-materias').textContent = Object.keys(materiasCache).length;
   
-  let tQ = 0, tT = 0, lista = '';
+  let totalQuizzes = 0, totalTopicos = 0, listaHTML = '';
   for (const [id, m] of Object.entries(materiasCache)) {
-    lista += `<div style="padding:5px 0;border-bottom:1px solid var(--border);">📚 <strong>${m.nome||'?'}</strong> — <span class="code" onclick="copiarID('${id}')">${id}</span></div>`;
+    listaHTML += `<div style="padding:5px 0;border-bottom:1px solid var(--border);">📚 <strong>${m.nome||'?'}</strong> — <span class="code" onclick="copiarID('${id}')">${id}</span></div>`;
     const [qSnap, tSnap] = await Promise.all([
       db.ref('quizzes/'+id).once('value'),
       db.ref('topicos/'+id).once('value')
     ]);
-    tQ += Object.keys(qSnap.val()||{}).length;
-    tT += Object.keys(tSnap.val()||{}).length;
+    totalQuizzes += Object.keys(qSnap.val()||{}).length;
+    totalTopicos += Object.keys(tSnap.val()||{}).length;
   }
-  document.getElementById('s-quizzes').textContent = tQ;
-  document.getElementById('s-topicos').textContent = tT;
-  document.getElementById('materias-lista').innerHTML = lista || 'Nenhuma matéria';
+  document.getElementById('s-quizzes').textContent = totalQuizzes;
+  document.getElementById('s-topicos').textContent = totalTopicos;
+  document.getElementById('materias-lista').innerHTML = listaHTML || 'Nenhuma matéria cadastrada';
   
   renderUsers(Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0)));
 }
 
-function copiarID(id) { navigator.clipboard.writeText(id); alert('✅ ID copiado!'); }
+function copiarID(id) { 
+  navigator.clipboard.writeText(id).then(() => {
+    alert('✅ ID copiado: ' + id);
+  });
+}
 
 // ========== USUÁRIOS ==========
 function renderUsers(arr) {
@@ -397,9 +401,9 @@ function renderUsers(arr) {
       <td>${u.avatar?.startsWith('http')?'<img src="'+u.avatar+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover">':(u.avatar||'🎓')}</td>
       <td>@${u.username||'?'}</td>
       <td>${u.fullname||'-'}</td>
-      <td><input type="number" id="pts-${uid}" value="${u.points||0}" style="width:70px" /><button class="btn btn-verde" onclick="addPontos('${uid}')">💾</button></td>
-      <td><select onchange="updateUser('${uid}','plano',this.value)"><option value="gratis" ${u.plano=='gratis'?'selected':''}>Grátis</option><option value="premium" ${u.plano=='premium'?'selected':''}>Premium</option><option value="pro" ${u.plano=='pro'?'selected':''}>PRO</option></select></td>
-      <td><select onchange="updateUser('${uid}','adminLevel',this.value)"><option value="0">-</option><option value="1" ${u.adminLevel==1?'selected':''}>N1</option><option value="2" ${u.adminLevel==2?'selected':''}>N2</option><option value="3" ${u.adminLevel==3?'selected':''}>N3</option><option value="4" ${u.adminLevel==4?'selected':''}>N4</option></select></td>
+      <td><input type="number" id="pts-${uid}" value="${u.points||0}" style="width:70px;margin:0" /><button class="btn btn-verde" onclick="addPontos('${uid}')">💾</button></td>
+      <td><select onchange="updateUser('${uid}','plano',this.value)" style="margin:0"><option value="gratis" ${u.plano=='gratis'?'selected':''}>Grátis</option><option value="premium" ${u.plano=='premium'?'selected':''}>Premium</option><option value="pro" ${u.plano=='pro'?'selected':''}>PRO</option></select></td>
+      <td><select onchange="updateUser('${uid}','adminLevel',this.value)" style="margin:0"><option value="0" ${u.adminLevel==0?'selected':''}>-</option><option value="1" ${u.adminLevel==1?'selected':''}>N1</option><option value="2" ${u.adminLevel==2?'selected':''}>N2</option><option value="3" ${u.adminLevel==3?'selected':''}>N3</option><option value="4" ${u.adminLevel==4?'selected':''}>N4</option></select></td>
       <td><button class="btn ${u.isProf?'btn-verde':'btn-azul'}" onclick="updateUser('${uid}','isProf',${!u.isProf})">${u.isProf?'✅':'❌'}</button></td>
       <td><button class="btn ${u.isQuizzer?'btn-verde':'btn-azul'}" onclick="updateUser('${uid}','isQuizzer',${!u.isQuizzer})">${u.isQuizzer?'✅':'❌'}</button></td>
       <td><button class="btn btn-vermelho" onclick="deleteUser('${uid}')">🗑</button></td>
@@ -407,9 +411,10 @@ function renderUsers(arr) {
 }
 
 function filtrarUsuarios() {
-  const t = (document.getElementById('search-user')?.value || '').toLowerCase();
+  const termo = (document.getElementById('search-user')?.value || '').toLowerCase();
   const arr = Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0));
-  renderUsers(t ? arr.filter(([id,u])=> (u.username||'').toLowerCase().includes(t) || (u.fullname||'').toLowerCase().includes(t)) : arr);
+  const filtrado = termo ? arr.filter(([id,u]) => (u.username||'').toLowerCase().includes(termo) || (u.fullname||'').toLowerCase().includes(termo)) : arr;
+  renderUsers(filtrado);
 }
 
 async function updateUser(uid, campo, valor) {
@@ -420,15 +425,15 @@ async function updateUser(uid, campo, valor) {
 }
 
 async function addPontos(uid) {
-  const senha = prompt('🔒 Senha para adicionar pontos:');
-  if (senha !== SENHA_PTS) return alert('❌ Senha incorreta!');
-  const pts = parseInt(prompt('Quantos pontos?'));
-  if (!pts || pts <= 0) return;
+  const senhaDigitada = prompt('🔒 Senha para adicionar pontos:');
+  if (senhaDigitada !== SENHA_PTS) return alert('❌ Senha incorreta!');
+  const qtdPontos = parseInt(window.prompt('Quantos pontos?'));
+  if (!qtdPontos || qtdPontos <= 0) return;
   const atual = usersCache[uid]?.points || 0;
-  await db.ref('usuarios/'+uid).update({points: atual + pts});
-  usersCache[uid].points = atual + pts;
-  document.getElementById('pts-'+uid).value = atual + pts;
-  alert('✅ +' + pts + ' pontos! Total: ' + (atual+pts));
+  await db.ref('usuarios/'+uid).update({points: atual + qtdPontos});
+  usersCache[uid].points = atual + qtdPontos;
+  document.getElementById('pts-'+uid).value = atual + qtdPontos;
+  alert('✅ +' + qtdPontos + ' pontos! Total: ' + (atual+qtdPontos));
 }
 
 async function deleteUser(uid) {
@@ -439,10 +444,10 @@ async function deleteUser(uid) {
 }
 
 // ========== IA ==========
-async function callGroq(prompt) {
+async function callGroq(conteudo) {
   const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
-    body: JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:prompt}],max_tokens:4096,temperature:0.9})
+    body: JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:conteudo}],max_tokens:4096,temperature:0.9})
   });
   const d = await r.json();
   const txt = d.choices?.[0]?.message?.content || '';
@@ -453,90 +458,176 @@ async function callGroq(prompt) {
 async function criarQuizzesIA() {
   const mid = document.getElementById('ia-materia-id').value.trim();
   const tema = document.getElementById('ia-tema').value.trim();
-  const qtd = parseInt(document.getElementById('ia-qtd').value);
-  const s = document.getElementById('ia-resultado');
-  if (!mid||!tema) { s.innerHTML='❌ Preencha ID e Tema!'; s.style.color='#EF4444'; return; }
-  s.innerHTML='⏳ Gerando ' + qtd + ' quizzes...'; s.style.color='#94A3B8';
-  const prompt = `Crie ${qtd} quizzes sobre "${tema}". JSON: [{"nome":"Nome","nivel":1,"questoes":[{"pergunta":"?","alternativas":["A","B","C","D"],"correta":0}]}]. Cada quiz 5 questões. Só JSON.`;
-  const quizzes = await callGroq(prompt);
-  if (!quizzes) { s.innerHTML='❌ Erro. Tente novamente.'; s.style.color='#EF4444'; return; }
-  let n=0;
+  const quantidade = parseInt(document.getElementById('ia-qtd').value);
+  const resultado = document.getElementById('ia-resultado');
+  
+  if (!mid || !tema) { 
+    resultado.innerHTML='❌ Preencha o ID da matéria e o Tema!'; 
+    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; 
+    return; 
+  }
+  
+  // Verificar se matéria existe
+  const materiaExiste = await db.ref('materias/'+mid).once('value');
+  if (!materiaExiste.val()) {
+    resultado.innerHTML='❌ Matéria com ID <code>'+mid+'</code> não encontrada! Verifique o ID.';
+    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
+    return;
+  }
+  
+  resultado.innerHTML='⏳ Gerando ' + quantidade + ' quizzes sobre "' + tema + '"...';
+  resultado.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px;';
+  
+  const comando = `Crie ${quantidade} quizzes sobre "${tema}". Retorne APENAS um array JSON válido neste formato: [{"nome":"Nome do Quiz","nivel":1,"questoes":[{"pergunta":"Pergunta?","alternativas":["A","B","C","D"],"correta":0}]}]. Cada quiz deve ter 5 questões. NÃO inclua texto fora do JSON.`;
+  const quizzes = await callGroq(comando);
+  
+  if (!quizzes || !Array.isArray(quizzes)) { 
+    resultado.innerHTML='❌ Erro ao gerar quizzes. Tente novamente.'; 
+    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; 
+    return; 
+  }
+  
+  let criados = 0;
   for (const q of quizzes) {
-    if (q.nome&&q.questoes) {
-      await db.ref('quizzes/'+mid).push({nome:q.nome,tempo:30,questoes:q.questoes.slice(0,5),nivel:q.nivel||1,oficial:true,autorId:'ia',autorNome:'Neurinho IA',totalPlays:0,createdAt:Date.now()});
-      n++;
+    if (q.nome && q.questoes && q.questoes.length > 0) {
+      await db.ref('quizzes/'+mid).push({
+        nome: q.nome,
+        tempo: 30,
+        questoes: q.questoes.slice(0,5),
+        nivel: q.nivel || 1,
+        oficial: true,
+        autorId: 'ia',
+        autorNome: 'Neurinho IA',
+        totalPlays: 0,
+        createdAt: Date.now()
+      });
+      criados++;
     }
   }
-  s.innerHTML='✅ ' + n + ' quizzes criados!'; s.style.color='#34D399';
+  
+  resultado.innerHTML='✅ ' + criados + ' quizzes criados com sucesso na matéria!';
+  resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
   carregarTudo();
 }
 
 async function criarTopicosIA() {
   const mid = document.getElementById('ia-materia-id').value.trim();
   const tema = document.getElementById('ia-tema').value.trim();
-  const qtd = parseInt(prompt('Quantos tópicos?','5'));
-  const s = document.getElementById('ia-resultado');
-  if (!mid||!tema) { s.innerHTML='❌ Preencha ID e Tema!'; s.style.color='#EF4444'; return; }
-  s.innerHTML='⏳ Gerando ' + qtd + ' tópicos...'; s.style.color='#94A3B8';
-  const prompt = `Crie ${qtd} tópicos sobre "${tema}". JSON: [{"titulo":"Título","conteudo":"Conteúdo COMPLETO com no MÍNIMO 500 caracteres, bem didático, com exemplos e explicações."}]. Só JSON.`;
-  const topicos = await callGroq(prompt);
-  if (!topicos) { s.innerHTML='❌ Erro.'; s.style.color='#EF4444'; return; }
-  let n=0;
+  const quantidade = parseInt(document.getElementById('ia-qtd').value);
+  const resultado = document.getElementById('ia-resultado');
+  
+  if (!mid || !tema) { 
+    resultado.innerHTML='❌ Preencha o ID da matéria e o Tema!'; 
+    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; 
+    return; 
+  }
+  
+  // Verificar se matéria existe
+  const materiaExiste = await db.ref('materias/'+mid).once('value');
+  if (!materiaExiste.val()) {
+    resultado.innerHTML='❌ Matéria com ID <code>'+mid+'</code> não encontrada! Verifique o ID.';
+    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
+    return;
+  }
+  
+  resultado.innerHTML='⏳ Gerando ' + quantidade + ' tópicos sobre "' + tema + '"...';
+  resultado.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px;';
+  
+  const comando = `Crie ${quantidade} tópicos de estudo sobre "${tema}". Retorne APENAS um array JSON válido neste formato: [{"titulo":"Título do Tópico","conteudo":"Conteúdo COMPLETO e DIDÁTICO com no MÍNIMO 500 caracteres, incluindo exemplos e explicações detalhadas."}]. NÃO inclua texto fora do JSON.`;
+  const topicos = await callGroq(comando);
+  
+  if (!topicos || !Array.isArray(topicos)) { 
+    resultado.innerHTML='❌ Erro ao gerar tópicos. Tente novamente.'; 
+    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; 
+    return; 
+  }
+  
+  let criados = 0;
   for (const t of topicos) {
-    if (t.titulo&&t.conteudo&&t.conteudo.length>100) {
-      await db.ref('topicos/'+mid).push({titulo:t.titulo,conteudo:t.conteudo,autorId:'ia',autorNome:'Neurinho IA',verificado:true,createdAt:Date.now()});
-      n++;
+    if (t.titulo && t.conteudo && t.conteudo.length > 100) {
+      await db.ref('topicos/'+mid).push({
+        titulo: t.titulo,
+        conteudo: t.conteudo,
+        autorId: 'ia',
+        autorNome: 'Neurinho IA',
+        verificado: true,
+        createdAt: Date.now()
+      });
+      criados++;
     }
   }
-  if (n>0) { const snap = await db.ref('materias/'+mid+'/topicosCount').once('value'); await db.ref('materias/'+mid).update({topicosCount:(snap.val()||0)+n}); }
-  s.innerHTML='✅ ' + n + ' tópicos criados!'; s.style.color='#34D399';
+  
+  if (criados > 0) {
+    const snap = await db.ref('materias/'+mid+'/topicosCount').once('value');
+    await db.ref('materias/'+mid).update({topicosCount: (snap.val()||0) + criados});
+  }
+  
+  resultado.innerHTML='✅ ' + criados + ' tópicos criados com sucesso na matéria!';
+  resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
   carregarTudo();
 }
 
 async function criarTudoIA() {
-  const s = document.getElementById('ia-resultado');
-  s.innerHTML='⏳ Criando tudo...'; s.style.color='#94A3B8';
+  const resultado = document.getElementById('ia-resultado');
+  resultado.innerHTML='⏳ Criando tópicos e quizzes... Aguarde!';
+  resultado.style.cssText = 'color:#F59E0B;background:#78350F;padding:10px;border-radius:10px;';
+  
   await criarTopicosIA();
   await criarQuizzesIA();
-  s.innerHTML='✅ TUDO pronto!'; s.style.color='#34D399';
 }
 
 // ========== ABAS ==========
 async function carregarMateriasTab() {
   const arr = Object.entries(materiasCache);
-  document.getElementById('materias-table').innerHTML = arr.length ? arr.map(([id,m])=>`<tr><td>${m.icone||'📚'}</td><td>${m.nome||'?'}</td><td>@${m.autorNome||'?'}</td><td>${m.topicosCount||0}</td><td><button class="btn btn-vermelho" onclick="del('materias','${id}')">🗑</button></td></tr>`).join('') : '<tr><td colspan="5">Nenhuma</td></tr>';
+  document.getElementById('materias-table').innerHTML = arr.length ? arr.map(([id,m])=>`<tr><td>${m.icone||'📚'}</td><td>${m.nome||'?'}</td><td>@${m.autorNome||'?'}</td><td>${m.topicosCount||0}</td><td><button class="btn btn-vermelho" onclick="deletarItem('materias','${id}')">🗑</button></td></tr>`).join('') : '<tr><td colspan="5">Nenhuma matéria</td></tr>';
 }
+
 async function carregarQuizzesTab() {
-  let h='';
-  for (const [mid,m] of Object.entries(materiasCache)) {
+  let html = '';
+  for (const [mid, m] of Object.entries(materiasCache)) {
     const snap = await db.ref('quizzes/'+mid).once('value');
-    for (const [qid,q] of Object.entries(snap.val()||{})) h += `<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td>${q.oficial?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">Não</span>'}</td><td><button class="btn btn-vermelho" onclick="del('quizzes/${mid}','${qid}')">🗑</button></td></tr>`;
+    for (const [qid, q] of Object.entries(snap.val()||{})) {
+      html += `<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td>${q.oficial?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">Não</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('quizzes/${mid}','${qid}')">🗑</button></td></tr>`;
+    }
   }
-  document.getElementById('quizzes-table').innerHTML = h || '<tr><td colspan="5">Nenhum</td></tr>';
+  document.getElementById('quizzes-table').innerHTML = html || '<tr><td colspan="5">Nenhum quiz</td></tr>';
 }
+
 async function carregarTopicosTab() {
-  let h='';
-  for (const [mid,m] of Object.entries(materiasCache)) {
+  let html = '';
+  for (const [mid, m] of Object.entries(materiasCache)) {
     const snap = await db.ref('topicos/'+mid).once('value');
-    for (const [tid,t] of Object.entries(snap.val()||{})) h += `<tr><td>${(t.titulo||'?').substring(0,50)}</td><td>${m.nome||'?'}</td><td>@${t.autorNome||'?'}</td><td>${t.verificado?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">❌</span>'}</td><td><button class="btn btn-vermelho" onclick="del('topicos/${mid}','${tid}')">🗑</button></td></tr>`;
+    for (const [tid, t] of Object.entries(snap.val()||{})) {
+      html += `<tr><td>${(t.titulo||'?').substring(0,50)}</td><td>${m.nome||'?'}</td><td>@${t.autorNome||'?'}</td><td>${t.verificado?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">❌</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('topicos/${mid}','${tid}')">🗑</button></td></tr>`;
+    }
   }
-  document.getElementById('topicos-table').innerHTML = h || '<tr><td colspan="5">Nenhum</td></tr>';
+  document.getElementById('topicos-table').innerHTML = html || '<tr><td colspan="5">Nenhum tópico</td></tr>';
 }
+
 async function carregarPostsTab() {
   const snap = await db.ref('posts').once('value');
   const posts = snap.val()||{};
-  document.getElementById('posts-table').innerHTML = Object.entries(posts).reverse().slice(0,50).map(([id,p])=>`<tr><td>@${p.autorNome||'?'}</td><td>${(p.texto||'').substring(0,60)}</td><td>${new Date(p.createdAt).toLocaleDateString('pt-BR')}</td><td><button class="btn btn-vermelho" onclick="del('posts','${id}')">🗑</button></td></tr>`).join('') || '<tr><td colspan="4">Nenhum</td></tr>';
+  document.getElementById('posts-table').innerHTML = Object.entries(posts).reverse().slice(0,50).map(([id,p])=>`<tr><td>@${p.autorNome||'?'}</td><td>${(p.texto||'').substring(0,60)}</td><td>${new Date(p.createdAt).toLocaleDateString('pt-BR')}</td><td><button class="btn btn-vermelho" onclick="deletarItem('posts','${id}')">🗑</button></td></tr>`).join('') || '<tr><td colspan="4">Nenhum post</td></tr>';
 }
+
 async function carregarChatTab() {
   const snap = await db.ref('chat_rooms').once('value');
   const rooms = snap.val()||{};
-  document.getElementById('chat-list').innerHTML = Object.entries(rooms).map(([id,r])=>`<div style="padding:8px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"># ${r.nome||'?'} <button class="btn btn-vermelho" onclick="del('chat_rooms','${id}')">🗑</button></div>`).join('') || 'Nenhuma sala';
+  document.getElementById('chat-list').innerHTML = Object.entries(rooms).map(([id,r])=>`<div style="padding:8px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"># ${r.nome||'?'} <button class="btn btn-vermelho" onclick="deletarItem('chat_rooms','${id}')">🗑</button></div>`).join('') || 'Nenhuma sala';
 }
-async function del(path, id) {
-  if (!confirm('🗑 Excluir?')) return;
-  await db.ref(path+'/'+id).remove();
+
+async function deletarItem(caminho, id) {
+  if (!confirm('🗑 Tem certeza que deseja excluir?')) return;
+  await db.ref(caminho+'/'+id).remove();
   carregarTudo();
 }
+
+// Enter no login
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') {
+    verificarSenha();
+  }
+});
 </script>
 </body>
 </html>
