@@ -76,7 +76,7 @@
     .login-box button:hover { background: var(--primary-light); }
     .login-error { color: var(--danger); font-size: 13px; margin-top: 10px; display: none; }
     
-    #painel-screen { display: none; padding: 20px; max-width: 1100px; margin: 0 auto; }
+    #painel-screen { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; }
     .header { text-align: center; margin-bottom: 25px; }
     .header h1 { color: var(--primary-light); font-size: 24px; }
     .header .stats { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
@@ -138,7 +138,7 @@
       margin-bottom: 8px;
       transition: border 0.2s;
     }
-    input:focus, select:focus { border-color: var(--primary); }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); }
     select { cursor: pointer; }
     
     .btn {
@@ -183,7 +183,8 @@
     .hidden { display: none !important; }
     #ia-resultado { margin-top: 12px; font-size: 13px; text-align: center; padding: 10px; border-radius: 10px; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    @media (max-width: 600px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -204,29 +205,33 @@
     <div class="stats">
       <div class="stat-item"><div class="num" id="s-users">0</div><div class="lbl">Usuários</div></div>
       <div class="stat-item"><div class="num" id="s-posts">0</div><div class="lbl">Posts</div></div>
-      <div class="stat-item"><div class="num" id="s-materias">0</div><div class="lbl">Matérias</div></div>
+      <div class="stat-item"><div class="num" id="s-materias">0</div><div class="lbl">Disciplinas</div></div>
       <div class="stat-item"><div class="num" id="s-quizzes">0</div><div class="lbl">Quizzes</div></div>
-      <div class="stat-item"><div class="num" id="s-topicos">0</div><div class="lbl">Tópicos</div></div>
+      <div class="stat-item"><div class="num" id="s-aulas">0</div><div class="lbl">Aulas</div></div>
     </div>
   </div>
 
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('ia')">🤖 Gerador IA</button>
     <button class="tab-btn" onclick="switchTab('usuarios')">👥 Usuários</button>
-    <button class="tab-btn" onclick="switchTab('materias')">📚 Matérias</button>
+    <button class="tab-btn" onclick="switchTab('materias')">📚 Disciplinas</button>
     <button class="tab-btn" onclick="switchTab('quizzes')">🎮 Quizzes</button>
-    <button class="tab-btn" onclick="switchTab('topicos')">📝 Tópicos</button>
+    <button class="tab-btn" onclick="switchTab('aulas')">📝 Aulas</button>
     <button class="tab-btn" onclick="switchTab('posts')">💬 Posts</button>
+    <button class="tab-btn" onclick="switchTab('desafios')">⚔️ Desafios</button>
+    <button class="tab-btn" onclick="switchTab('sobre')">ℹ️ Sobre</button>
+    <button class="tab-btn" onclick="switchTab('updates')">📋 Updates</button>
     <button class="tab-btn" onclick="switchTab('chat')">💭 Chat</button>
   </div>
 
+  <!-- TAB IA -->
   <div id="tab-ia" class="tab-content active">
     <div class="card">
-      <h3>🤖 Gerador IA</h3>
+      <h3>🤖 Gerador IA (Jarvis)</h3>
       <div class="grid-2">
         <div>
-          <label style="color:var(--text2);font-size:12px;">ID da Matéria (obrigatório)</label>
-          <input type="text" id="ia-materia-id" placeholder="Cole o ID da matéria..." style="font-family:monospace;font-size:12px" />
+          <label style="color:var(--text2);font-size:12px;">ID da Disciplina (obrigatório)</label>
+          <input type="text" id="ia-materia-id" placeholder="Cole o ID..." style="font-family:monospace;font-size:12px" />
         </div>
         <div>
           <label style="color:var(--text2);font-size:12px;">Tema</label>
@@ -239,18 +244,19 @@
           <option value="5">5 itens</option>
           <option value="10" selected>10 itens</option>
         </select>
-        <button class="btn btn-roxo" onclick="criarQuizzesIA()" style="flex:1;">🤖 Criar Quizzes</button>
-        <button class="btn btn-roxo" onclick="criarTopicosIA()" style="flex:1;">📝 Criar Tópicos</button>
-        <button class="btn btn-dourado" onclick="criarTudoIA()" style="flex:1;">🚀 Criar TUDO</button>
+        <button class="btn btn-roxo" onclick="criarQuizzesIA()" style="flex:1;">🤖 Quizzes</button>
+        <button class="btn btn-roxo" onclick="criarAulasIA()" style="flex:1;">📝 Aulas</button>
+        <button class="btn btn-dourado" onclick="criarTudoIA()" style="flex:1;">🚀 TUDO</button>
       </div>
       <div id="ia-resultado"></div>
     </div>
     <div class="card">
-      <h3>📚 IDs das Matérias (clique para copiar)</h3>
+      <h3>📚 IDs das Disciplinas (clique para copiar)</h3>
       <div id="materias-lista" style="max-height:250px;overflow-y:auto;font-size:12px;"></div>
     </div>
   </div>
 
+  <!-- TAB USUÁRIOS -->
   <div id="tab-usuarios" class="tab-content">
     <div class="card">
       <h3>👥 Gerenciar Usuários</h3>
@@ -264,34 +270,81 @@
     </div>
   </div>
 
+  <!-- TAB DISCIPLINAS -->
   <div id="tab-materias" class="tab-content">
     <div class="card">
-      <h3>📚 Matérias</h3>
-      <div class="table-wrap"><table><thead><tr><th>Ícone</th><th>Nome</th><th>Autor</th><th>Tópicos</th><th>Ações</th></tr></thead><tbody id="materias-table"></tbody></table></div>
+      <h3>📚 Disciplinas</h3>
+      <div class="table-wrap"><table><thead><tr><th>Ícone</th><th>Nome</th><th>Autor</th><th>Aulas</th><th>Ações</th></tr></thead><tbody id="materias-table"></tbody></table></div>
     </div>
   </div>
 
+  <!-- TAB QUIZZES -->
   <div id="tab-quizzes" class="tab-content">
     <div class="card">
       <h3>🎮 Quizzes</h3>
-      <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Matéria</th><th>Qtd</th><th>Oficial</th><th>Ações</th></tr></thead><tbody id="quizzes-table"></tbody></table></div>
+      <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Disciplina</th><th>Qtd</th><th>Oficial</th><th>Ações</th></tr></thead><tbody id="quizzes-table"></tbody></table></div>
     </div>
   </div>
 
-  <div id="tab-topicos" class="tab-content">
+  <!-- TAB AULAS -->
+  <div id="tab-aulas" class="tab-content">
     <div class="card">
-      <h3>📝 Tópicos</h3>
-      <div class="table-wrap"><table><thead><tr><th>Título</th><th>Matéria</th><th>Autor</th><th>Verificado</th><th>Ações</th></tr></thead><tbody id="topicos-table"></tbody></table></div>
+      <h3>📝 Aulas</h3>
+      <div class="table-wrap"><table><thead><tr><th>Título</th><th>Disciplina</th><th>Autor</th><th>Verificado</th><th>Ações</th></tr></thead><tbody id="aulas-table"></tbody></table></div>
     </div>
   </div>
 
+  <!-- TAB POSTS -->
   <div id="tab-posts" class="tab-content">
     <div class="card">
       <h3>💬 Posts</h3>
-      <div class="table-wrap"><table><thead><tr><th>Autor</th><th>Texto</th><th>Data</th><th>Ações</th></tr></thead><tbody id="posts-table"></tbody></table></div>
+      <div class="table-wrap"><table><thead><tr><th>Autor</th><th>Texto</th><th>Data</th><th>Views</th><th>Ações</th></tr></thead><tbody id="posts-table"></tbody></table></div>
     </div>
   </div>
 
+  <!-- TAB DESAFIOS -->
+  <div id="tab-desafios" class="tab-content">
+    <div class="card">
+      <h3>⚔️ Criar Desafio</h3>
+      <input type="text" id="des-titulo" placeholder="Título do desafio" />
+      <textarea id="des-descricao" rows="3" placeholder="Descrição do desafio"></textarea>
+      <div class="grid-3">
+        <input type="number" id="des-premio" placeholder="Prêmio em pontos" />
+        <input type="date" id="des-data" />
+        <button class="btn btn-dourado" onclick="criarDesafio()" style="height:40px">🏆 Criar Desafio</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>📋 Desafios Ativos</h3>
+      <div id="desafios-admin-list"></div>
+    </div>
+  </div>
+
+  <!-- TAB SOBRE -->
+  <div id="tab-sobre" class="tab-content">
+    <div class="card">
+      <h3>ℹ️ Editar Página "Sobre Nós"</h3>
+      <textarea id="sobre-texto" rows="10" placeholder="Conteúdo da página Sobre Nós..."></textarea>
+      <button class="btn btn-verde" onclick="salvarSobre()" style="margin-top:10px">💾 Salvar</button>
+    </div>
+  </div>
+
+  <!-- TAB UPDATES -->
+  <div id="tab-updates" class="tab-content">
+    <div class="card">
+      <h3>📋 Novo Update</h3>
+      <input type="text" id="up-titulo" placeholder="Título da atualização" />
+      <input type="text" id="up-versao" placeholder="Versão (ex: 3.0)" />
+      <textarea id="up-descricao" rows="5" placeholder="Descrição das mudanças..."></textarea>
+      <button class="btn btn-azul" onclick="criarUpdate()" style="margin-top:10px">📢 Publicar Update</button>
+    </div>
+    <div class="card">
+      <h3>📋 Histórico de Updates</h3>
+      <div id="updates-admin-list"></div>
+    </div>
+  </div>
+
+  <!-- TAB CHAT -->
   <div id="tab-chat" class="tab-content">
     <div class="card">
       <h3>💭 Salas de Chat</h3>
@@ -339,9 +392,12 @@ function switchTab(tab) {
   document.getElementById('tab-' + tab)?.classList.add('active');
   if (tab === 'materias') carregarMateriasTab();
   if (tab === 'quizzes') carregarQuizzesTab();
-  if (tab === 'topicos') carregarTopicosTab();
+  if (tab === 'aulas') carregarAulasTab();
   if (tab === 'posts') carregarPostsTab();
   if (tab === 'chat') carregarChatTab();
+  if (tab === 'desafios') carregarDesafiosAdmin();
+  if (tab === 'sobre') carregarSobreAdmin();
+  if (tab === 'updates') carregarUpdatesAdmin();
 }
 
 // ========== CARREGAR TUDO ==========
@@ -358,26 +414,24 @@ async function carregarTudo() {
   document.getElementById('s-posts').textContent = Object.keys(pSnap.val() || {}).length;
   document.getElementById('s-materias').textContent = Object.keys(materiasCache).length;
   
-  let totalQuizzes = 0, totalTopicos = 0, listaHTML = '';
+  let totalQuizzes = 0, totalAulas = 0, listaHTML = '';
   for (const [id, m] of Object.entries(materiasCache)) {
     listaHTML += `<div style="padding:5px 0;border-bottom:1px solid var(--border);">📚 <strong>${m.nome||'?'}</strong> — <span class="code" onclick="copiarID('${id}')">${id}</span></div>`;
-    const [qSnap, tSnap] = await Promise.all([
+    const [qSnap, aSnap] = await Promise.all([
       db.ref('quizzes/'+id).once('value'),
-      db.ref('topicos/'+id).once('value')
+      db.ref('aulas/'+id).once('value')
     ]);
     totalQuizzes += Object.keys(qSnap.val()||{}).length;
-    totalTopicos += Object.keys(tSnap.val()||{}).length;
+    totalAulas += Object.keys(aSnap.val()||{}).length;
   }
   document.getElementById('s-quizzes').textContent = totalQuizzes;
-  document.getElementById('s-topicos').textContent = totalTopicos;
-  document.getElementById('materias-lista').innerHTML = listaHTML || 'Nenhuma matéria cadastrada';
+  document.getElementById('s-aulas').textContent = totalAulas;
+  document.getElementById('materias-lista').innerHTML = listaHTML || 'Nenhuma disciplina';
   
   renderUsers(Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0)));
 }
 
-function copiarID(id) { 
-  navigator.clipboard.writeText(id).then(() => alert('✅ ID copiado!'));
-}
+function copiarID(id) { navigator.clipboard.writeText(id).then(() => alert('✅ ID copiado!')); }
 
 // ========== USUÁRIOS ==========
 function renderUsers(arr) {
@@ -427,41 +481,22 @@ async function deleteUser(uid) {
   carregarTudo();
 }
 
-// ========== PARSER JSON ROBUSTO ==========
+// ========== PARSER JSON ==========
 function parseJSONdaIA(txt) {
   let str = txt.replace(/^[^\[\{]*/, '');
-  
   let ultimoColchete = str.lastIndexOf(']');
   let ultimaChave = str.lastIndexOf('}');
-  
-  if (str.startsWith('[')) {
-    if (ultimoColchete > 0) str = str.substring(0, ultimoColchete + 1);
-  } else if (str.startsWith('{')) {
-    if (ultimaChave > 0) str = str.substring(0, ultimaChave + 1);
-  }
-  
+  if (str.startsWith('[')) { if (ultimoColchete > 0) str = str.substring(0, ultimoColchete + 1); }
+  else if (str.startsWith('{')) { if (ultimaChave > 0) str = str.substring(0, ultimaChave + 1); }
   str = str.replace(/\n/g, ' ').replace(/\r/g, ' ').replace(/\t/g, ' ');
-  str = str.replace(/,\s*\]/g, ']');
-  str = str.replace(/,\s*\}/g, '}');
+  str = str.replace(/,\s*\]/g, ']').replace(/,\s*\}/g, '}');
   str = str.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
-  
-  try {
-    return JSON.parse(str);
-  } catch(e) {
-    let abertos = (str.match(/\[/g) || []).length;
-    let fechados = (str.match(/\]/g) || []).length;
+  try { return JSON.parse(str); } catch(e) {
+    let abertos = (str.match(/\[/g) || []).length, fechados = (str.match(/\]/g) || []).length;
     while (fechados < abertos) { str += ']'; fechados++; }
-    
-    abertos = (str.match(/\{/g) || []).length;
-    fechados = (str.match(/\}/g) || []).length;
+    abertos = (str.match(/\{/g) || []).length; fechados = (str.match(/\}/g) || []).length;
     while (fechados < abertos) { str += '}'; fechados++; }
-    
-    try {
-      return JSON.parse(str);
-    } catch(e2) {
-      console.error('Falha ao parsear JSON');
-      return null;
-    }
+    try { return JSON.parse(str); } catch(e2) { return null; }
   }
 }
 
@@ -472,186 +507,148 @@ async function criarQuizzesIA() {
   const quantidade = parseInt(document.getElementById('ia-qtd').value);
   const resultado = document.getElementById('ia-resultado');
   
-  if (!mid || !tema) { 
-    resultado.innerHTML='❌ Preencha o ID da matéria e o Tema!'; 
-    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; 
-    return; 
-  }
+  if (!mid || !tema) { resultado.innerHTML='❌ Preencha ID e Tema!'; resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; return; }
   
   const materiaExiste = await db.ref('materias/'+mid).once('value');
-  if (!materiaExiste.val()) {
-    resultado.innerHTML='❌ Matéria não encontrada!';
-    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
-    return;
-  }
+  if (!materiaExiste.val()) { resultado.innerHTML='❌ Disciplina não encontrada!'; resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; return; }
   
   resultado.innerHTML='⏳ Gerando ' + quantidade + ' quizzes...';
   resultado.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px;';
   
   let criados = 0;
-  
   for (let i = 0; i < quantidade; i++) {
-    resultado.innerHTML='⏳ Criando quiz ' + (i+1) + '/' + quantidade + '...';
-    
+    resultado.innerHTML='⏳ Quiz ' + (i+1) + '/' + quantidade + '...';
     try {
-      const comando = `Crie 1 quiz sobre "${tema}" com 5 questões.
-Responda APENAS com este JSON (sem texto adicional):
-{"nome":"Título do Quiz","questoes":[{"pergunta":"Pergunta 1?","alternativas":["A","B","C","D"],"correta":0},{"pergunta":"Pergunta 2?","alternativas":["A","B","C","D"],"correta":1}]}`;
-      
+      const comando = `Crie 1 quiz sobre "${tema}" com 5 questões. Responda APENAS: {"nome":"Título","questoes":[{"pergunta":"?","alternativas":["A","B","C","D"],"correta":0}]}`;
       const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
-        body: JSON.stringify({
-          model:'llama-3.1-8b-instant',
-          messages:[{role:'user',content:comando}],
-          max_tokens:800,
-          temperature:0.8
-        })
+        method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+        body: JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:comando}],max_tokens:800,temperature:0.8})
       });
-      
-      if (r.status === 429) {
-        resultado.innerHTML='⏳ Limite API. Aguardando 15s...';
-        await new Promise(resolve => setTimeout(resolve, 15000));
-        i--;
-        continue;
-      }
-      
+      if (r.status === 429) { resultado.innerHTML='⏳ Limite API. Aguardando 15s...'; await new Promise(resolve => setTimeout(resolve, 15000)); i--; continue; }
       const d = await r.json();
-      const txt = d.choices?.[0]?.message?.content || '';
-      
-      let quizData = parseJSONdaIA(txt);
-      
-      if (quizData && !Array.isArray(quizData)) {
-        quizData = [quizData];
-      }
-      
-      if (quizData && Array.isArray(quizData) && quizData.length > 0) {
+      let quizData = parseJSONdaIA(d.choices?.[0]?.message?.content || '');
+      if (quizData && !Array.isArray(quizData)) quizData = [quizData];
+      if (quizData && quizData[0]?.nome && quizData[0]?.questoes?.length >= 2) {
         const q = quizData[0];
-        if (q.nome && q.questoes && q.questoes.length >= 2) {
-          await db.ref('quizzes/'+mid).push({
-            nome: String(q.nome).substring(0, 100),
-            tempo: 30,
-            questoes: q.questoes.slice(0, 5).map(qq => ({
-              pergunta: String(qq.pergunta || 'Pergunta'),
-              alternativas: (qq.alternativas || ['A','B','C','D']).map(a => String(a)),
-              correta: [0,1,2,3].includes(parseInt(qq.correta)) ? parseInt(qq.correta) : 0
-            })),
-            nivel: 1,
-            oficial: false, // 👈 NÃO OFICIAL (precisa revisão)
-            autorId: 'ia',
-            autorNome: 'Neurinho IA',
-            totalPlays: 0,
-            createdAt: Date.now()
-          });
-          criados++;
-        }
+        await db.ref('quizzes/'+mid).push({
+          nome: String(q.nome).substring(0,100), tempo: 30,
+          questoes: q.questoes.slice(0,5).map(qq => ({pergunta: String(qq.pergunta||'?'), alternativas: (qq.alternativas||['A','B','C','D']).map(a=>String(a)), correta: [0,1,2,3].includes(parseInt(qq.correta))?parseInt(qq.correta):0})),
+          nivel: 1, oficial: false, autorId: 'ia', autorNome: 'Jarvis IA', totalPlays: 0, createdAt: Date.now(), views: {}
+        });
+        criados++;
       }
-      
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
-    } catch(err) {
-      console.error('Erro quiz ' + (i+1) + ':', err);
-    }
+    } catch(err) { console.error('Erro quiz ' + (i+1) + ':', err); }
   }
-  
-  if (criados > 0) {
-    resultado.innerHTML='✅ ' + criados + ' quizzes criados! (Não oficiais)';
-    resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
-  } else {
-    resultado.innerHTML='❌ Nenhum quiz criado. Tente novamente.';
-    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
-  }
+  resultado.innerHTML = criados > 0 ? '✅ ' + criados + ' quizzes criados! (Não oficiais)' : '❌ Nenhum quiz criado.';
+  resultado.style.cssText = criados > 0 ? 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;' : 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
   carregarTudo();
 }
 
-// ========== CRIAR TÓPICOS IA ==========
-async function criarTopicosIA() {
+// ========== CRIAR AULAS IA ==========
+async function criarAulasIA() {
   const mid = document.getElementById('ia-materia-id').value.trim();
   const tema = document.getElementById('ia-tema').value.trim();
   const quantidade = parseInt(document.getElementById('ia-qtd').value);
   const resultado = document.getElementById('ia-resultado');
   
-  if (!mid || !tema) { 
-    resultado.innerHTML='❌ Preencha o ID da matéria e o Tema!'; 
-    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; 
-    return; 
-  }
+  if (!mid || !tema) { resultado.innerHTML='❌ Preencha ID e Tema!'; resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; return; }
   
-  resultado.innerHTML='⏳ Gerando ' + quantidade + ' tópicos detalhados...';
+  resultado.innerHTML='⏳ Gerando ' + quantidade + ' aulas...';
   resultado.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px;';
   
-  const comando = `Crie ${quantidade} tópicos sobre "${tema}".
-Responda APENAS com JSON (sem texto adicional):
-[{"titulo":"Título","conteudo":"Conteúdo BEM DETALHADO com no mínimo 800 caracteres, incluindo definições, exemplos práticos e dicas de estudo. Seja didático e claro."}]`;
-  
+  const comando = `Crie ${quantidade} aulas sobre "${tema}". Responda APENAS JSON: [{"titulo":"Título","conteudo":"Conteúdo detalhado com mínimo 800 caracteres, exemplos e explicações didáticas."}]`;
   const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
-    body: JSON.stringify({
-      model:'llama-3.1-8b-instant',
-      messages:[{role:'user',content:comando}],
-      max_tokens:4096,
-      temperature:0.8
-    })
+    method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+    body: JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:comando}],max_tokens:4096,temperature:0.8})
   });
-  
-  if (r.status === 429) {
-    resultado.innerHTML='⏳ Limite API. Aguardando 10s...';
-    await new Promise(resolve => setTimeout(resolve, 10000));
-    return criarTopicosIA();
-  }
-  
+  if (r.status === 429) { resultado.innerHTML='⏳ Limite API. Aguardando 10s...'; await new Promise(resolve => setTimeout(resolve, 10000)); return criarAulasIA(); }
   const d = await r.json();
-  const txt = d.choices?.[0]?.message?.content || '';
-  const topicos = parseJSONdaIA(txt);
-  
-  if (!topicos || !Array.isArray(topicos)) { 
-    resultado.innerHTML='❌ Erro ao gerar. Tente novamente.'; 
-    resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; 
-    return; 
-  }
+  const aulas = parseJSONdaIA(d.choices?.[0]?.message?.content || '');
+  if (!aulas || !Array.isArray(aulas)) { resultado.innerHTML='❌ Erro ao gerar.'; resultado.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;'; return; }
   
   let criados = 0;
-  for (const t of topicos) {
-    if (t.titulo && t.conteudo?.length > 100) {
-      await db.ref('topicos/'+mid).push({
-        titulo: String(t.titulo).substring(0, 200),
-        conteudo: String(t.conteudo).substring(0, 8000),
-        autorId: 'ia',
-        autorNome: 'Neurinho IA',
-        verificado: false, // 👈 NÃO VERIFICADO (precisa revisão)
-        createdAt: Date.now()
-      });
+  for (const a of aulas) {
+    if (a.titulo && a.conteudo?.length > 100) {
+      await db.ref('aulas/'+mid).push({titulo: String(a.titulo).substring(0,200), conteudo: String(a.conteudo).substring(0,8000), autorId: 'ia', autorNome: 'Jarvis IA', verificado: false, createdAt: Date.now(), views: {}});
       criados++;
     }
   }
-  
-  if (criados > 0) {
-    const snap = await db.ref('materias/'+mid+'/topicosCount').once('value');
-    await db.ref('materias/'+mid).update({topicosCount: (snap.val()||0) + criados});
-  }
-  
-  resultado.innerHTML='✅ ' + criados + ' tópicos criados! (Não verificados)';
-  resultado.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;';
+  if (criados > 0) { const snap = await db.ref('materias/'+mid+'/aulasCount').once('value'); await db.ref('materias/'+mid).update({aulasCount: (snap.val()||0) + criados}); }
+  resultado.innerHTML = criados > 0 ? '✅ ' + criados + ' aulas criadas! (Não verificadas)' : '❌ Nenhuma aula criada.';
+  resultado.style.cssText = criados > 0 ? 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px;' : 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px;';
   carregarTudo();
 }
 
-// ========== CRIAR TUDO ==========
 async function criarTudoIA() {
   const resultado = document.getElementById('ia-resultado');
-  resultado.innerHTML='⏳ Fase 1/2: Criando tópicos...';
-  resultado.style.cssText = 'color:#F59E0B;background:#78350F;padding:10px;border-radius:10px;';
-  await criarTopicosIA();
-  
+  resultado.innerHTML='⏳ Fase 1/2: Criando aulas...'; resultado.style.cssText = 'color:#F59E0B;background:#78350F;padding:10px;border-radius:10px;';
+  await criarAulasIA();
   resultado.innerHTML='⏳ Fase 2/2: Criando quizzes...';
-  resultado.style.cssText = 'color:#F59E0B;background:#78350F;padding:10px;border-radius:10px;';
   await criarQuizzesIA();
+}
+
+// ========== DESAFIOS ==========
+async function criarDesafio() {
+  const titulo = document.getElementById('des-titulo')?.value.trim();
+  const descricao = document.getElementById('des-descricao')?.value.trim();
+  const premio = parseInt(document.getElementById('des-premio')?.value || '0');
+  const data = document.getElementById('des-data')?.value;
+  if (!titulo || !premio || !data) return alert('Preencha todos os campos!');
+  await db.ref('desafios').push({titulo, descricao, premio, dataLimite: new Date(data).getTime(), createdAt: Date.now()});
+  document.getElementById('des-titulo').value = '';
+  document.getElementById('des-descricao').value = '';
+  document.getElementById('des-premio').value = '';
+  document.getElementById('des-data').value = '';
+  carregarDesafiosAdmin();
+  alert('✅ Desafio criado!');
+}
+
+async function carregarDesafiosAdmin() {
+  const c = document.getElementById('desafios-admin-list'); if (!c) return;
+  const snap = await db.ref('desafios').once('value');
+  const desafios = snap.val();
+  c.innerHTML = desafios ? Object.entries(desafios).reverse().map(([id,d]) => `<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><strong>⚔️ ${d.titulo}</strong><br><span style="font-size:11px;color:var(--text3)">🏆 +${d.premio} pts · 📅 ${new Date(d.dataLimite).toLocaleDateString('pt-BR')}</span></div><button class="btn btn-vermelho" onclick="deletarItem('desafios','${id}')">🗑</button></div>`).join('') : 'Nenhum desafio';
+}
+
+// ========== SOBRE ==========
+async function carregarSobreAdmin() {
+  const snap = await db.ref('config/sobre').once('value');
+  const data = snap.val();
+  if (data) document.getElementById('sobre-texto').value = data.texto || '';
+}
+
+async function salvarSobre() {
+  const texto = document.getElementById('sobre-texto')?.value || '';
+  await db.ref('config/sobre').set({texto, atualizadoEm: Date.now()});
+  alert('✅ Página Sobre Nós atualizada!');
+}
+
+// ========== UPDATES ==========
+async function criarUpdate() {
+  const titulo = document.getElementById('up-titulo')?.value.trim();
+  const versao = document.getElementById('up-versao')?.value.trim();
+  const descricao = document.getElementById('up-descricao')?.value.trim();
+  if (!titulo || !versao || !descricao) return alert('Preencha todos os campos!');
+  await db.ref('config/updates').push({titulo, versao, descricao, data: Date.now()});
+  document.getElementById('up-titulo').value = '';
+  document.getElementById('up-versao').value = '';
+  document.getElementById('up-descricao').value = '';
+  carregarUpdatesAdmin();
+  alert('✅ Update publicado!');
+}
+
+async function carregarUpdatesAdmin() {
+  const c = document.getElementById('updates-admin-list'); if (!c) return;
+  const snap = await db.ref('config/updates').once('value');
+  const updates = snap.val();
+  c.innerHTML = updates ? Object.entries(updates).reverse().map(([id,u]) => `<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><strong>📋 ${u.titulo}</strong> <span class="badge">v${u.versao}</span><br><span style="font-size:11px;color:var(--text3)">📅 ${new Date(u.data).toLocaleDateString('pt-BR')}</span></div><button class="btn btn-vermelho" onclick="deletarItem('config/updates','${id}')">🗑</button></div>`).join('') : 'Nenhum update';
 }
 
 // ========== ABAS ==========
 async function carregarMateriasTab() {
   const arr = Object.entries(materiasCache);
-  document.getElementById('materias-table').innerHTML = arr.length ? arr.map(([id,m])=>`<tr><td>${m.icone||'📚'}</td><td>${m.nome||'?'}</td><td>@${m.autorNome||'?'}</td><td>${m.topicosCount||0}</td><td><button class="btn btn-vermelho" onclick="deletarItem('materias','${id}')">🗑</button></td></tr>`).join('') : '<tr><td colspan="5">Nenhuma</td></tr>';
+  document.getElementById('materias-table').innerHTML = arr.length ? arr.map(([id,m])=>`<tr><td>${m.icone||'📚'}</td><td>${m.nome||'?'}</td><td>@${m.autorNome||'?'}</td><td>${m.aulasCount||0}</td><td><button class="btn btn-vermelho" onclick="deletarItem('materias','${id}')">🗑</button></td></tr>`).join('') : '<tr><td colspan="5">Nenhuma</td></tr>';
 }
 
 async function carregarQuizzesTab() {
@@ -659,27 +656,33 @@ async function carregarQuizzesTab() {
   for (const [mid, m] of Object.entries(materiasCache)) {
     const snap = await db.ref('quizzes/'+mid).once('value');
     for (const [qid, q] of Object.entries(snap.val()||{})) {
-      html += `<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td>${q.oficial?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">❌ Não</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('quizzes/${mid}','${qid}')">🗑</button></td></tr>`;
+      html += `<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td>${q.oficial?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">❌</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('quizzes/${mid}','${qid}')">🗑</button></td></tr>`;
     }
   }
   document.getElementById('quizzes-table').innerHTML = html || '<tr><td colspan="5">Nenhum</td></tr>';
 }
 
-async function carregarTopicosTab() {
+async function carregarAulasTab() {
   let html = '';
   for (const [mid, m] of Object.entries(materiasCache)) {
-    const snap = await db.ref('topicos/'+mid).once('value');
-    for (const [tid, t] of Object.entries(snap.val()||{})) {
-      html += `<tr><td>${(t.titulo||'?').substring(0,50)}</td><td>${m.nome||'?'}</td><td>@${t.autorNome||'?'}</td><td>${t.verificado?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">❌ Não</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('topicos/${mid}','${tid}')">🗑</button></td></tr>`;
+    const snap = await db.ref('aulas/'+mid).once('value');
+    for (const [aid, a] of Object.entries(snap.val()||{})) {
+      html += `<tr><td>${(a.titulo||'?').substring(0,50)}</td><td>${m.nome||'?'}</td><td>@${a.autorNome||'?'}</td><td>${a.verificado?'<span class="badge badge-sim">✅</span>':'<span class="badge badge-nao">❌</span>'}</td><td><button class="btn btn-vermelho" onclick="deletarItem('aulas/${mid}','${aid}')">🗑</button></td></tr>`;
     }
   }
-  document.getElementById('topicos-table').innerHTML = html || '<tr><td colspan="5">Nenhum</td></tr>';
+  document.getElementById('aulas-table').innerHTML = html || '<tr><td colspan="5">Nenhuma</td></tr>';
 }
 
 async function carregarPostsTab() {
   const snap = await db.ref('posts').once('value');
   const posts = snap.val()||{};
-  document.getElementById('posts-table').innerHTML = Object.entries(posts).reverse().slice(0,50).map(([id,p])=>`<tr><td>@${p.autorNome||'?'}</td><td>${(p.texto||'').substring(0,60)}</td><td>${new Date(p.createdAt).toLocaleDateString('pt-BR')}</td><td><button class="btn btn-vermelho" onclick="deletarItem('posts','${id}')">🗑</button></td></tr>`).join('') || '<tr><td colspan="4">Nenhum</td></tr>';
+  let html = '';
+  for (const [id, p] of Object.entries(posts).reverse().slice(0,50)) {
+    const viewsSnap = await db.ref('posts/'+id+'/views').once('value');
+    const views = viewsSnap.val() ? Object.keys(viewsSnap.val()).length : 0;
+    html += `<tr><td>@${p.autorNome||'?'}</td><td>${(p.texto||'').substring(0,60)}</td><td>${new Date(p.createdAt).toLocaleDateString('pt-BR')}</td><td>👁️ ${views}</td><td><button class="btn btn-vermelho" onclick="deletarItem('posts','${id}')">🗑</button></td></tr>`;
+  }
+  document.getElementById('posts-table').innerHTML = html || '<tr><td colspan="5">Nenhum</td></tr>';
 }
 
 async function carregarChatTab() {
@@ -693,6 +696,10 @@ async function deletarItem(caminho, id) {
   await db.ref(caminho+'/'+id).remove();
   carregarTudo();
 }
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') verificarSenha();
+});
 </script>
 </body>
 </html>
