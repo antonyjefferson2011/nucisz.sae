@@ -302,23 +302,43 @@
     </div>
   </div>
 
-  <!-- TAB DESAFIOS -->
-  <div id="tab-desafios" class="tab-content">
-    <div class="card">
-      <h3>⚔️ Criar Desafio</h3>
-      <input type="text" id="des-titulo" placeholder="Título do desafio" />
-      <textarea id="des-descricao" rows="3" placeholder="Descrição do desafio"></textarea>
-      <div class="grid-3">
-        <input type="number" id="des-premio" placeholder="Prêmio em pontos" />
-        <input type="date" id="des-data" />
-        <button class="btn btn-dourado" onclick="criarDesafio()" style="height:40px">🏆 Criar Desafio</button>
+ <!-- TAB DESAFIOS (PAINEL ADMIN) -->
+<div id="tab-desafios" class="tab-content">
+  <div class="card">
+    <h3>⚔️ Criar Novo Desafio</h3>
+    <input type="text" id="des-titulo" placeholder="Título do desafio" />
+    <textarea id="des-descricao" rows="3" placeholder="Descrição e instruções"></textarea>
+    
+    <div class="grid-2">
+      <div>
+        <label style="color:var(--text2);font-size:11px">📅 Data/Hora de INÍCIO</label>
+        <input type="datetime-local" id="des-inicio" />
+      </div>
+      <div>
+        <label style="color:var(--text2);font-size:11px">📅 Data/Hora de TÉRMINO</label>
+        <input type="datetime-local" id="des-fim" />
       </div>
     </div>
-    <div class="card">
-      <h3>📋 Desafios Ativos</h3>
-      <div id="desafios-admin-list"></div>
+    
+    <div class="grid-2">
+      <input type="number" id="des-premio" placeholder="🏆 Prêmio em pontos" />
+      <input type="text" id="des-materia" placeholder="📚 Matéria (ex: Matemática)" />
     </div>
+    
+    <label style="font-size:11px;color:var(--text2);margin-top:10px;display:block">📝 Banner de anúncio (aparece na Home):</label>
+    <input type="text" id="des-banner" placeholder="Ex: Se prepare! Desafio de Matemática dia 10/05 às 14h. Estude equações!" />
+    
+    <label style="font-size:11px;color:var(--text2);margin-top:10px;display:block">📝 Questões:</label>
+    <textarea id="des-questoes" rows="8" placeholder="Formato:&#10;Qual a capital do Brasil?&#10;a) Rio de Janeiro&#10;b) São Paulo&#10;c) Brasília&#10;d) Salvador&#10;RESPOSTA: c&#10;&#10;Separe questões com linha em branco"></textarea>
+    
+    <button class="btn btn-dourado" onclick="criarDesafioAdm()" style="margin-top:10px;width:100%">🏆 Criar Desafio</button>
   </div>
+  
+  <div class="card">
+    <h3>📋 Desafios Criados</h3>
+    <div id="desafios-admin-list"></div>
+  </div>
+</div>
 
   <!-- TAB SOBRE -->
   <div id="tab-sobre" class="tab-content">
