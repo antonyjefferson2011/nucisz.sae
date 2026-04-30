@@ -523,28 +523,50 @@ async function criarTudoIA() { /* igual antes */ }
 
 // ========== DESAFIOS ==========
 async function criarDesafio() {
-  const titulo = document.getElementById('des-titulo')?.value.trim();
-  const descricao = document.getElementById('des-descricao')?.value.trim();
+  const titulo = document.getElementById('des-titulo')?.value?.trim();
+  const descricao = document.getElementById('des-descricao')?.value?.trim();
   const inicio = document.getElementById('des-inicio')?.value;
   const fim = document.getElementById('des-fim')?.value;
-  const premio = parseInt(document.getElementById('des-premio')?.value || '0');
-  const materia = document.getElementById('des-materia')?.value.trim();
-  const banner = document.getElementById('des-banner')?.value.trim();
-  const questoes = document.getElementById('des-questoes')?.value.trim();
+  const premio = document.getElementById('des-premio')?.value;
+  const materia = document.getElementById('des-materia')?.value?.trim();
+  const banner = document.getElementById('des-banner')?.value?.trim();
+  const questoes = document.getElementById('des-questoes')?.value?.trim();
   
-  if (!titulo || !inicio || !fim || !premio || !questoes) return alert('Preencha todos os campos!');
+  // Debug - mostra o que está sendo lido
+  console.log('Título:', titulo);
+  console.log('Início:', inicio);
+  console.log('Fim:', fim);
+  console.log('Prêmio:', premio);
+  console.log('Questões:', questoes);
+  
+  if (!titulo) return alert('Preencha o TÍTULO!');
+  if (!inicio) return alert('Preencha a data de INÍCIO!');
+  if (!fim) return alert('Preencha a data de TÉRMINO!');
+  if (!premio || premio === '0') return alert('Preencha o PRÊMIO!');
+  if (!questoes) return alert('Preencha as QUESTÕES!');
   
   await db.ref('desafios').push({
-    titulo, descricao, materia, banner, questoes, premio,
+    titulo,
+    descricao: descricao || '',
+    materia: materia || '',
+    banner: banner || '',
+    questoes,
+    premio: parseInt(premio),
     inicio: new Date(inicio).getTime(),
     fim: new Date(fim).getTime(),
     criadoPor: 'Admin',
     createdAt: Date.now()
   });
   
-  ['des-titulo','des-descricao','des-inicio','des-fim','des-premio','des-materia','des-banner','des-questoes'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = '';
-  });
+  // Limpa
+  document.getElementById('des-titulo').value = '';
+  document.getElementById('des-descricao').value = '';
+  document.getElementById('des-inicio').value = '';
+  document.getElementById('des-fim').value = '';
+  document.getElementById('des-premio').value = '';
+  document.getElementById('des-materia').value = '';
+  document.getElementById('des-banner').value = '';
+  document.getElementById('des-questoes').value = '';
   
   carregarDesafiosAdmin();
   alert('✅ Desafio criado!');
