@@ -6,63 +6,208 @@
   <title>Painel Admin - Sexta-Feira Studies</title>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    :root { --bg:#0F172A; --card:#1E293B; --text:#F1F5F9; --text2:#94A3B8; --border:#334155; --primary:#0F766E; --primary-light:#14B8A6; --danger:#EF4444; --blue:#3B82F6; --purple:#8B5CF6; --gold:#F59E0B; }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Sora',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-    #login-screen { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px; }
-    .login-box { background:var(--card); border-radius:20px; padding:40px 30px; width:100%; max-width:380px; text-align:center; border:1px solid var(--border); }
-    .login-box h1 { color:var(--primary-light); font-size:22px; margin-bottom:5px; }
-    .login-box input { width:100%; padding:14px; background:var(--bg); border:2px solid var(--border); border-radius:12px; color:white; font-size:15px; font-family:'Sora',sans-serif; outline:none; margin-bottom:10px; }
-    .login-box button { width:100%; padding:14px; background:var(--primary); color:white; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Sora',sans-serif; }
-    .login-error { color:var(--danger); font-size:13px; margin-top:10px; display:none; }
-    #painel-screen { display:none; padding:20px; max-width:1200px; margin:0 auto; }
-    .header { text-align:center; margin-bottom:25px; }
-    .header h1 { color:var(--primary-light); font-size:24px; }
-    .stats { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:15px; }
-    .stat-item { background:var(--card); padding:15px 20px; border-radius:14px; text-align:center; min-width:100px; border:1px solid var(--border); }
-    .stat-item .num { font-size:24px; font-weight:800; color:var(--primary-light); }
-    .stat-item .lbl { font-size:11px; color:var(--text2); margin-top:3px; }
-    .tabs { display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; justify-content:center; }
-    .tab-btn { padding:10px 18px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text2); cursor:pointer; font-size:13px; font-weight:600; font-family:'Sora',sans-serif; }
-    .tab-btn:hover { border-color:var(--primary); color:white; }
-    .tab-btn.active { background:var(--primary); color:white; border-color:var(--primary); }
-    .tab-content { display:none; }
-    .tab-content.active { display:block; }
-    .card { background:var(--card); border-radius:16px; padding:20px; margin-bottom:15px; border:1px solid var(--border); }
-    .card h3 { margin-bottom:15px; font-size:17px; color:var(--primary-light); }
-    input,select,textarea { width:100%; padding:10px 12px; background:var(--bg); border:1px solid var(--border); border-radius:10px; color:white; font-size:13px; font-family:'Sora',sans-serif; outline:none; margin-bottom:8px; }
-    input:focus,select:focus,textarea:focus { border-color:var(--primary); }
-    .btn { padding:8px 14px; border-radius:8px; border:none; cursor:pointer; font-weight:600; font-size:12px; font-family:'Sora',sans-serif; margin:2px; }
-    .btn:hover { opacity:0.9; }
-    .btn-verde { background:var(--primary); color:white; }
-    .btn-azul { background:var(--blue); color:white; }
-    .btn-roxo { background:var(--purple); color:white; }
-    .btn-dourado { background:var(--gold); color:black; font-weight:700; }
-    .btn-vermelho { background:var(--danger); color:white; }
-    .table-wrap { overflow-x:auto; max-height:400px; overflow-y:auto; border-radius:10px; }
-    table { width:100%; border-collapse:collapse; font-size:12px; }
-    th { background:var(--bg); padding:10px; text-align:left; color:var(--primary-light); font-size:11px; position:sticky; top:0; }
-    td { padding:10px; border-bottom:1px solid var(--border); }
-    .code { background:var(--bg); padding:3px 8px; border-radius:5px; cursor:pointer; font-family:monospace; font-size:11px; color:var(--primary-light); }
-    .badge { padding:3px 8px; border-radius:10px; font-size:10px; font-weight:600; }
-    .badge-sim { background:#064E3B; color:#34D399; }
-    .badge-nao { background:#7F1D1D; color:#FCA5A5; }
-    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    @media(max-width:600px) { .grid-2 { grid-template-columns:1fr; } }
+    :root {
+      --bg: #0F172A;
+      --card: #1E293B;
+      --text: #F1F5F9;
+      --text2: #94A3B8;
+      --border: #334155;
+      --primary: #0F766E;
+      --primary-light: #14B8A6;
+      --danger: #EF4444;
+      --blue: #3B82F6;
+      --purple: #8B5CF6;
+      --gold: #F59E0B;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    
+    /* LOGIN */
+    #login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .login-box {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .login-box h1 { color: var(--primary-light); font-size: 22px; margin-bottom: 5px; }
+    .login-box p { color: var(--text2); font-size: 13px; margin-bottom: 25px; }
+    .login-box input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      color: white;
+      font-size: 15px;
+      font-family: 'Sora', sans-serif;
+      outline: none;
+      margin-bottom: 10px;
+      transition: border 0.2s;
+    }
+    .login-box input:focus { border-color: var(--primary); }
+    .login-box button {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Sora', sans-serif;
+      transition: background 0.2s;
+    }
+    .login-box button:hover { background: var(--primary-light); }
+    .login-error { color: var(--danger); font-size: 13px; margin-top: 10px; display: none; }
+    
+    /* PAINEL */
+    #painel-screen { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 25px; }
+    .header h1 { color: var(--primary-light); font-size: 24px; }
+    .header .stats { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+    .stat-item {
+      background: var(--card);
+      padding: 15px 20px;
+      border-radius: 14px;
+      text-align: center;
+      min-width: 100px;
+      border: 1px solid var(--border);
+    }
+    .stat-item .num { font-size: 24px; font-weight: 800; color: var(--primary-light); }
+    .stat-item .lbl { font-size: 11px; color: var(--text2); margin-top: 3px; }
+    
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tab-btn {
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text2);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Sora', sans-serif;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { border-color: var(--primary); color: white; }
+    .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* CARDS */
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 1px solid var(--border);
+    }
+    .card h3 { margin-bottom: 15px; font-size: 17px; color: var(--primary-light); }
+    
+    /* INPUTS */
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: white;
+      font-size: 13px;
+      font-family: 'Sora', sans-serif;
+      outline: none;
+      margin-bottom: 8px;
+      transition: border 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+    select { cursor: pointer; }
+    label { color: var(--text2); font-size: 11px; display: block; margin-bottom: 4px; }
+    
+    /* BOTÕES */
+    .btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      font-family: 'Sora', sans-serif;
+      transition: all 0.2s;
+      margin: 2px;
+    }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-verde { background: var(--primary); color: white; }
+    .btn-azul { background: var(--blue); color: white; }
+    .btn-roxo { background: var(--purple); color: white; }
+    .btn-dourado { background: var(--gold); color: black; font-weight: 700; }
+    .btn-vermelho { background: var(--danger); color: white; }
+    
+    /* TABELAS */
+    .table-wrap { overflow-x: auto; max-height: 400px; overflow-y: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { background: var(--bg); padding: 10px; text-align: left; color: var(--primary-light); font-size: 11px; position: sticky; top: 0; z-index: 1; }
+    td { padding: 10px; border-bottom: 1px solid var(--border); }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    
+    .code {
+      background: var(--bg);
+      padding: 3px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--primary-light);
+    }
+    .code:hover { background: var(--border); }
+    
+    .badge { padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+    .badge-sim { background: #064E3B; color: #34D399; }
+    .badge-nao { background: #7F1D1D; color: #FCA5A5; }
+    
+    .hidden { display: none !important; }
+    #ia-resultado { margin-top: 12px; font-size: 13px; text-align: center; padding: 10px; border-radius: 10px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <h1>🔒 Painel Admin</h1>
-    <p style="color:var(--text2);font-size:13px;margin-bottom:25px">Sexta-Feira Studies</p>
-    <input type="password" id="senha-input" placeholder="Senha de acesso" />
+    <p>Sexta-Feira Studies</p>
+    <input type="password" id="senha-input" placeholder="Senha de acesso" onkeydown="if(event.key==='Enter')verificarSenha()" />
     <button onclick="verificarSenha()">🚀 Entrar</button>
     <p class="login-error" id="login-error">Senha incorreta!</p>
   </div>
 </div>
 
+<!-- PAINEL -->
 <div id="painel-screen">
   <div class="header">
     <h1>⚙️ Painel Administrativo</h1>
@@ -75,6 +220,7 @@
     </div>
   </div>
 
+  <!-- TABS -->
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('ia')">🤖 Gerador IA</button>
     <button class="tab-btn" onclick="switchTab('usuarios')">👥 Usuários</button>
@@ -85,7 +231,6 @@
     <button class="tab-btn" onclick="switchTab('desafios')">⚔️ Desafios</button>
     <button class="tab-btn" onclick="switchTab('sobre')">ℹ️ Sobre</button>
     <button class="tab-btn" onclick="switchTab('updates')">📋 Updates</button>
-    <button class="tab-btn" onclick="switchTab('chat')">💭 Chat</button>
   </div>
 
   <!-- TAB IA -->
@@ -93,20 +238,30 @@
     <div class="card">
       <h3>🤖 Gerador IA (Jarvis)</h3>
       <div class="grid-2">
-        <div><label style="color:var(--text2);font-size:12px">ID da Disciplina</label><input type="text" id="ia-materia-id" placeholder="Cole o ID..." style="font-family:monospace" /></div>
-        <div><label style="color:var(--text2);font-size:12px">Tema</label><input type="text" id="ia-tema" placeholder="Ex: Revolução Francesa" /></div>
+        <div>
+          <label>ID da Disciplina (obrigatório)</label>
+          <input type="text" id="ia-materia-id" placeholder="Cole o ID..." style="font-family:monospace;font-size:12px" />
+        </div>
+        <div>
+          <label>Tema</label>
+          <input type="text" id="ia-tema" placeholder="Ex: Revolução Francesa" />
+        </div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <select id="ia-qtd" style="width:auto"><option value="3">3</option><option value="5">5</option><option value="10" selected>10</option></select>
-        <button class="btn btn-roxo" onclick="gerarQuizzes()" style="flex:1">🤖 Quizzes</button>
-        <button class="btn btn-roxo" onclick="gerarAulas()" style="flex:1">📝 Aulas</button>
-        <button class="btn btn-dourado" onclick="gerarTudo()" style="flex:1">🚀 TUDO</button>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <select id="ia-qtd" style="width:auto;">
+          <option value="3">3 itens</option>
+          <option value="5">5 itens</option>
+          <option value="10" selected>10 itens</option>
+        </select>
+        <button class="btn btn-roxo" onclick="gerarQuizzes()" style="flex:1;">🤖 Criar Quizzes</button>
+        <button class="btn btn-roxo" onclick="gerarAulas()" style="flex:1;">📝 Criar Aulas</button>
+        <button class="btn btn-dourado" onclick="gerarTudo()" style="flex:1;">🚀 Criar TUDO</button>
       </div>
-      <div id="ia-resultado" style="margin-top:12px;font-size:13px;text-align:center;padding:10px;border-radius:10px"></div>
+      <div id="ia-resultado"></div>
     </div>
     <div class="card">
       <h3>📚 IDs das Disciplinas (clique para copiar)</h3>
-      <div id="materias-lista" style="max-height:250px;overflow-y:auto;font-size:12px"></div>
+      <div id="materias-lista" style="max-height:250px;overflow-y:auto;font-size:12px;"></div>
     </div>
   </div>
 
@@ -114,31 +269,46 @@
   <div id="tab-usuarios" class="tab-content">
     <div class="card">
       <h3>👥 Gerenciar Usuários</h3>
-      <input type="text" id="search-user" placeholder="🔍 Buscar..." oninput="filtrarUsuarios()" />
-      <div class="table-wrap" style="margin-top:10px">
-        <table><thead><tr><th>Avatar</th><th>@</th><th>Nome</th><th>Pontos</th><th>Plano</th><th>Admin</th><th>Prof</th><th>Quizzer</th><th>Ações</th></tr></thead><tbody id="users-table"></tbody></table>
+      <input type="text" id="search-user" placeholder="🔍 Buscar por nome ou @usuario..." oninput="filtrarUsuarios()" />
+      <div class="table-wrap" style="margin-top:10px;">
+        <table>
+          <thead><tr><th>Avatar</th><th>@</th><th>Nome</th><th>Pontos</th><th>Plano</th><th>Admin</th><th>Prof</th><th>Quizzer</th><th>Ações</th></tr></thead>
+          <tbody id="users-table"></tbody>
+        </table>
       </div>
     </div>
   </div>
 
   <!-- TAB DISCIPLINAS -->
   <div id="tab-materias" class="tab-content">
-    <div class="card"><h3>📚 Disciplinas</h3><div class="table-wrap"><table><thead><tr><th>Ícone</th><th>Nome</th><th>Autor</th><th>Ações</th></tr></thead><tbody id="materias-table"></tbody></table></div></div>
+    <div class="card">
+      <h3>📚 Disciplinas</h3>
+      <div class="table-wrap"><table><thead><tr><th>Ícone</th><th>Nome</th><th>Autor</th><th>Ações</th></tr></thead><tbody id="materias-table"></tbody></table></div>
+    </div>
   </div>
 
   <!-- TAB QUIZZES -->
   <div id="tab-quizzes" class="tab-content">
-    <div class="card"><h3>🎮 Quizzes</h3><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Disciplina</th><th>Qtd</th><th>Ações</th></tr></thead><tbody id="quizzes-table"></tbody></table></div></div>
+    <div class="card">
+      <h3>🎮 Quizzes</h3>
+      <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Disciplina</th><th>Qtd</th><th>Ações</th></tr></thead><tbody id="quizzes-table"></tbody></table></div>
+    </div>
   </div>
 
   <!-- TAB AULAS -->
   <div id="tab-aulas" class="tab-content">
-    <div class="card"><h3>📝 Aulas</h3><div class="table-wrap"><table><thead><tr><th>Título</th><th>Disciplina</th><th>Autor</th><th>Ações</th></tr></thead><tbody id="aulas-table"></tbody></table></div></div>
+    <div class="card">
+      <h3>📝 Aulas</h3>
+      <div class="table-wrap"><table><thead><tr><th>Título</th><th>Disciplina</th><th>Autor</th><th>Ações</th></tr></thead><tbody id="aulas-table"></tbody></table></div>
+    </div>
   </div>
 
   <!-- TAB POSTS -->
   <div id="tab-posts" class="tab-content">
-    <div class="card"><h3>💬 Posts</h3><div class="table-wrap"><table><thead><tr><th>Autor</th><th>Texto</th><th>Data</th><th>Views</th><th>Ações</th></tr></thead><tbody id="posts-table"></tbody></table></div></div>
+    <div class="card">
+      <h3>💬 Posts</h3>
+      <div class="table-wrap"><table><thead><tr><th>Autor</th><th>Texto</th><th>Data</th><th>Views</th><th>Ações</th></tr></thead><tbody id="posts-table"></tbody></table></div>
+    </div>
   </div>
 
   <!-- TAB DESAFIOS -->
@@ -146,89 +316,416 @@
     <div class="card">
       <h3>⚔️ Criar Novo Desafio</h3>
       <input type="text" id="des-titulo" placeholder="Título do desafio" />
-      <textarea id="des-descricao" rows="2" placeholder="Descrição"></textarea>
+      <textarea id="des-descricao" rows="2" placeholder="Descrição e instruções"></textarea>
       <div class="grid-2">
-        <div><label style="color:var(--text2);font-size:11px">📅 INÍCIO</label><input type="datetime-local" id="des-inicio" /></div>
-        <div><label style="color:var(--text2);font-size:11px">📅 TÉRMINO</label><input type="datetime-local" id="des-fim" /></div>
+        <div>
+          <label>📅 Data/Hora de INÍCIO</label>
+          <input type="datetime-local" id="des-inicio" />
+        </div>
+        <div>
+          <label>📅 Data/Hora de TÉRMINO</label>
+          <input type="datetime-local" id="des-fim" />
+        </div>
       </div>
       <div class="grid-2">
         <input type="number" id="des-premio" placeholder="🏆 Prêmio em pontos" />
-        <input type="text" id="des-materia" placeholder="📚 Matéria" />
+        <input type="text" id="des-materia" placeholder="📚 Matéria (ex: Matemática)" />
       </div>
-      <label style="font-size:11px;color:var(--text2);margin-top:10px;display:block">📝 Banner (aparece na Home):</label>
-      <input type="text" id="des-banner" placeholder="Ex: Se prepare! Desafio dia 10/05 às 14h!" />
-      <label style="font-size:11px;color:var(--text2);margin-top:10px;display:block">📝 Questões:</label>
-      <textarea id="des-questoes" rows="8" placeholder="Formato: Pergunta?&#10;a) A&#10;b) B&#10;c) C&#10;d) D&#10;RESPOSTA: c&#10;&#10;Separe com linha em branco"></textarea>
+      <label style="margin-top:10px">📝 Banner de anúncio (aparece na Home):</label>
+      <input type="text" id="des-banner" placeholder="Ex: Se prepare! Desafio de Matemática dia 10/05 às 14h. Estude equações!" />
+      <label style="margin-top:10px">📝 Questões do desafio:</label>
+      <textarea id="des-questoes" rows="8" placeholder="Formato:&#10;Pergunta?&#10;a) Alternativa A&#10;b) Alternativa B&#10;c) Alternativa C&#10;d) Alternativa D&#10;RESPOSTA: c&#10;&#10;Separe cada questão com uma linha em branco"></textarea>
       <div style="display:flex;gap:8px;margin-top:10px">
         <button class="btn btn-dourado" onclick="criarDesafio()" style="flex:1">🏆 Criar Desafio</button>
         <button class="btn btn-roxo" onclick="gerarQuestoesIA()">🤖 Gerar com IA</button>
       </div>
     </div>
-    <div class="card"><h3>📋 Desafios Criados</h3><div id="desafios-admin-list"></div></div>
+    <div class="card">
+      <h3>📋 Desafios Criados</h3>
+      <div id="desafios-admin-list"></div>
+    </div>
   </div>
 
   <!-- TAB SOBRE -->
   <div id="tab-sobre" class="tab-content">
-    <div class="card"><h3>ℹ️ Editar "Sobre Nós"</h3><textarea id="sobre-texto" rows="10" placeholder="Conteúdo..."></textarea><button class="btn btn-verde" onclick="salvarSobre()" style="margin-top:10px">💾 Salvar</button></div>
+    <div class="card">
+      <h3>ℹ️ Editar Página "Sobre Nós"</h3>
+      <textarea id="sobre-texto" rows="10" placeholder="Conteúdo da página Sobre Nós..."></textarea>
+      <button class="btn btn-verde" onclick="salvarSobre()" style="margin-top:10px">💾 Salvar</button>
+    </div>
   </div>
 
   <!-- TAB UPDATES -->
   <div id="tab-updates" class="tab-content">
-    <div class="card"><h3>📋 Novo Update</h3><input type="text" id="up-titulo" placeholder="Título" /><input type="text" id="up-versao" placeholder="Versão" /><textarea id="up-descricao" rows="5" placeholder="Descrição..."></textarea><button class="btn btn-azul" onclick="criarUpdate()" style="margin-top:10px">📢 Publicar</button></div>
-    <div class="card"><h3>📜 Histórico</h3><div id="updates-admin-list"></div></div>
-  </div>
-
-  <!-- TAB CHAT -->
-  <div id="tab-chat" class="tab-content">
-    <div class="card"><h3>💭 Salas de Chat</h3><div id="chat-list" style="max-height:300px;overflow-y:auto"></div></div>
+    <div class="card">
+      <h3>📋 Novo Update</h3>
+      <input type="text" id="up-titulo" placeholder="Título da atualização" />
+      <input type="text" id="up-versao" placeholder="Versão (ex: 4.0)" />
+      <textarea id="up-descricao" rows="5" placeholder="Descrição das mudanças..."></textarea>
+      <button class="btn btn-azul" onclick="criarUpdate()" style="margin-top:10px">📢 Publicar Update</button>
+    </div>
+    <div class="card">
+      <h3>📜 Histórico de Updates</h3>
+      <div id="updates-admin-list"></div>
+    </div>
   </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
-const firebaseConfig={apiKey:"AIzaSyC9Lcx3mYGYXavUi_b9c_tRbS3Otm9JQNk",authDomain:"sexta-feira-studies.firebaseapp.com",databaseURL:"https://sexta-feira-studies-default-rtdb.firebaseio.com",projectId:"sexta-feira-studies",storageBucket:"sexta-feira-studies.firebasestorage.app",messagingSenderId:"673251857052",appId:"1:673251857052:web:0ef6929ea93123f7a91359"};
+// ========== CONFIG ==========
+const firebaseConfig = {
+  apiKey: "AIzaSyC9Lcx3mYGYXavUi_b9c_tRbS3Otm9JQNk",
+  authDomain: "sexta-feira-studies.firebaseapp.com",
+  databaseURL: "https://sexta-feira-studies-default-rtdb.firebaseio.com",
+  projectId: "sexta-feira-studies",
+  storageBucket: "sexta-feira-studies.firebasestorage.app",
+  messagingSenderId: "673251857052",
+  appId: "1:673251857052:web:0ef6929ea93123f7a91359"
+};
 firebase.initializeApp(firebaseConfig);
-const db=firebase.database();
-const GROQ_KEY='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';
-const SENHA='admin123';
-const SENHA_PTS='54321';
-let usersCache={},materiasCache={};
+const db = firebase.database();
+const GROQ_KEY = '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';
+const SENHA = 'admin123';
+const SENHA_PTS = '54321';
+let usersCache = {}, materiasCache = {};
 
-function verificarSenha(){if(document.getElementById('senha-input').value===SENHA){document.getElementById('login-screen').style.display='none';document.getElementById('painel-screen').style.display='block';carregarTudo()}else document.getElementById('login-error').style.display='block'}
-function switchTab(t){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.querySelector(`[onclick="switchTab('${t}')"]`)?.classList.add('active');document.getElementById('tab-'+t)?.classList.add('active');if(t==='materias')carregarMaterias();if(t==='quizzes')carregarQuizzes();if(t==='aulas')carregarAulas();if(t==='posts')carregarPosts();if(t==='desafios')carregarDesafios();if(t==='sobre')carregarSobre();if(t==='updates')carregarUpdates();if(t==='chat')carregarChat()}
+// ========== LOGIN ==========
+function verificarSenha() {
+  if (document.getElementById('senha-input').value === SENHA) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('painel-screen').style.display = 'block';
+    carregarTudo();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
 
-async function carregarTudo(){const[u,m,p]=await Promise.all([db.ref('usuarios').once('value'),db.ref('materias').once('value'),db.ref('posts').once('value')]);usersCache=u.val()||{};materiasCache=m.val()||{};document.getElementById('s-users').textContent=Object.keys(usersCache).length;document.getElementById('s-posts').textContent=Object.keys(p.val()||{}).length;document.getElementById('s-materias').textContent=Object.keys(materiasCache).length;let tQ=0,tA=0,lista='';for(const[id,m]of Object.entries(materiasCache)){lista+=`<div style="padding:5px 0;border-bottom:1px solid var(--border)">📚 <strong>${m.nome||'?'}</strong> — <span class="code" onclick="navigator.clipboard.writeText('${id}');alert('✅ Copiado!')">${id}</span></div>`;const[q,a]=await Promise.all([db.ref('quizzes/'+id).once('value'),db.ref('aulas/'+id).once('value')]);tQ+=Object.keys(q.val()||{}).length;tA+=Object.keys(a.val()||{}).length}document.getElementById('s-quizzes').textContent=tQ;document.getElementById('s-aulas').textContent=tA;document.getElementById('materias-lista').innerHTML=lista||'Nenhuma';renderUsers(Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0)))}
+// ========== TABS ==========
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  const btn = document.querySelector(`[onclick="switchTab('${tab}')"]`);
+  if (btn) btn.classList.add('active');
+  const content = document.getElementById('tab-' + tab);
+  if (content) content.classList.add('active');
+  
+  if (tab === 'materias') carregarMaterias();
+  if (tab === 'quizzes') carregarQuizzes();
+  if (tab === 'aulas') carregarAulas();
+  if (tab === 'posts') carregarPosts();
+  if (tab === 'desafios') carregarDesafios();
+  if (tab === 'sobre') carregarSobre();
+  if (tab === 'updates') carregarUpdates();
+}
 
-function renderUsers(arr){document.getElementById('users-table').innerHTML=arr.map(([uid,u])=>`<tr><td>${u.avatar?.startsWith('http')?'<img src="'+u.avatar+'" style="width:28px;height:28px;border-radius:50%">':(u.avatar||'🎓')}</td><td>@${u.username||'?'}</td><td>${u.fullname||'-'}</td><td><input type="number" id="pts-${uid}" value="${u.points||0}" style="width:70px;margin:0"><button class="btn btn-verde" onclick="addPontos('${uid}')">💾</button></td><td><select onchange="updateUser('${uid}','plano',this.value)" style="margin:0"><option value="gratis" ${u.plano=='gratis'?'selected':''}>Grátis</option><option value="premium" ${u.plano=='premium'?'selected':''}>Premium</option><option value="pro" ${u.plano=='pro'?'selected':''}>PRO</option></select></td><td><select onchange="updateUser('${uid}','adminLevel',this.value)" style="margin:0"><option value="0">-</option><option value="1" ${u.adminLevel==1?'selected':''}>N1</option><option value="2" ${u.adminLevel==2?'selected':''}>N2</option><option value="3" ${u.adminLevel==3?'selected':''}>N3</option><option value="4" ${u.adminLevel==4?'selected':''}>N4</option></select></td><td><button class="btn ${u.isProf?'btn-verde':'btn-azul'}" onclick="updateUser('${uid}','isProf',${!u.isProf})">${u.isProf?'✅':'❌'}</button></td><td><button class="btn ${u.isQuizzer?'btn-verde':'btn-azul'}" onclick="updateUser('${uid}','isQuizzer',${!u.isQuizzer})">${u.isQuizzer?'✅':'❌'}</button></td><td><button class="btn btn-vermelho" onclick="delUser('${uid}')">🗑</button></td></tr>`).join('')}
-function filtrarUsuarios(){const t=(document.getElementById('search-user')?.value||'').toLowerCase();const arr=Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0));renderUsers(t?arr.filter(([id,u])=>(u.username||'').toLowerCase().includes(t)||(u.fullname||'').toLowerCase().includes(t)):arr)}
-async function updateUser(uid,c,v){if(c==='adminLevel')v=parseInt(v);if(c==='isProf'||c==='isQuizzer')v=v==='true'||v===true;await db.ref('usuarios/'+uid).update({[c]:v});usersCache[uid][c]=v}
-async function addPontos(uid){const s=prompt('🔒 Senha:');if(s!==SENHA_PTS)return alert('❌ Incorreta!');const p=parseInt(prompt('Pontos?'));if(!p||p<=0)return;const a=usersCache[uid]?.points||0;await db.ref('usuarios/'+uid).update({points:a+p});usersCache[uid].points=a+p;document.getElementById('pts-'+uid).value=a+p;alert('✅ +'+p)}
-async function delUser(uid){if(!confirm('Excluir?'))return;await db.ref('usuarios/'+uid).remove();delete usersCache[uid];carregarTudo()}
+// ========== CARREGAR TUDO ==========
+async function carregarTudo() {
+  const [uSnap, mSnap, pSnap] = await Promise.all([
+    db.ref('usuarios').once('value'),
+    db.ref('materias').once('value'),
+    db.ref('posts').once('value')
+  ]);
+  usersCache = uSnap.val() || {};
+  materiasCache = mSnap.val() || {};
+  
+  document.getElementById('s-users').textContent = Object.keys(usersCache).length;
+  document.getElementById('s-posts').textContent = Object.keys(pSnap.val() || {}).length;
+  document.getElementById('s-materias').textContent = Object.keys(materiasCache).length;
+  
+  let totalQuizzes = 0, totalAulas = 0, listaHTML = '';
+  for (const [id, m] of Object.entries(materiasCache)) {
+    listaHTML += `<div style="padding:5px 0;border-bottom:1px solid var(--border);">📚 <strong>${m.nome||'?'}</strong> — <span class="code" onclick="copiarID('${id}')">${id}</span></div>`;
+    const [qSnap, aSnap] = await Promise.all([
+      db.ref('quizzes/'+id).once('value'),
+      db.ref('aulas/'+id).once('value')
+    ]);
+    totalQuizzes += Object.keys(qSnap.val()||{}).length;
+    totalAulas += Object.keys(aSnap.val()||{}).length;
+  }
+  document.getElementById('s-quizzes').textContent = totalQuizzes;
+  document.getElementById('s-aulas').textContent = totalAulas;
+  document.getElementById('materias-lista').innerHTML = listaHTML || 'Nenhuma disciplina cadastrada';
+  
+  renderUsers(Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0)));
+}
 
-// IA
-async function gerarQuizzes(){const mid=document.getElementById('ia-materia-id').value.trim();const tema=document.getElementById('ia-tema').value.trim();const qtd=parseInt(document.getElementById('ia-qtd').value);const r=document.getElementById('ia-resultado');if(!mid||!tema){r.innerHTML='❌ Preencha tudo!';return}r.innerHTML='⏳ Gerando...';let c=0;for(let i=0;i<qtd;i++){try{const resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:`Crie 1 quiz sobre "${tema}". JSON: {"nome":"Título","questoes":[{"pergunta":"?","alternativas":["A","B","C","D"],"correta":0}]}`}],max_tokens:800})});const d=await resp.json();const txt=d.choices?.[0]?.message?.content||'';const match=txt.match(/\{[\s\S]*\}/);if(match){const q=JSON.parse(match[0]);if(q.nome&&q.questoes?.length>=2){await db.ref('quizzes/'+mid).push({nome:q.nome,tempo:30,questoes:q.questoes.slice(0,5),oficial:false,autorId:'ia',autorNome:'Jarvis IA',createdAt:Date.now(),views:{}});c++}}await new Promise(res=>setTimeout(res,1500))}catch(e){console.error(e)}}r.innerHTML=c>0?`✅ ${c} quizzes criados!`:'❌ Erro';carregarTudo()}
-async function gerarAulas(){const mid=document.getElementById('ia-materia-id').value.trim();const tema=document.getElementById('ia-tema').value.trim();const r=document.getElementById('ia-resultado');if(!mid||!tema){r.innerHTML='❌ Preencha tudo!';return}r.innerHTML='⏳ Gerando...';try{const resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:`Crie 5 aulas sobre "${tema}". JSON: [{"titulo":"Título","conteudo":"Conteúdo detalhado..."}]`}],max_tokens:4096})});const d=await resp.json();const txt=d.choices?.[0]?.message?.content||'';const match=txt.match(/\[[\s\S]*\]/);if(match){const aulas=JSON.parse(match[0]);let c=0;for(const a of aulas){if(a.titulo&&a.conteudo){await db.ref('aulas/'+mid).push({titulo:a.titulo,conteudo:a.conteudo,autorId:'ia',autorNome:'Jarvis IA',verificado:false,createdAt:Date.now(),views:{}});c++}}r.innerHTML=`✅ ${c} aulas criadas!`}else r.innerHTML='❌ Erro'}catch(e){r.innerHTML='❌ Erro'}carregarTudo()}
-async function gerarTudo(){await gerarAulas();await gerarQuizzes()}
+function copiarID(id) { 
+  navigator.clipboard.writeText(id).then(() => alert('✅ ID copiado: ' + id));
+}
 
-// DESAFIOS
-async function criarDesafio(){const t=document.getElementById('des-titulo')?.value?.trim();const d=document.getElementById('des-descricao')?.value?.trim();const ini=document.getElementById('des-inicio')?.value;const fim=document.getElementById('des-fim')?.value;const p=parseInt(document.getElementById('des-premio')?.value||'0');const m=document.getElementById('des-materia')?.value?.trim();const b=document.getElementById('des-banner')?.value?.trim();const q=document.getElementById('des-questoes')?.value?.trim();if(!t||!ini||!fim||!p||!q)return alert('Preencha todos!');await db.ref('desafios').push({titulo:t,descricao:d||'',materia:m||'',banner:b||'',questoes:q,premio:p,inicio:new Date(ini).getTime(),fim:new Date(fim).getTime(),criadoPor:'Admin',createdAt:Date.now()});['des-titulo','des-descricao','des-inicio','des-fim','des-premio','des-materia','des-banner','des-questoes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});carregarDesafios();alert('✅ Criado!')}
-async function carregarDesafios(){const c=document.getElementById('desafios-admin-list');if(!c)return;const s=await db.ref('desafios').once('value');const d=s.val();const agora=Date.now();c.innerHTML=d?Object.entries(d).reverse().map(([id,x])=>{const st=agora<x.inicio?'⏳ Agendado':agora>x.fim?'❌ Encerrado':'🟢 Ativo';return`<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><strong>⚔️ ${x.titulo}</strong> <span class="badge">${st}</span><br><span style="font-size:11px;color:var(--text2)">🏆 +${x.premio} pts · ${new Date(x.inicio).toLocaleString('pt-BR')}</span></div><button class="btn btn-vermelho" onclick="del('desafios','${id}')">🗑</button></div>`}).join(''):'Nenhum'}
-async function gerarQuestoesIA(){const m=document.getElementById('des-materia')?.value?.trim();const t=document.getElementById('des-titulo')?.value?.trim();if(!m&&!t)return alert('Preencha título ou matéria!');const tema=t||m;try{const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:`Crie 10 questões sobre "${tema}". Formato:\n1. Pergunta?\na) A\nb) B\nc) C\nd) D\nRESPOSTA: letra\n\nSepare com linha em branco.`}],max_tokens:2000})});const d=await r.json();document.getElementById('des-questoes').value=d.choices?.[0]?.message?.content||'';alert('✅ Gerado!')}catch(e){alert('❌ Erro')}}
+// ========== USUÁRIOS ==========
+function renderUsers(arr) {
+  document.getElementById('users-table').innerHTML = arr.map(([uid, u]) => `
+    <tr>
+      <td>${u.avatar?.startsWith('http')?'<img src="'+u.avatar+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover">':(u.avatar||'🎓')}</td>
+      <td>@${u.username||'?'}</td>
+      <td>${u.fullname||'-'}</td>
+      <td><input type="number" id="pts-${uid}" value="${u.points||0}" style="width:70px;margin:0" /><button class="btn btn-verde" onclick="addPontos('${uid}')">💾</button></td>
+      <td><select onchange="updateUser('${uid}','plano',this.value)" style="margin:0"><option value="gratis" ${u.plano=='gratis'?'selected':''}>Grátis</option><option value="premium" ${u.plano=='premium'?'selected':''}>Premium</option><option value="pro" ${u.plano=='pro'?'selected':''}>PRO</option></select></td>
+      <td><select onchange="updateUser('${uid}','adminLevel',this.value)" style="margin:0"><option value="0">-</option><option value="1" ${u.adminLevel==1?'selected':''}>N1</option><option value="2" ${u.adminLevel==2?'selected':''}>N2</option><option value="3" ${u.adminLevel==3?'selected':''}>N3</option><option value="4" ${u.adminLevel==4?'selected':''}>N4</option></select></td>
+      <td><button class="btn ${u.isProf?'btn-verde':'btn-azul'}" onclick="updateUser('${uid}','isProf',${!u.isProf})">${u.isProf?'✅':'❌'}</button></td>
+      <td><button class="btn ${u.isQuizzer?'btn-verde':'btn-azul'}" onclick="updateUser('${uid}','isQuizzer',${!u.isQuizzer})">${u.isQuizzer?'✅':'❌'}</button></td>
+      <td><button class="btn btn-vermelho" onclick="delUser('${uid}')">🗑</button></td>
+    </tr>`).join('');
+}
 
-// SOBRE/UPDATES
-async function carregarSobre(){const s=await db.ref('config/sobre').once('value');const d=s.val();if(d)document.getElementById('sobre-texto').value=d.texto||''}
-async function salvarSobre(){await db.ref('config/sobre').set({texto:document.getElementById('sobre-texto')?.value||'',atualizadoEm:Date.now()});alert('✅ Salvo!')}
-async function criarUpdate(){const t=document.getElementById('up-titulo')?.value?.trim();const v=document.getElementById('up-versao')?.value?.trim();const d=document.getElementById('up-descricao')?.value?.trim();if(!t||!v||!d)return alert('Preencha!');await db.ref('config/updates').push({titulo:t,versao:v,descricao:d,data:Date.now()});['up-titulo','up-versao','up-descricao'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});carregarUpdates();alert('✅ Publicado!')}
-async function carregarUpdates(){const c=document.getElementById('updates-admin-list');if(!c)return;const s=await db.ref('config/updates').once('value');const u=s.val();c.innerHTML=u?Object.entries(u).reverse().map(([id,x])=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><strong>📋 ${x.titulo}</strong> <span class="badge">v${x.versao}</span><br><span style="font-size:11px;color:var(--text2)">${new Date(x.data).toLocaleDateString('pt-BR')}</span></div><button class="btn btn-vermelho" onclick="del('config/updates','${id}')">🗑</button></div>`).join(''):'Nenhum'}
+function filtrarUsuarios() {
+  const termo = (document.getElementById('search-user')?.value || '').toLowerCase();
+  const arr = Object.entries(usersCache).sort((a,b)=>(b[1].points||0)-(a[1].points||0));
+  renderUsers(termo ? arr.filter(([id,u]) => (u.username||'').toLowerCase().includes(termo) || (u.fullname||'').toLowerCase().includes(termo)) : arr);
+}
 
-// ABAS
-async function carregarMaterias(){const arr=Object.entries(materiasCache);document.getElementById('materias-table').innerHTML=arr.length?arr.map(([id,m])=>`<tr><td>${m.icone||'📚'}</td><td>${m.nome||'?'}</td><td>@${m.autorNome||'?'}</td><td><button class="btn btn-vermelho" onclick="del('materias','${id}')">🗑</button></td></tr>`).join(''):'<tr><td colspan="4">Nenhuma</td></tr>'}
-async function carregarQuizzes(){let h='';for(const[mid,m]of Object.entries(materiasCache)){const s=await db.ref('quizzes/'+mid).once('value');for(const[qid,q]of Object.entries(s.val()||{})){h+=`<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td><button class="btn btn-vermelho" onclick="del('quizzes/${mid}','${qid}')">🗑</button></td></tr>`}}document.getElementById('quizzes-table').innerHTML=h||'<tr><td colspan="4">Nenhum</td></tr>'}
-async function carregarAulas(){let h='';for(const[mid,m]of Object.entries(materiasCache)){const s=await db.ref('aulas/'+mid).once('value');for(const[aid,a]of Object.entries(s.val()||{})){h+=`<tr><td>${(a.titulo||'?').substring(0,50)}</td><td>${m.nome||'?'}</td><td>@${a.autorNome||'?'}</td><td><button class="btn btn-vermelho" onclick="del('aulas/${mid}','${aid}')">🗑</button></td></tr>`}}document.getElementById('aulas-table').innerHTML=h||'<tr><td colspan="4">Nenhuma</td></tr>'}
-async function carregarPosts(){const s=await db.ref('posts').once('value');const p=s.val()||{};let h='';for(const[id,x]of Object.entries(p).reverse().slice(0,50)){const vs=await db.ref('posts/'+id+'/views').once('value');const v=vs.val()?Object.keys(vs.val()).length:0;h+=`<tr><td>@${x.autorNome||'?'}</td><td>${(x.texto||'').substring(0,50)}</td><td>${new Date(x.createdAt).toLocaleDateString('pt-BR')}</td><td>👁 ${v}</td><td><button class="btn btn-vermelho" onclick="del('posts','${id}')">🗑</button></td></tr>`}document.getElementById('posts-table').innerHTML=h||'<tr><td colspan="5">Nenhum</td></tr>'}
-async function carregarChat(){const s=await db.ref('chat_rooms').once('value');const r=s.val()||{};document.getElementById('chat-list').innerHTML=Object.entries(r).map(([id,x])=>`<div style="padding:8px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"># ${x.nome||'?'} <button class="btn btn-vermelho" onclick="del('chat_rooms','${id}')">🗑</button></div>`).join('')||'Nenhuma'}
-async function del(path,id){if(!confirm('Excluir?'))return;await db.ref(path+'/'+id).remove();carregarTudo()}
+async function updateUser(uid, campo, valor) {
+  if (campo === 'adminLevel') valor = parseInt(valor);
+  if (campo === 'isProf' || campo === 'isQuizzer') valor = valor === 'true' || valor === true;
+  await db.ref('usuarios/'+uid).update({[campo]: valor});
+  usersCache[uid][campo] = valor;
+}
+
+async function addPontos(uid) {
+  const senhaDigitada = prompt('🔒 Senha para adicionar pontos:');
+  if (senhaDigitada !== SENHA_PTS) return alert('❌ Senha incorreta!');
+  const qtdPontos = parseInt(prompt('Quantos pontos?'));
+  if (!qtdPontos || qtdPontos <= 0) return;
+  const atual = usersCache[uid]?.points || 0;
+  await db.ref('usuarios/'+uid).update({points: atual + qtdPontos});
+  usersCache[uid].points = atual + qtdPontos;
+  document.getElementById('pts-'+uid).value = atual + qtdPontos;
+  alert('✅ +' + qtdPontos + ' pontos!');
+}
+
+async function delUser(uid) {
+  if (!confirm('🗑 Excluir @' + (usersCache[uid]?.username || uid) + '?')) return;
+  await db.ref('usuarios/'+uid).remove();
+  delete usersCache[uid];
+  carregarTudo();
+}
+
+// ========== IA ==========
+async function gerarQuizzes() {
+  const mid = document.getElementById('ia-materia-id').value.trim();
+  const tema = document.getElementById('ia-tema').value.trim();
+  const qtd = parseInt(document.getElementById('ia-qtd').value);
+  const res = document.getElementById('ia-resultado');
+  
+  if (!mid || !tema) { res.innerHTML = '❌ Preencha ID e Tema!'; res.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px'; return; }
+  
+  res.innerHTML = '⏳ Gerando ' + qtd + ' quizzes...';
+  res.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px';
+  
+  let criados = 0;
+  for (let i = 0; i < qtd; i++) {
+    try {
+      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+        body: JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:`Crie 1 quiz sobre "${tema}". JSON: {"nome":"Título","questoes":[{"pergunta":"?","alternativas":["A","B","C","D"],"correta":0}]}`}],max_tokens:800})
+      });
+      if (r.status === 429) { res.innerHTML = '⏳ Limite API. Aguardando...'; await new Promise(resolve => setTimeout(resolve, 10000)); i--; continue; }
+      const d = await r.json();
+      const txt = d.choices?.[0]?.message?.content || '';
+      const match = txt.match(/\{[\s\S]*\}/);
+      if (match) {
+        const q = JSON.parse(match[0]);
+        if (q.nome && q.questoes?.length >= 2) {
+          await db.ref('quizzes/'+mid).push({nome:q.nome,tempo:30,questoes:q.questoes.slice(0,5),oficial:false,autorId:'ia',autorNome:'Jarvis IA',createdAt:Date.now()});
+          criados++;
+        }
+      }
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    } catch(e) { console.error(e); }
+  }
+  
+  res.innerHTML = criados > 0 ? '✅ ' + criados + ' quizzes criados!' : '❌ Erro ao gerar';
+  res.style.cssText = criados > 0 ? 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px' : 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px';
+  carregarTudo();
+}
+
+async function gerarAulas() {
+  const mid = document.getElementById('ia-materia-id').value.trim();
+  const tema = document.getElementById('ia-tema').value.trim();
+  const res = document.getElementById('ia-resultado');
+  
+  if (!mid || !tema) { res.innerHTML = '❌ Preencha ID e Tema!'; res.style.cssText = 'color:#EF4444;background:#7F1D1D;padding:10px;border-radius:10px'; return; }
+  
+  res.innerHTML = '⏳ Gerando aulas...';
+  res.style.cssText = 'color:#94A3B8;background:#1E293B;padding:10px;border-radius:10px';
+  
+  try {
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+      body: JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:`Crie 5 aulas sobre "${tema}". JSON: [{"titulo":"Título","conteudo":"Conteúdo detalhado..."}]`}],max_tokens:4096})
+    });
+    const d = await r.json();
+    const txt = d.choices?.[0]?.message?.content || '';
+    const match = txt.match(/\[[\s\S]*\]/);
+    if (match) {
+      const aulas = JSON.parse(match[0]);
+      let c = 0;
+      for (const a of aulas) {
+        if (a.titulo && a.conteudo) {
+          await db.ref('aulas/'+mid).push({titulo:a.titulo,conteudo:a.conteudo,autorId:'ia',autorNome:'Jarvis IA',verificado:false,createdAt:Date.now()});
+          c++;
+        }
+      }
+      res.innerHTML = '✅ ' + c + ' aulas criadas!';
+      res.style.cssText = 'color:#34D399;background:#064E3B;padding:10px;border-radius:10px';
+    }
+  } catch(e) { res.innerHTML = '❌ Erro'; }
+  carregarTudo();
+}
+
+async function gerarTudo() {
+  await gerarAulas();
+  await gerarQuizzes();
+}
+
+// ========== DESAFIOS ==========
+async function criarDesafio() {
+  const titulo = document.getElementById('des-titulo')?.value?.trim();
+  const descricao = document.getElementById('des-descricao')?.value?.trim();
+  const inicio = document.getElementById('des-inicio')?.value;
+  const fim = document.getElementById('des-fim')?.value;
+  const premio = parseInt(document.getElementById('des-premio')?.value || '0');
+  const materia = document.getElementById('des-materia')?.value?.trim();
+  const banner = document.getElementById('des-banner')?.value?.trim();
+  const questoes = document.getElementById('des-questoes')?.value?.trim();
+  
+  if (!titulo || !inicio || !fim || !premio || !questoes) return alert('Preencha todos os campos obrigatórios!');
+  
+  await db.ref('desafios').push({
+    titulo, descricao: descricao || '', materia: materia || '', banner: banner || '', questoes, premio,
+    inicio: new Date(inicio).getTime(), fim: new Date(fim).getTime(), criadoPor: 'Admin', createdAt: Date.now()
+  });
+  
+  ['des-titulo','des-descricao','des-inicio','des-fim','des-premio','des-materia','des-banner','des-questoes'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  
+  carregarDesafios();
+  alert('✅ Desafio criado com sucesso!');
+}
+
+async function gerarQuestoesIA() {
+  const materia = document.getElementById('des-materia')?.value?.trim();
+  const titulo = document.getElementById('des-titulo')?.value?.trim();
+  if (!materia && !titulo) return alert('Preencha título ou matéria primeiro!');
+  
+  const tema = titulo || materia;
+  try {
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+      body: JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'user',content:`Crie 10 questões de múltipla escolha sobre "${tema}". Formato:\n1. Pergunta?\na) A\nb) B\nc) C\nd) D\nRESPOSTA: letra\n\nSepare com linha em branco.`}],max_tokens:2000})
+    });
+    const d = await r.json();
+    document.getElementById('des-questoes').value = d.choices?.[0]?.message?.content || '';
+    alert('✅ Questões geradas!');
+  } catch(e) { alert('❌ Erro ao gerar'); }
+}
+
+async function carregarDesafios() {
+  const c = document.getElementById('desafios-admin-list'); if (!c) return;
+  const snap = await db.ref('desafios').once('value');
+  const desafios = snap.val();
+  const agora = Date.now();
+  
+  c.innerHTML = desafios ? Object.entries(desafios).reverse().map(([id,d]) => {
+    const status = agora < d.inicio ? '⏳ Agendado' : agora > d.fim ? '❌ Encerrado' : '🟢 Ativo';
+    const cor = agora < d.inicio ? '#F59E0B' : agora > d.fim ? '#EF4444' : '#10B981';
+    return `<div class="card" style="border-left:3px solid ${cor};margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
+      <div><strong>⚔️ ${d.titulo}</strong> <span class="badge" style="background:${cor};color:white">${status}</span><br>
+      <span style="font-size:11px;color:var(--text2)">🏆 +${d.premio} pts · ${d.materia||'Geral'}</span><br>
+      <span style="font-size:10px;color:var(--text2)">📅 ${new Date(d.inicio).toLocaleString('pt-BR')} até ${new Date(d.fim).toLocaleString('pt-BR')}</span></div>
+      <button class="btn btn-vermelho" onclick="del('desafios','${id}')">🗑</button>
+    </div>`;
+  }).join('') : '<div style="color:var(--text2);text-align:center;padding:10px">Nenhum desafio</div>';
+}
+
+// ========== SOBRE ==========
+async function carregarSobre() {
+  const snap = await db.ref('config/sobre').once('value');
+  const data = snap.val();
+  if (data) document.getElementById('sobre-texto').value = data.texto || '';
+}
+
+async function salvarSobre() {
+  const texto = document.getElementById('sobre-texto')?.value || '';
+  await db.ref('config/sobre').set({texto, atualizadoEm: Date.now()});
+  alert('✅ Página Sobre Nós atualizada!');
+}
+
+// ========== UPDATES ==========
+async function criarUpdate() {
+  const titulo = document.getElementById('up-titulo')?.value?.trim();
+  const versao = document.getElementById('up-versao')?.value?.trim();
+  const descricao = document.getElementById('up-descricao')?.value?.trim();
+  if (!titulo || !versao || !descricao) return alert('Preencha todos os campos!');
+  await db.ref('config/updates').push({titulo, versao, descricao, data: Date.now()});
+  ['up-titulo','up-versao','up-descricao'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  carregarUpdates();
+  alert('✅ Update publicado!');
+}
+
+async function carregarUpdates() {
+  const c = document.getElementById('updates-admin-list'); if (!c) return;
+  const snap = await db.ref('config/updates').once('value');
+  const updates = snap.val();
+  c.innerHTML = updates ? Object.entries(updates).reverse().map(([id,u]) => `<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><strong>📋 ${u.titulo}</strong> <span class="badge">v${u.versao}</span><br><span style="font-size:11px;color:var(--text2)">📅 ${new Date(u.data).toLocaleDateString('pt-BR')}</span></div><button class="btn btn-vermelho" onclick="del('config/updates','${id}')">🗑</button></div>`).join('') : 'Nenhum update';
+}
+
+// ========== ABAS ==========
+async function carregarMaterias() {
+  const arr = Object.entries(materiasCache);
+  document.getElementById('materias-table').innerHTML = arr.length ? arr.map(([id,m])=>`<tr><td>${m.icone||'📚'}</td><td>${m.nome||'?'}</td><td>@${m.autorNome||'?'}</td><td><button class="btn btn-vermelho" onclick="del('materias','${id}')">🗑</button></td></tr>`).join('') : '<tr><td colspan="4">Nenhuma</td></tr>';
+}
+
+async function carregarQuizzes() {
+  let html = '';
+  for (const [mid, m] of Object.entries(materiasCache)) {
+    const snap = await db.ref('quizzes/'+mid).once('value');
+    for (const [qid, q] of Object.entries(snap.val()||{})) {
+      html += `<tr><td>${q.nome||'?'}</td><td>${m.nome||'?'}</td><td>${q.questoes?.length||0}</td><td><button class="btn btn-vermelho" onclick="del('quizzes/${mid}','${qid}')">🗑</button></td></tr>`;
+    }
+  }
+  document.getElementById('quizzes-table').innerHTML = html || '<tr><td colspan="4">Nenhum</td></tr>';
+}
+
+async function carregarAulas() {
+  let html = '';
+  for (const [mid, m] of Object.entries(materiasCache)) {
+    const snap = await db.ref('aulas/'+mid).once('value');
+    for (const [aid, a] of Object.entries(snap.val()||{})) {
+      html += `<tr><td>${(a.titulo||'?').substring(0,50)}</td><td>${m.nome||'?'}</td><td>@${a.autorNome||'?'}</td><td><button class="btn btn-vermelho" onclick="del('aulas/${mid}','${aid}')">🗑</button></td></tr>`;
+    }
+  }
+  document.getElementById('aulas-table').innerHTML = html || '<tr><td colspan="4">Nenhuma</td></tr>';
+}
+
+async function carregarPosts() {
+  const snap = await db.ref('posts').once('value');
+  const posts = snap.val()||{};
+  let html = '';
+  for (const [id, p] of Object.entries(posts).reverse().slice(0,50)) {
+    const vs = await db.ref('posts/'+id+'/views').once('value');
+    const views = vs.val() ? Object.keys(vs.val()).length : 0;
+    html += `<tr><td>@${p.autorNome||'?'}</td><td>${(p.texto||'').substring(0,50)}</td><td>${new Date(p.createdAt).toLocaleDateString('pt-BR')}</td><td>👁 ${views}</td><td><button class="btn btn-vermelho" onclick="del('posts','${id}')">🗑</button></td></tr>`;
+  }
+  document.getElementById('posts-table').innerHTML = html || '<tr><td colspan="5">Nenhum</td></tr>';
+}
+
+async function del(path, id) {
+  if (!confirm('🗑 Excluir permanentemente?')) return;
+  await db.ref(path+'/'+id).remove();
+  carregarTudo();
+}
+
+// Enter no login
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') {
+    verificarSenha();
+  }
+});
 </script>
 </body>
 </html>
