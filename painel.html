@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Admin – Sexta-Feira Studies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{color-scheme:dark}
+    body{font-family:'Sora',sans-serif;background:#0F172A;color:#F1F5F9;min-height:100vh;-webkit-font-smoothing:antialiased}
+    button{cursor:pointer;border:none;background:none;font-family:inherit;color:inherit}
+    input,textarea,select{font-family:inherit;color:#F1F5F9}
+    a{color:#10B981}
+    .oculto{display:none!important}
+    /* LAYOUT */
+    .header{position:sticky;top:0;z-index:20;background:#0F172A;border-bottom:1px solid #1E293B;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+    .header-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+    .header-logo img{width:32px;height:32px;border-radius:10px;object-fit:cover}
+    .badge-admin{font-size:12px;padding:3px 10px;border-radius:8px;background:#10B98122;color:#10B981;font-weight:600}
+    .container{max-width:900px;margin:0 auto;padding:24px 16px}
+    /* AUTH */
+    .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .auth-card{background:#1E293B;border:1px solid #334155;border-radius:20px;padding:28px;width:100%;max-width:340px;text-align:center}
+    .auth-card img{width:60px;height:60px;border-radius:14px;object-fit:cover;margin-bottom:12px}
+    .auth-card h2{margin-bottom:4px}
+    .auth-card p{color:#64748B;font-size:13px;margin-bottom:20px}
+    /* TABS */
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+    .tab{padding:8px 18px;border-radius:12px;font-size:13px;font-weight:500;color:#94A3B8;border:1px solid #334155;transition:background .2s,color .2s}
+    .tab.ativo{background:#10B981;color:#fff;border-color:#10B981}
+    /* FORM */
+    .form-group{margin-bottom:14px}
+    .form-group label{display:block;font-size:12px;color:#94A3B8;margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+    .form-group input,.form-group textarea,.form-group select{width:100%;padding:11px 14px;border-radius:12px;background:#0F172A;border:1px solid #334155;color:#F1F5F9;font-size:14px;outline:none;transition:border-color .2s;resize:vertical}
+    .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:#10B981}
+    /* BOTÕES */
+    .btn{padding:10px 20px;border-radius:12px;font-size:14px;font-weight:600;transition:opacity .2s,transform .1s}
+    .btn:active{transform:scale(.97)}
+    .btn-green{background:#10B981;color:#fff}
+    .btn-blue{background:#3B82F6;color:#fff}
+    .btn-red{background:transparent;color:#EF4444;font-size:12px;border:1px solid #450A0A;border-radius:8px;padding:4px 10px}
+    .btn-outline{background:#0F172A;color:#94A3B8;border:1px solid #334155;border-radius:12px;padding:8px 16px;font-size:13px}
+    /* CARD */
+    .card{background:#1E293B;border:1px solid #334155;border-radius:18px;padding:20px;margin-bottom:16px}
+    .card h3{margin-bottom:16px;font-size:15px}
+    /* TABLE */
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th{text-align:left;padding:10px 12px;color:#64748B;font-weight:500;border-bottom:1px solid #334155}
+    td{padding:9px 12px;border-bottom:1px solid #1E293B;vertical-align:middle}
+    td select{background:#0F172A;border:1px solid #334155;border-radius:8px;padding:4px 8px;font-size:12px;color:#F1F5F9;outline:none}
+    /* ITEM LIST */
+    .item-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:14px;background:#1E293B;border:1px solid #334155;margin-bottom:8px}
+    .item-row-info{flex:1;min-width:0}
+    .item-row-nome{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .item-row-sub{color:#64748B;font-size:12px;margin-top:2px}
+    /* PREVIEW QUIZ */
+    .quiz-preview{background:#0F172A;border-radius:12px;padding:14px;margin-bottom:8px}
+    .quiz-preview .questao{font-weight:600;font-size:13px;margin-bottom:8px}
+    .quiz-preview .opcao-prev{font-size:12px;margin-bottom:3px}
+    .quiz-preview .certa{color:#10B981}
+    .quiz-preview .errada{color:#64748B}
+    /* TOAST */
+    #toast-container{position:fixed;bottom:20px;right:20px;z-index:100;display:flex;flex-direction:column;gap:8px}
+    .toast{padding:12px 18px;border-radius:14px;font-size:14px;font-weight:500;background:#1E293B;border:1px solid #334155;color:#F1F5F9;animation:slide-in .3s ease;max-width:300px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+    .toast.erro{border-color:#EF4444;color:#FCA5A5}
+    .toast.sucesso{border-color:#10B981;color:#6EE7B7}
+    @keyframes slide-in{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+    /* MISC */
+    .flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .mt{margin-top:16px}
+    .empty{color:#64748B;text-align:center;padding:30px;font-size:14px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:500px){.grid-2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<!-- AUTH -->
+<div id="auth-screen" class="auth-wrap">
+  <div class="auth-card">
+    <img src="https://i.ibb.co/TqNkvPMT/Gemini-Generated-Image-vetlw0vetlw0vetl.png" alt="Logo" />
+    <h2>Painel Admin</h2>
+    <p>Sexta-Feira Studies</p>
+    <div class="form-group">
+      <input type="password" id="admin-senha" placeholder="Senha de administrador" onkeydown="if(event.key==='Enter')entrarAdmin()" />
+    </div>
+    <button class="btn btn-green" style="width:100%" onclick="entrarAdmin()">Entrar</button>
+    <p style="margin-top:14px;font-size:13px"><a href="/">← Voltar ao site</a></p>
+  </div>
+</div>
+
+<!-- PAINEL -->
+<div id="painel" class="oculto">
+  <div class="header">
+    <div class="header-logo">
+      <img src="https://i.ibb.co/TqNkvPMT/Gemini-Generated-Image-vetlw0vetlw0vetl.png" alt="Logo" />
+      Painel Admin
+      <span class="badge-admin">Admin</span>
+    </div>
+    <a href="/" style="font-size:13px;color:#64748B">← Site</a>
+  </div>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab ativo" onclick="mudarAba('gerador')">Gerador IA</button>
+      <button class="tab" onclick="mudarAba('usuarios')">Usuários</button>
+      <button class="tab" onclick="mudarAba('disciplinas')">Disciplinas</button>
+      <button class="tab" onclick="mudarAba('quizzes')">Quizzes</button>
+      <button class="tab" onclick="mudarAba('desafios')">Desafios</button>
+      <button class="tab" onclick="mudarAba('sobre')">Sobre</button>
+      <button class="tab" onclick="mudarAba('updates')">Updates</button>
+    </div>
+
+    <!-- GERADOR IA -->
+    <div id="aba-gerador">
+      <div class="card">
+        <h3>Gerar Quiz com IA (Groq)</h3>
+        <div class="grid-2">
+          <div class="form-group"><label>Tópico</label><input id="g-topico" placeholder="Ex: Equações do 2º grau" /></div>
+          <div class="form-group"><label>Disciplina</label><input id="g-disc" placeholder="Ex: Matemática" /></div>
+        </div>
+        <div class="form-group"><label>Nº de questões</label><input id="g-num" type="number" value="5" min="3" max="20" style="max-width:120px" /></div>
+        <button class="btn btn-blue" onclick="gerarQuiz()">Gerar com IA</button>
+      </div>
+      <div id="preview-quiz" class="oculto card">
+        <h3 id="preview-titulo"></h3>
+        <div id="preview-questoes"></div>
+        <button class="btn btn-green mt" onclick="salvarQuizGerado()">Salvar Quiz</button>
+      </div>
+    </div>
+
+    <!-- USUÁRIOS -->
+    <div id="aba-usuarios" class="oculto">
+      <div class="card">
+        <h3>Usuários</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nome</th><th>Username</th><th>Email</th><th>Pontos</th><th>Plano</th><th>Admin</th><th>Prof</th><th>Quizzer</th><th>Ações</th></tr></thead>
+            <tbody id="tabela-usuarios"><tr><td colspan="9" class="empty">Carregando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISCIPLINAS -->
+    <div id="aba-disciplinas" class="oculto">
+      <div class="card">
+        <h3>Disciplinas</h3>
+        <div id="lista-discs-admin"><div class="empty">Carregando...</div></div>
+      </div>
+    </div>
+
+    <!-- QUIZZES -->
+    <div id="aba-quizzes" class="oculto">
+      <div class="card">
+        <h3>Quizzes</h3>
+        <div id="lista-quizzes-admin"><div class="empty">Carregando...</div></div>
+      </div>
+    </div>
+
+    <!-- DESAFIOS -->
+    <div id="aba-desafios" class="oculto">
+      <div class="card">
+        <h3>Criar Desafio</h3>
+        <div class="grid-2">
+          <div class="form-group"><label>Título</label><input id="d-titulo" placeholder="Título do desafio" /></div>
+          <div class="form-group"><label>Matéria</label><input id="d-materia" placeholder="Ex: Matemática" /></div>
+        </div>
+        <div class="form-group"><label>Descrição</label><textarea id="d-desc" rows="2" placeholder="Descrição..."></textarea></div>
+        <div class="form-group"><label>URL do Banner</label><input id="d-banner" placeholder="https://..." /></div>
+        <div class="grid-2">
+          <div class="form-group"><label>Início</label><input id="d-inicio" type="datetime-local" /></div>
+          <div class="form-group"><label>Fim</label><input id="d-fim" type="datetime-local" /></div>
+        </div>
+        <div class="form-group"><label>Prêmio (pontos)</label><input id="d-premio" type="number" value="100" style="max-width:150px" /></div>
+        <div class="flex">
+          <button class="btn btn-blue" onclick="gerarQuestoesDesafio()">Gerar questões IA</button>
+          <button class="btn btn-outline" onclick="adicionarQuestaoManual()">+ Questão manual</button>
+        </div>
+        <div id="questoes-desafio" style="margin-top:14px"></div>
+        <button class="btn btn-green mt" onclick="salvarDesafio()">Criar Desafio</button>
+      </div>
+      <div class="card">
+        <h3>Desafios existentes</h3>
+        <div id="lista-desafios-admin"><div class="empty">Carregando...</div></div>
+      </div>
+    </div>
+
+    <!-- SOBRE -->
+    <div id="aba-sobre" class="oculto">
+      <div class="card">
+        <h3>Editar Página Sobre Nós</h3>
+        <div class="form-group"><label>Conteúdo</label><textarea id="sobre-texto" rows="10" placeholder="Conteúdo da página..."></textarea></div>
+        <button class="btn btn-green" onclick="salvarSobre()">Salvar</button>
+      </div>
+    </div>
+
+    <!-- UPDATES -->
+    <div id="aba-updates" class="oculto">
+      <div class="card">
+        <h3>Publicar Update</h3>
+        <div class="form-group"><label>Título</label><input id="u-titulo" placeholder="Título do update" /></div>
+        <div class="form-group"><label>Conteúdo</label><textarea id="u-conteudo" rows="4" placeholder="Descreva as novidades..."></textarea></div>
+        <button class="btn btn-green" onclick="publicarUpdate()">Publicar</button>
+      </div>
+      <div class="card">
+        <h3>Updates publicados</h3>
+        <div id="lista-updates"><div class="empty">Carregando...</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getDatabase, ref, get, set, push, update, remove, query, orderByChild } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC9Lcx3mYGYXavUi_b9c_tRbS3Otm9JQNk",
+  authDomain: "sexta-feira-studies.firebaseapp.com",
+  databaseURL: "https://sexta-feira-studies-default-rtdb.firebaseio.com",
+  projectId: "sexta-feira-studies",
+  storageBucket: "sexta-feira-studies.firebasestorage.app",
+  messagingSenderId: "673251857052",
+  appId: "1:673251857052:web:0ef6929ea93123f7a91359"
+};
+
+const GROQ_KEY = "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";
+const ADMIN_SENHA = "admin123";
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+let quizGerado = null;
+let questoesDesafio = [];
+
+function toast(msg, tipo = '') {
+  const c = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = `toast ${tipo}`; el.textContent = msg; c.appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+window.entrarAdmin = function() {
+  const senha = document.getElementById('admin-senha').value;
+  if (senha === ADMIN_SENHA) {
+    document.getElementById('auth-screen').classList.add('oculto');
+    document.getElementById('painel').classList.remove('oculto');
+    carregarAba('gerador');
+  } else { toast('Senha incorreta', 'erro'); }
+};
+
+window.mudarAba = function(id) {
+  document.querySelectorAll('[id^="aba-"]').forEach(el => el.classList.add('oculto'));
+  document.getElementById(`aba-${id}`).classList.remove('oculto');
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    const abas = ['gerador','usuarios','disciplinas','quizzes','desafios','sobre','updates'];
+    t.classList.toggle('ativo', abas[i] === id);
+  });
+  carregarAba(id);
+};
+
+async function carregarAba(id) {
+  if (id === 'usuarios') await carregarUsuarios();
+  if (id === 'disciplinas') await carregarDiscsAdmin();
+  if (id === 'quizzes') await carregarQuizzesAdmin();
+  if (id === 'desafios') await carregarDesafiosAdmin();
+  if (id === 'sobre') await carregarSobre();
+  if (id === 'updates') await carregarUpdates();
+}
+
+// ===== GERADOR IA =====
+window.gerarQuiz = async function() {
+  const topico = document.getElementById('g-topico').value.trim();
+  const disc = document.getElementById('g-disc').value.trim();
+  const num = parseInt(document.getElementById('g-num').value) || 5;
+  if (!topico || !disc) { toast('Preencha tópico e disciplina', 'erro'); return; }
+  toast('Gerando quiz com IA...');
+  document.getElementById('preview-quiz').classList.add('oculto');
+  try {
+    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+      body: JSON.stringify({
+        model: 'llama-3.1-70b-versatile',
+        messages: [
+          { role: 'system', content: 'Você é um especialista em educação. Responda apenas com JSON válido.' },
+          { role: 'user', content: `Crie um quiz educacional sobre "${topico}" para ${disc} com ${num} questões de múltipla escolha. Formato JSON: {"title":"título","questions":[{"question":"texto","options":["A","B","C","D"],"correct":0}]}` }
+        ], temperature: 0.7, max_tokens: 2048
+      })
+    });
+    const data = await resp.json();
+    const text = data.choices[0].message.content;
+    const match = text.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('JSON inválido');
+    quizGerado = JSON.parse(match[0]);
+    quizGerado._disc = disc;
+    document.getElementById('preview-titulo').textContent = quizGerado.title;
+    const letras = ['A','B','C','D'];
+    document.getElementById('preview-questoes').innerHTML = quizGerado.questions.map((q,i) => `
+      <div class="quiz-preview">
+        <div class="questao">${i+1}. ${q.question}</div>
+        ${q.options.map((o,oi) => `<div class="opcao-prev ${oi===q.correct?'certa':'errada'}">${letras[oi]}) ${o}${oi===q.correct?' ✓':''}</div>`).join('')}
+      </div>
+    `).join('');
+    document.getElementById('preview-quiz').classList.remove('oculto');
+    toast('Quiz gerado!', 'sucesso');
+  } catch(e) { toast('Erro ao gerar quiz', 'erro'); console.error(e); }
+};
+
+window.salvarQuizGerado = async function() {
+  if (!quizGerado) return;
+  try {
+    // Buscar ID da disciplina
+    const snap = await get(ref(db, 'disciplinas'));
+    let disciplinaId = ''; let disciplinaNome = quizGerado._disc;
+    if (snap.exists()) {
+      snap.forEach(c => {
+        if (c.val().name.toLowerCase() === quizGerado._disc.toLowerCase()) {
+          disciplinaId = c.key; disciplinaNome = c.val().name;
+        }
+      });
+    }
+    const r = push(ref(db, 'quizzes'));
+    await set(r, { title: quizGerado.title, disciplinaId, disciplinaNome, questions: quizGerado.questions, createdAt: Date.now() });
+    toast('Quiz salvo!', 'sucesso');
+    document.getElementById('preview-quiz').classList.add('oculto');
+    quizGerado = null;
+  } catch(e) { toast('Erro ao salvar', 'erro'); console.error(e); }
+};
+
+// ===== USUÁRIOS =====
+async function carregarUsuarios() {
+  const tbody = document.getElementById('tabela-usuarios');
+  tbody.innerHTML = '<tr><td colspan="9" class="empty">Carregando...</td></tr>';
+  const snap = await get(ref(db, 'users'));
+  if (!snap.exists()) { tbody.innerHTML = '<tr><td colspan="9" class="empty">Nenhum usuário</td></tr>'; return; }
+  const users = [];
+  snap.forEach(c => users.push({ uid: c.key, ...c.val() }));
+  tbody.innerHTML = users.map(u => `
+    <tr>
+      <td style="font-weight:600">${u.fullname||''}</td>
+      <td style="color:#64748B">@${u.username||''}</td>
+      <td style="color:#64748B;font-size:12px">${u.email||''}</td>
+      <td>
+        <input type="number" value="${u.points||0}" style="width:80px;background:#0F172A;border:1px solid #334155;border-radius:8px;padding:4px 8px;font-size:12px;color:#F1F5F9;outline:none"
+          onchange="atualizarCampo('${u.uid}','points',parseInt(this.value))" />
+      </td>
+      <td>
+        <select onchange="atualizarCampo('${u.uid}','plano',this.value)">
+          <option value="free" ${(u.plano||'free')==='free'?'selected':''}>Free</option>
+          <option value="premium" ${u.plano==='premium'?'selected':''}>Premium</option>
+        </select>
+      </td>
+      <td><button class="btn ${(u.adminLevel||0)>0?'btn-green':'btn-outline'}" style="padding:4px 12px;font-size:12px" onclick="toggleCampo('${u.uid}','adminLevel',${u.adminLevel||0})">${(u.adminLevel||0)>0?'Sim':'Não'}</button></td>
+      <td><button class="btn ${u.isProf?'btn-green':'btn-outline'}" style="padding:4px 12px;font-size:12px" onclick="toggleBool('${u.uid}','isProf',${!!u.isProf})">${u.isProf?'Sim':'Não'}</button></td>
+      <td><button class="btn ${u.isQuizzer?'btn-green':'btn-outline'}" style="padding:4px 12px;font-size:12px" onclick="toggleBool('${u.uid}','isQuizzer',${!!u.isQuizzer})">${u.isQuizzer?'Sim':'Não'}</button></td>
+      <td><button class="btn-red" onclick="excluirUsuario('${u.uid}')">Excluir</button></td>
+    </tr>
+  `).join('');
+}
+
+window.atualizarCampo = async function(uid, campo, valor) {
+  try { await update(ref(db, `users/${uid}`), { [campo]: valor }); toast('Atualizado!', 'sucesso'); }
+  catch(e) { toast('Erro', 'erro'); }
+};
+
+window.toggleCampo = async function(uid, campo, valor) {
+  const novo = valor > 0 ? 0 : 1;
+  await update(ref(db, `users/${uid}`), { [campo]: novo });
+  carregarUsuarios();
+};
+
+window.toggleBool = async function(uid, campo, valor) {
+  await update(ref(db, `users/${uid}`), { [campo]: !valor });
+  carregarUsuarios();
+};
+
+window.excluirUsuario = async function(uid) {
+  if (!confirm('Excluir usuário?')) return;
+  await remove(ref(db, `users/${uid}`));
+  toast('Usuário excluído', 'sucesso'); carregarUsuarios();
+};
+
+// ===== DISCIPLINAS =====
+async function carregarDiscsAdmin() {
+  const lista = document.getElementById('lista-discs-admin');
+  const snap = await get(ref(db, 'disciplinas'));
+  if (!snap.exists()) { lista.innerHTML = '<div class="empty">Nenhuma disciplina</div>'; return; }
+  const discs = [];
+  snap.forEach(c => discs.push({ id: c.key, ...c.val() }));
+  lista.innerHTML = discs.map(d => `
+    <div class="item-row">
+      <div class="item-row-info"><div class="item-row-nome">${d.icon||''} ${d.name}</div><div class="item-row-sub">${d.description||''}</div></div>
+      <button class="btn-red" onclick="excluirDisc('${d.id}')">Excluir</button>
+    </div>
+  `).join('') || '<div class="empty">Nenhuma disciplina</div>';
+}
+
+window.excluirDisc = async function(id) {
+  if (!confirm('Excluir disciplina?')) return;
+  await remove(ref(db, `disciplinas/${id}`));
+  toast('Excluída!', 'sucesso'); carregarDiscsAdmin();
+};
+
+// ===== QUIZZES =====
+async function carregarQuizzesAdmin() {
+  const lista = document.getElementById('lista-quizzes-admin');
+  const snap = await get(ref(db, 'quizzes'));
+  if (!snap.exists()) { lista.innerHTML = '<div class="empty">Nenhum quiz</div>'; return; }
+  const items = [];
+  snap.forEach(c => items.push({ id: c.key, ...c.val() }));
+  lista.innerHTML = items.map(q => `
+    <div class="item-row">
+      <div class="item-row-info"><div class="item-row-nome">${q.title}</div><div class="item-row-sub">${q.disciplinaNome||''} · ${(q.questions||[]).length} questões</div></div>
+      <button class="btn-red" onclick="excluirQuiz('${q.id}')">Excluir</button>
+    </div>
+  `).join('') || '<div class="empty">Nenhum quiz</div>';
+}
+
+window.excluirQuiz = async function(id) {
+  if (!confirm('Excluir quiz?')) return;
+  await remove(ref(db, `quizzes/${id}`));
+  toast('Excluído!', 'sucesso'); carregarQuizzesAdmin();
+};
+
+// ===== DESAFIOS =====
+async function carregarDesafiosAdmin() {
+  const lista = document.getElementById('lista-desafios-admin');
+  const snap = await get(ref(db, 'desafios'));
+  if (!snap.exists()) { lista.innerHTML = '<div class="empty">Nenhum desafio</div>'; return; }
+  const items = [];
+  snap.forEach(c => items.push({ id: c.key, ...c.val() }));
+  lista.innerHTML = items.map(d => `
+    <div class="item-row">
+      <div class="item-row-info"><div class="item-row-nome">${d.title}</div><div class="item-row-sub">${d.materia||''} · +${d.prize} pts</div></div>
+      <button class="btn-red" onclick="excluirDesafio('${d.id}')">Excluir</button>
+    </div>
+  `).join('') || '<div class="empty">Nenhum desafio</div>';
+}
+
+window.gerarQuestoesDesafio = async function() {
+  const titulo = document.getElementById('d-titulo').value.trim();
+  const materia = document.getElementById('d-materia').value.trim();
+  if (!materia) { toast('Informe a matéria primeiro', 'erro'); return; }
+  toast('Gerando questões...');
+  try {
+    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+      body: JSON.stringify({
+        model: 'llama-3.1-70b-versatile',
+        messages: [
+          { role: 'system', content: 'Responda apenas com JSON válido.' },
+          { role: 'user', content: `Crie 5 questões de múltipla escolha sobre "${titulo||materia}" para ${materia}. JSON: {"questions":[{"question":"texto","options":["A","B","C","D"],"correct":0}]}` }
+        ], max_tokens: 1500
+      })
+    });
+    const data = await resp.json();
+    const match = data.choices[0].message.content.match(/\{[\s\S]*\}/);
+    const parsed = JSON.parse(match[0]);
+    questoesDesafio = parsed.questions || [];
+    renderizarQuestoesDesafio();
+    toast('Questões geradas!', 'sucesso');
+  } catch(e) { toast('Erro ao gerar', 'erro'); console.error(e); }
+};
+
+window.adicionarQuestaoManual = function() {
+  questoesDesafio.push({ question: '', options: ['','','',''], correct: 0 });
+  renderizarQuestoesDesafio();
+};
+
+function renderizarQuestoesDesafio() {
+  const letras = ['A','B','C','D'];
+  document.getElementById('questoes-desafio').innerHTML = questoesDesafio.map((q,i) => `
+    <div class="quiz-preview">
+      <div class="questao">${i+1}. ${q.question||'(sem texto)'}</div>
+      ${q.options.map((o,oi) => `<div class="opcao-prev ${oi===q.correct?'certa':'errada'}">${letras[oi]}) ${o||'(vazio)'}${oi===q.correct?' ✓':''}</div>`).join('')}
+    </div>
+  `).join('');
+}
+
+window.salvarDesafio = async function() {
+  const titulo = document.getElementById('d-titulo').value.trim();
+  const materia = document.getElementById('d-materia').value.trim();
+  const desc = document.getElementById('d-desc').value.trim();
+  const banner = document.getElementById('d-banner').value.trim();
+  const inicio = document.getElementById('d-inicio').value;
+  const fim = document.getElementById('d-fim').value;
+  const premio = parseInt(document.getElementById('d-premio').value) || 100;
+  if (!titulo || !materia || !inicio || !fim) { toast('Preencha os campos obrigatórios', 'erro'); return; }
+  if (questoesDesafio.length === 0) { toast('Adicione pelo menos uma questão', 'erro'); return; }
+  try {
+    const r = push(ref(db, 'desafios'));
+    await set(r, { title: titulo, description: desc, materia, banner, startDate: new Date(inicio).getTime(), endDate: new Date(fim).getTime(), prize: premio, questions: questoesDesafio, createdAt: Date.now() });
+    toast('Desafio criado!', 'sucesso');
+    questoesDesafio = [];
+    document.getElementById('questoes-desafio').innerHTML = '';
+    ['d-titulo','d-materia','d-desc','d-banner','d-inicio','d-fim'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('d-premio').value = '100';
+    carregarDesafiosAdmin();
+  } catch(e) { toast('Erro ao criar desafio', 'erro'); console.error(e); }
+};
+
+window.excluirDesafio = async function(id) {
+  if (!confirm('Excluir desafio?')) return;
+  await remove(ref(db, `desafios/${id}`));
+  toast('Excluído!', 'sucesso'); carregarDesafiosAdmin();
+};
+
+// ===== SOBRE =====
+async function carregarSobre() {
+  const snap = await get(ref(db, 'config/sobreNos'));
+  if (snap.exists()) document.getElementById('sobre-texto').value = snap.val();
+}
+
+window.salvarSobre = async function() {
+  const texto = document.getElementById('sobre-texto').value;
+  await set(ref(db, 'config/sobreNos'), texto);
+  toast('Salvo!', 'sucesso');
+};
+
+// ===== UPDATES =====
+async function carregarUpdates() {
+  const lista = document.getElementById('lista-updates');
+  const snap = await get(ref(db, 'updates'));
+  if (!snap.exists()) { lista.innerHTML = '<div class="empty">Nenhum update</div>'; return; }
+  const items = [];
+  snap.forEach(c => items.push({ id: c.key, ...c.val() }));
+  items.sort((a,b) => b.createdAt - a.createdAt);
+  lista.innerHTML = items.map(u => `
+    <div class="item-row" style="align-items:flex-start;flex-direction:column;gap:8px">
+      <div style="display:flex;width:100%;justify-content:space-between;align-items:flex-start">
+        <div class="item-row-nome">${u.title}</div>
+        <button class="btn-red" onclick="excluirUpdate('${u.id}')">Excluir</button>
+      </div>
+      <div class="item-row-sub">${u.content}</div>
+      <div style="font-size:11px;color:#334155">${new Date(u.createdAt).toLocaleDateString('pt-BR')}</div>
+    </div>
+  `).join('');
+}
+
+window.publicarUpdate = async function() {
+  const titulo = document.getElementById('u-titulo').value.trim();
+  const conteudo = document.getElementById('u-conteudo').value.trim();
+  if (!titulo || !conteudo) { toast('Preencha todos os campos', 'erro'); return; }
+  const r = push(ref(db, 'updates'));
+  await set(r, { title: titulo, content: conteudo, createdAt: Date.now() });
+  toast('Publicado!', 'sucesso');
+  document.getElementById('u-titulo').value = '';
+  document.getElementById('u-conteudo').value = '';
+  carregarUpdates();
+};
+
+window.excluirUpdate = async function(id) {
+  await remove(ref(db, `updates/${id}`));
+  toast('Excluído!', 'sucesso'); carregarUpdates();
+};
+</script>
+</body>
+</html>
