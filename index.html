@@ -9,115 +9,118 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#FFFFFF;--bg2:#F8FAFC;--text:#1E293B;--text2:#64748B;--border:#E2E8F0;--primary:#10B981;--primary-dark:#059669;--accent:#3B82F6;--accent-dark:#2563EB;--shadow:0 1px 3px rgba(0,0,0,0.08);--shadow-lg:0 10px 40px rgba(0,0,0,0.1)}
-    body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+    body{font-family:'Sora',sans-serif;background:#fff;color:#1E293B;overflow-x:hidden;line-height:1.5}
     
-    /* NAVBAR */
-    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:12px 0;transition:all 0.3s}
-    .navbar.scrolled{box-shadow:var(--shadow-lg)}
-    .nav-container{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
-    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-    .nav-logo img{height:40px;width:auto}
-    .nav-logo span{font-weight:800;font-size:18px;color:var(--text)}
-    .nav-links{display:flex;gap:32px;list-style:none}
-    .nav-links a{text-decoration:none;color:var(--text2);font-weight:500;font-size:14px;transition:color 0.2s}
-    .nav-links a:hover{color:var(--primary)}
-    .nav-btn{background:var(--primary);color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;transition:all 0.2s}
-    .nav-btn:hover{background:var(--primary-dark);transform:translateY(-1px)}
-    .menu-toggle{display:none;background:none;border:none;font-size:24px;cursor:pointer;color:var(--text)}
+    /* NAVBAR - Faixa preta */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:#0F172A;padding:10px 0}
+    .nav-container{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between}
+    .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer}
+    .nav-logo img{height:36px;width:auto;border-radius:6px}
+    .nav-logo span{font-weight:800;font-size:16px;color:#fff}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{text-decoration:none;color:#94A3B8;font-weight:500;font-size:13px;transition:color 0.2s}
+    .nav-links a:hover{color:#10B981}
+    .nav-btn{background:#10B981;color:#fff;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px}
+    .menu-toggle{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:#fff}
     
     /* HERO */
-    .hero{min-height:100vh;display:flex;align-items:center;padding:100px 24px 80px;max-width:1200px;margin:0 auto;gap:60px}
+    .hero{min-height:90vh;display:flex;align-items:center;padding:100px 20px 60px;max-width:1100px;margin:0 auto;gap:40px}
     .hero-content{flex:1}
-    .hero-badge{display:inline-block;background:var(--primary);color:white;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:20px;animation:fadeInUp 0.6s ease}
-    .hero h1{font-size:clamp(36px,5vw,56px);font-weight:800;line-height:1.1;margin-bottom:20px;animation:fadeInUp 0.6s ease 0.1s both}
-    .hero h1 span{color:var(--primary)}
-    .hero p{font-size:18px;color:var(--text2);margin-bottom:32px;max-width:500px;animation:fadeInUp 0.6s ease 0.2s both}
-    .hero-buttons{display:flex;gap:12px;flex-wrap:wrap;animation:fadeInUp 0.6s ease 0.3s both}
-    .btn-primary{background:var(--primary);color:white;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
-    .btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 8px 25px rgba(16,185,129,0.3)}
-    .btn-outline{background:transparent;color:var(--text);padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;border:2px solid var(--border);transition:all 0.2s}
-    .btn-outline:hover{border-color:var(--primary);color:var(--primary)}
-    .hero-image{flex:1;display:flex;align-items:center;justify-content:center;animation:fadeInUp 0.6s ease 0.4s both}
-    .hero-image img{max-width:100%;height:auto}
-    .hero-graphic{width:400px;height:400px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:50%;position:relative;overflow:hidden}
-    .hero-graphic::before{content:'';position:absolute;width:300px;height:300px;background:rgba(255,255,255,0.15);border-radius:50%;top:50px;left:50px}
-    .hero-graphic::after{content:'';position:absolute;width:150px;height:150px;background:rgba(255,255,255,0.2);border-radius:50%;top:125px;left:125px}
+    .hero-badge{display:inline-block;background:rgba(16,185,129,0.1);color:#10B981;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:16px}
+    .hero h1{font-size:clamp(30px,4vw,44px);font-weight:800;line-height:1.15;margin-bottom:12px}
+    .hero h1 span{color:#10B981}
+    .hero p{font-size:15px;color:#64748B;margin-bottom:24px;max-width:450px}
+    .hero-buttons{display:flex;gap:10px;flex-wrap:wrap}
+    .btn-primary{background:#10B981;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s}
+    .btn-primary:hover{background:#059669;transform:translateY(-2px)}
+    .btn-outline{background:transparent;color:#1E293B;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;border:2px solid #E2E8F0;transition:all 0.2s}
+    .btn-outline:hover{border-color:#10B981;color:#10B981}
+    .hero-graphic{width:300px;height:300px;background:linear-gradient(135deg,#10B981,#3B82F6);border-radius:50%;flex-shrink:0}
     
     /* SECTION */
-    section{padding:80px 24px}
-    .section-container{max-width:1200px;margin:0 auto}
-    .section-header{text-align:center;margin-bottom:60px}
-    .section-tag{display:inline-block;background:rgba(16,185,129,0.1);color:var(--primary);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:12px}
-    .section-header h2{font-size:clamp(28px,4vw,40px);font-weight:800;margin-bottom:12px}
-    .section-header p{color:var(--text2);font-size:16px;max-width:600px;margin:0 auto}
+    section{padding:60px 20px}
+    .section-container{max-width:1100px;margin:0 auto}
+    .section-header{text-align:center;margin-bottom:40px}
+    .section-tag{display:inline-block;background:rgba(16,185,129,0.1);color:#10B981;padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;margin-bottom:8px}
+    .section-header h2{font-size:clamp(24px,3vw,32px);font-weight:800;margin-bottom:6px}
+    .section-header p{color:#64748B;font-size:14px}
     
-    /* ABOUT */
-    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-    .about-text h3{font-size:24px;font-weight:700;margin-bottom:16px}
-    .about-text p{color:var(--text2);margin-bottom:24px;font-size:15px}
-    .about-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
-    .about-stat{background:var(--bg2);padding:20px;border-radius:12px;border:1px solid var(--border)}
-    .about-stat .num{font-size:28px;font-weight:800;color:var(--primary)}
-    .about-stat .lbl{font-size:13px;color:var(--text2)}
-    .about-image{display:flex;align-items:center;justify-content:center}
-    .about-image img{width:100%;max-width:450px;border-radius:20px}
+    /* SOBRE */
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+    .about-text h3{font-size:20px;font-weight:700;margin-bottom:10px}
+    .about-text p{color:#64748B;margin-bottom:16px;font-size:14px}
+    .about-image img{width:100%;max-width:350px;border-radius:16px}
     
-    /* SERVICES */
-    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
-    .service-card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:32px;transition:all 0.3s;cursor:pointer;position:relative;overflow:hidden}
-    .service-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--primary)}
-    .service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--accent));transform:scaleX(0);transition:transform 0.3s}
-    .service-card:hover::before{transform:scaleX(1)}
-    .service-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px}
-    .service-icon.green{background:rgba(16,185,129,0.1);color:var(--primary)}
-    .service-icon.blue{background:rgba(59,130,246,0.1);color:var(--accent)}
-    .service-card h3{font-size:18px;font-weight:700;margin-bottom:8px}
-    .service-card p{color:var(--text2);font-size:14px;line-height:1.7}
+    /* SERVIÇOS */
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+    .service-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;transition:all 0.3s}
+    .service-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.08);border-color:#10B981}
+    .service-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+    .service-icon.green{background:rgba(16,185,129,0.1);color:#10B981}
+    .service-icon.blue{background:rgba(59,130,246,0.1);color:#3B82F6}
+    .service-card h3{font-size:15px;font-weight:700;margin-bottom:4px}
+    .service-card p{color:#64748B;font-size:12px}
     
-    /* PORTFOLIO */
-    .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
-    .portfolio-card{border-radius:16px;overflow:hidden;border:1px solid var(--border);transition:all 0.3s}
-    .portfolio-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
-    .portfolio-card img{width:100%;height:200px;object-fit:cover}
-    .portfolio-info{padding:20px}
-    .portfolio-info h3{font-size:16px;font-weight:700;margin-bottom:4px}
-    .portfolio-info p{color:var(--text2);font-size:13px}
+    /* PORTFÓLIO */
+    .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+    .portfolio-card{border-radius:12px;overflow:hidden;border:1px solid #E2E8F0;transition:all 0.3s}
+    .portfolio-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.08)}
+    .portfolio-card img{width:100%;height:180px;object-fit:cover}
+    .portfolio-info{padding:14px}
+    .portfolio-info h3{font-size:14px;font-weight:700;margin-bottom:2px}
+    .portfolio-info p{color:#64748B;font-size:12px}
     
-    /* CONTACT */
-    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
-    .contact-info h3{font-size:24px;font-weight:700;margin-bottom:16px}
-    .contact-info p{color:var(--text2);margin-bottom:24px}
-    .contact-item{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-    .contact-item i{width:40px;height:40px;border-radius:50%;background:rgba(16,185,129,0.1);color:var(--primary);display:flex;align-items:center;justify-content:center}
-    .contact-form{background:var(--bg2);padding:32px;border-radius:16px;border:1px solid var(--border)}
-    .contact-form input,.contact-form textarea{width:100%;padding:12px;border:2px solid var(--border);border-radius:10px;font-family:'Sora',sans-serif;font-size:14px;outline:none;margin-bottom:12px;transition:border 0.2s;background:white}
-    .contact-form input:focus,.contact-form textarea:focus{border-color:var(--primary)}
-    .contact-form textarea{resize:vertical;min-height:100px}
+    /* CONTATO */
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
+    .contact-item{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px}
+    .contact-item i{width:36px;height:36px;border-radius:50%;background:rgba(16,185,129,0.1);color:#10B981;display:flex;align-items:center;justify-content:center;font-size:16px}
+    .contact-form{background:#F8FAFC;padding:24px;border-radius:12px;border:1px solid #E2E8F0}
+    .contact-form input,.contact-form textarea{width:100%;padding:10px;border:2px solid #E2E8F0;border-radius:8px;font-family:'Sora',sans-serif;font-size:13px;outline:none;margin-bottom:10px;background:#fff}
+    .contact-form input:focus,.contact-form textarea:focus{border-color:#10B981}
+    .contact-form textarea{resize:vertical;min-height:80px}
     .contact-form button{width:100%}
     
     /* FOOTER */
-    footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 24px;text-align:center}
-    .footer-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px}
-    .footer-logo img{height:36px}
-    .footer-logo span{font-weight:800;font-size:16px}
-    .footer-links{display:flex;gap:24px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
-    .footer-links a{color:var(--text2);text-decoration:none;font-size:13px;transition:color 0.2s}
-    .footer-links a:hover{color:var(--primary)}
-    .footer-copy{color:var(--text2);font-size:12px}
+    footer{background:#0F172A;padding:30px 20px;text-align:center;color:#94A3B8}
+    .footer-logo{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}
+    .footer-logo img{height:30px;border-radius:4px}
+    .footer-logo span{font-weight:800;font-size:14px;color:#fff}
+    .footer-links{display:flex;gap:18px;justify-content:center;margin-bottom:10px;flex-wrap:wrap}
+    .footer-links a{color:#94A3B8;text-decoration:none;font-size:12px}
+    .footer-links a:hover{color:#10B981}
+    .footer-copy{font-size:10px;color:#64748B}
     
-    /* ANIMAÇÕES */
-    @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-    .reveal{opacity:0;transform:translateY(30px);transition:all 0.6s ease}
-    .reveal.active{opacity:1;transform:translateY(0)}
+    /* MODAL PAINEL */
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center}
+    .modal.show{display:flex}
+    .modal-box{background:#fff;border-radius:16px;padding:30px;width:90%;max-width:380px;text-align:center}
+    .modal-box h3{font-size:18px;margin-bottom:16px}
+    .modal-box input{width:100%;padding:10px;border:2px solid #E2E8F0;border-radius:8px;font-family:'Sora',sans-serif;font-size:14px;outline:none;margin-bottom:10px}
+    .modal-box button{width:100%;padding:10px;background:#10B981;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:'Sora',sans-serif}
+    .modal-error{color:#EF4444;font-size:12px;margin-top:8px;display:none}
+    
+    /* PAINEL */
+    #painel-screen{display:none;padding:80px 20px 40px;max-width:900px;margin:0 auto}
+    .painel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+    .painel-header h2{font-size:20px}
+    .staff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+    .staff-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:20px;text-align:center}
+    .staff-card img{width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:10px}
+    .staff-card h3{font-size:14px;font-weight:700}
+    .staff-card .cargo{color:#10B981;font-size:11px;font-weight:600;margin:4px 0}
+    .staff-card p{color:#64748B;font-size:12px}
+    .staff-card .actions{display:flex;gap:6px;justify-content:center;margin-top:10px}
+    .staff-card .actions button{padding:4px 10px;border-radius:4px;border:none;cursor:pointer;font-size:11px;font-family:'Sora',sans-serif;font-weight:600}
+    .btn-edit{background:#3B82F6;color:#fff}
+    .btn-del{background:#EF4444;color:#fff}
     
     @media(max-width:768px){
-      .nav-links{display:none;position:fixed;top:70px;left:0;right:0;background:white;flex-direction:column;padding:20px;gap:16px;border-bottom:1px solid var(--border)}
+      .nav-links{display:none;position:fixed;top:56px;left:0;right:0;background:#0F172A;flex-direction:column;padding:16px;gap:12px;border-top:1px solid #334155}
       .nav-links.show{display:flex}
       .menu-toggle{display:block}
       .hero{flex-direction:column;text-align:center;padding-top:120px}
       .hero p{margin:0 auto 24px}
-      .hero-graphic{width:250px;height:250px}
+      .hero-graphic{width:200px;height:200px}
       .about-grid{grid-template-columns:1fr}
       .contact-grid{grid-template-columns:1fr}
     }
@@ -126,9 +129,9 @@
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar" id="navbar">
+<nav class="navbar">
   <div class="nav-container">
-    <a href="#" class="nav-logo">
+    <a class="nav-logo" id="logo-click">
       <img src="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" alt="AeT Studios" />
       <span>AeT Studios</span>
     </a>
@@ -139,7 +142,7 @@
       <li><a href="#portfolio">Portfólio</a></li>
       <li><a href="#contato">Contato</a></li>
     </ul>
-    <a href="#contato" class="nav-btn">Fale Conosco</a>
+    <a href="#contato" class="nav-btn">Orçamento</a>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
   </div>
 </nav>
@@ -148,84 +151,40 @@
 <section class="hero" id="home">
   <div class="hero-content">
     <span class="hero-badge">🚀 Tecnologia e Inovação</span>
-    <h1>Transformamos ideias em <span>soluções digitais</span></h1>
-    <p>Criamos sites, aplicativos e sistemas que impulsionam o seu negócio com tecnologia de ponta e design excepcional.</p>
+    <h1>Criamos o <span>futuro digital</span> do seu negócio</h1>
+    <p>Sites, aplicativos e sistemas web com design moderno e tecnologia de ponta.</p>
     <div class="hero-buttons">
       <a href="#contato" class="btn-primary">Solicitar Orçamento <i class="fas fa-arrow-right"></i></a>
-      <a href="#portfolio" class="btn-outline">Ver Portfólio</a>
+      <a href="#portfolio" class="btn-outline">Ver Projetos</a>
     </div>
   </div>
-  <div class="hero-image">
-    <div class="hero-graphic"></div>
-  </div>
+  <div class="hero-graphic"></div>
 </section>
 
 <!-- SOBRE -->
 <section id="sobre">
   <div class="section-container">
-    <div class="section-header reveal">
-      <span class="section-tag">Quem Somos</span>
-      <h2>Conheça a AeT Studios</h2>
-      <p>Uma empresa focada em criar experiências digitais incríveis para nossos clientes</p>
-    </div>
+    <div class="section-header"><span class="section-tag">Quem Somos</span><h2>Conheça a AeT Studios</h2><p>Transformamos ideias em soluções digitais</p></div>
     <div class="about-grid">
-      <div class="about-text reveal">
-        <h3>Inovação e qualidade em cada projeto</h3>
-        <p>A AeT Studios nasceu da paixão por tecnologia e design. Somos especialistas em desenvolvimento web, aplicativos mobile e soluções de inteligência artificial.</p>
-        <p>Trabalhamos com as tecnologias mais modernas do mercado para entregar produtos de alta qualidade que realmente fazem a diferença.</p>
-        <div class="about-stats">
-          <div class="about-stat"><div class="num">50+</div><div class="lbl">Projetos Entregues</div></div>
-          <div class="about-stat"><div class="num">30+</div><div class="lbl">Clientes Satisfeitos</div></div>
-          <div class="about-stat"><div class="num">3</div><div class="lbl">Anos de Experiência</div></div>
-          <div class="about-stat"><div class="num">24/7</div><div class="lbl">Suporte Técnico</div></div>
-        </div>
+      <div class="about-text">
+        <h3>Tecnologia com propósito</h3>
+        <p>A AeT Studios é uma empresa nova no mercado, mas com muita vontade de fazer a diferença. Nosso primeiro grande projeto, o <strong>Sexta-Feira Studies</strong>, já está no ar e em constante evolução.</p>
+        <p>Buscamos criar soluções que realmente ajudem pessoas e empresas a crescerem no mundo digital.</p>
       </div>
-      <div class="about-image reveal">
-        <img src="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" alt="AeT Studios" />
-      </div>
+      <div class="about-image"><img src="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" alt="AeT Studios" /></div>
     </div>
   </div>
 </section>
 
 <!-- SERVIÇOS -->
-<section id="servicos" style="background:var(--bg2);">
+<section id="servicos" style="background:#F8FAFC;">
   <div class="section-container">
-    <div class="section-header reveal">
-      <span class="section-tag">O que fazemos</span>
-      <h2>Nossos Serviços</h2>
-      <p>Soluções completas para o seu negócio crescer no mundo digital</p>
-    </div>
+    <div class="section-header"><span class="section-tag">O que fazemos</span><h2>Nossos Serviços</h2><p>Soluções digitais para o seu negócio</p></div>
     <div class="services-grid">
-      <div class="service-card reveal">
-        <div class="service-icon green"><i class="fas fa-globe"></i></div>
-        <h3>Desenvolvimento Web</h3>
-        <p>Sites institucionais, landing pages, e-commerce e sistemas web completos com as melhores tecnologias.</p>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon blue"><i class="fas fa-mobile-alt"></i></div>
-        <h3>Apps Mobile</h3>
-        <p>Aplicativos nativos e híbridos para Android e iOS com experiência de usuário excepcional.</p>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon green"><i class="fas fa-robot"></i></div>
-        <h3>Inteligência Artificial</h3>
-        <p>Soluções com IA para automatizar processos, chatbots inteligentes e análise de dados.</p>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon blue"><i class="fas fa-paint-brush"></i></div>
-        <h3>UI/UX Design</h3>
-        <p>Design de interfaces modernas e intuitivas que encantam seus usuários e aumentam conversões.</p>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon green"><i class="fas fa-cloud"></i></div>
-        <h3>Hospedagem Cloud</h3>
-        <p>Infraestrutura em nuvem escalável com alta disponibilidade e segurança para seus projetos.</p>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon blue"><i class="fas fa-headset"></i></div>
-        <h3>Suporte Técnico</h3>
-        <p>Suporte dedicado 24/7 para garantir que seus sistemas estejam sempre funcionando perfeitamente.</p>
-      </div>
+      <div class="service-card"><div class="service-icon green"><i class="fas fa-globe"></i></div><h3>Sites e Landing Pages</h3><p>Sites modernos, rápidos e responsivos</p></div>
+      <div class="service-card"><div class="service-icon blue"><i class="fas fa-mobile-alt"></i></div><h3>Apps Mobile</h3><p>Aplicativos para Android e iOS</p></div>
+      <div class="service-card"><div class="service-icon green"><i class="fas fa-robot"></i></div><h3>IA e Automação</h3><p>Chatbots e soluções inteligentes</p></div>
+      <div class="service-card"><div class="service-icon blue"><i class="fas fa-paint-brush"></i></div><h3>UI/UX Design</h3><p>Interfaces bonitas e funcionais</p></div>
     </div>
   </div>
 </section>
@@ -233,50 +192,27 @@
 <!-- PORTFÓLIO -->
 <section id="portfolio">
   <div class="section-container">
-    <div class="section-header reveal">
-      <span class="section-tag">Trabalhos Recentes</span>
-      <h2>Nosso Portfólio</h2>
-      <p>Confira alguns dos projetos que desenvolvemos</p>
-    </div>
+    <div class="section-header"><span class="section-tag">Projetos</span><h2>Nosso Portfólio</h2><p>O que já criamos</p></div>
     <div class="portfolio-grid">
-      <div class="portfolio-card reveal">
-        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600" alt="Projeto 1" />
-        <div class="portfolio-info"><h3>Sexta-Feira Studies</h3><p>Plataforma gamificada de estudos com IA</p></div>
-      </div>
-      <div class="portfolio-card reveal">
-        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600" alt="Projeto 2" />
-        <div class="portfolio-info"><h3>E-commerce Premium</h3><p>Loja virtual com painel administrativo</p></div>
-      </div>
-      <div class="portfolio-card reveal">
-        <img src="https://images.unsplash.com/photo-1555421689-491a97ff2040?w=600" alt="Projeto 3" />
-        <div class="portfolio-info"><h3>App de Delivery</h3><p>Aplicativo completo para entregas</p></div>
-      </div>
+      <div class="portfolio-card"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600" alt="Sexta-Feira Studies" /><div class="portfolio-info"><h3>Sexta-Feira Studies</h3><p>Plataforma gamificada de estudos</p></div></div>
     </div>
   </div>
 </section>
 
 <!-- CONTATO -->
-<section id="contato" style="background:var(--bg2);">
+<section id="contato" style="background:#F8FAFC;">
   <div class="section-container">
-    <div class="section-header reveal">
-      <span class="section-tag">Fale Conosco</span>
-      <h2>Vamos conversar?</h2>
-      <p>Entre em contato e descubra como podemos ajudar seu negócio</p>
-    </div>
+    <div class="section-header"><span class="section-tag">Contato</span><h2>Vamos conversar?</h2><p>Preencha o formulário e retornaremos</p></div>
     <div class="contact-grid">
-      <div class="contact-info reveal">
-        <h3>Informações de Contato</h3>
-        <p>Estamos prontos para atender você e sua empresa. Escolha o canal de sua preferência.</p>
+      <div class="contact-info">
         <div class="contact-item"><i class="fas fa-envelope"></i><span>contato@aetstudios.com</span></div>
-        <div class="contact-item"><i class="fas fa-phone"></i><span>(11) 99999-9999</span></div>
         <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>São Paulo, Brasil</span></div>
       </div>
-      <form class="contact-form reveal" onsubmit="enviarContato(event)">
-        <input type="text" placeholder="Seu nome" required />
-        <input type="email" placeholder="Seu e-mail" required />
-        <input type="text" placeholder="Assunto" required />
-        <textarea placeholder="Sua mensagem..." required></textarea>
-        <button type="submit" class="btn-primary">Enviar Mensagem <i class="fas fa-paper-plane"></i></button>
+      <form class="contact-form" id="contactForm" onsubmit="salvarContato(event)">
+        <input type="text" id="ct-nome" placeholder="Seu nome" required />
+        <input type="email" id="ct-email" placeholder="Seu e-mail" required />
+        <textarea id="ct-msg" placeholder="Sua mensagem..." required></textarea>
+        <button type="submit" class="btn-primary">Enviar <i class="fas fa-paper-plane"></i></button>
       </form>
     </div>
   </div>
@@ -284,36 +220,177 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">
-    <img src="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" alt="AeT Studios" />
-    <span>AeT Studios</span>
-  </div>
-  <div class="footer-links">
-    <a href="#home">Home</a>
-    <a href="#sobre">Sobre</a>
-    <a href="#servicos">Serviços</a>
-    <a href="#portfolio">Portfólio</a>
-    <a href="#contato">Contato</a>
-  </div>
+  <div class="footer-logo"><img src="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" alt="AeT Studios" /><span>AeT Studios</span></div>
+  <div class="footer-links"><a href="#home">Home</a><a href="#sobre">Sobre</a><a href="#servicos">Serviços</a><a href="#portfolio">Portfólio</a><a href="#contato">Contato</a></div>
   <p class="footer-copy">&copy; 2025 AeT Studios. Todos os direitos reservados.</p>
 </footer>
 
+<!-- MODAL LOGIN PAINEL -->
+<div class="modal" id="modal-login">
+  <div class="modal-box">
+    <h3>🔒 Acesso ao Painel</h3>
+    <input type="password" id="painel-senha" placeholder="Senha de acesso" />
+    <button onclick="verificarPainel()">Entrar</button>
+    <p class="modal-error" id="modal-error">Senha incorreta!</p>
+  </div>
+</div>
+
+<!-- PAINEL ADMIN -->
+<div id="painel-screen">
+  <div class="painel-header">
+    <h2>⚙️ Painel Administrativo</h2>
+    <button class="btn-primary" onclick="abrirFormStaff()">+ Adicionar</button>
+  </div>
+  <div class="staff-grid" id="staff-grid"></div>
+  <button class="btn-outline" onclick="fecharPainel()" style="margin-top:20px;">← Voltar ao site</button>
+</div>
+
+<!-- MODAL STAFF -->
+<div class="modal" id="modal-staff">
+  <div class="modal-box">
+    <h3 id="staff-modal-title">Adicionar Pessoa</h3>
+    <input type="text" id="st-nome" placeholder="Nome" />
+    <input type="text" id="st-cargo" placeholder="Cargo" />
+    <input type="text" id="st-desc" placeholder="Descrição" />
+    <input type="file" id="st-img" accept="image/*" />
+    <img id="st-preview" style="max-width:100px;max-height:100px;border-radius:8px;margin:8px 0;display:none;" />
+    <button class="btn-primary" onclick="salvarStaff()">Salvar</button>
+    <input type="hidden" id="st-edit-id" />
+  </div>
+</div>
+
 <script>
-// Toggle menu mobile
+// ═══════════════ MENU ═══════════════
 function toggleMenu(){document.getElementById('navLinks').classList.toggle('show')}
-
-// Navbar scroll effect
-window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50)})
-
-// Reveal animations
-const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('active')})},{threshold:0.1})
-document.querySelectorAll('.reveal').forEach(el=>observer.observe(el))
-
-// Contato
-function enviarContato(e){e.preventDefault();alert('✅ Mensagem enviada com sucesso! Entraremos em contato em breve.');e.target.reset()}
-
-// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',function(e){e.preventDefault();const t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});document.getElementById('navLinks').classList.remove('show')})})
+
+// ═══════════════ PAINEL SECRETO ═══════════════
+let clickCount=0,clickTimer=null;
+const ADMIN_PASSWORD="aet2025";
+
+document.getElementById('logo-click').addEventListener('click',function(e){
+  e.preventDefault();
+  clickCount++;
+  if(clickCount===1)clickTimer=setTimeout(()=>{clickCount=0},2000);
+  if(clickCount>=5){clearTimeout(clickTimer);clickCount=0;document.getElementById('modal-login').classList.add('show')}
+});
+
+function verificarPainel(){
+  if(document.getElementById('painel-senha').value===ADMIN_PASSWORD){
+    document.getElementById('modal-login').classList.remove('show');
+    document.getElementById('painel-screen').style.display='block';
+    document.querySelector('.navbar').style.display='none';
+    document.querySelectorAll('section,footer').forEach(el=>el.style.display='none');
+    carregarStaff();
+  }else{
+    document.getElementById('modal-error').style.display='block';
+  }
+}
+
+function fecharPainel(){
+  document.getElementById('painel-screen').style.display='none';
+  document.querySelector('.navbar').style.display='';
+  document.querySelectorAll('section,footer').forEach(el=>el.style.display='');
+}
+
+// ═══════════════ CONTATOS ═══════════════
+function salvarContato(e){
+  e.preventDefault();
+  const contatos=JSON.parse(localStorage.getItem('aet_contatos')||'[]');
+  contatos.push({
+    nome:document.getElementById('ct-nome').value,
+    email:document.getElementById('ct-email').value,
+    msg:document.getElementById('ct-msg').value,
+    data:new Date().toISOString()
+  });
+  localStorage.setItem('aet_contatos',JSON.stringify(contatos));
+  alert('✅ Mensagem enviada! Entraremos em contato.');
+  document.getElementById('contactForm').reset();
+}
+
+// ═══════════════ STAFF (Painel) ═══════════════
+function abrirFormStaff(editId=null){
+  document.getElementById('modal-staff').classList.add('show');
+  document.getElementById('staff-modal-title').textContent=editId?'Editar Pessoa':'Adicionar Pessoa';
+  document.getElementById('st-edit-id').value=editId||'';
+  if(editId){
+    const staff=JSON.parse(localStorage.getItem('aet_staff')||'[]');
+    const s=staff.find(x=>x.id===editId);
+    if(s){
+      document.getElementById('st-nome').value=s.nome;
+      document.getElementById('st-cargo').value=s.cargo;
+      document.getElementById('st-desc').value=s.desc;
+      if(s.img){document.getElementById('st-preview').src=s.img;document.getElementById('st-preview').style.display=''};
+    }
+  }else{
+    ['st-nome','st-cargo','st-desc'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('st-img').value='';
+    document.getElementById('st-preview').style.display='none';
+  }
+}
+
+async function salvarStaff(){
+  const nome=document.getElementById('st-nome').value.trim();
+  const cargo=document.getElementById('st-cargo').value.trim();
+  const desc=document.getElementById('st-desc').value.trim();
+  if(!nome||!cargo)return alert('Preencha nome e cargo');
+  
+  let imgUrl='';
+  const file=document.getElementById('st-img').files[0];
+  if(file){
+    const form=new FormData();form.append('image',file);
+    const r=await fetch('https://api.imgbb.com/1/upload?key=86427cccd2a94fb42a0754ffd7f19e79',{method:'POST',body:form});
+    const d=await r.json();
+    imgUrl=d.data?d.data.url:'';
+  }
+  
+  const staff=JSON.parse(localStorage.getItem('aet_staff')||'[]');
+  const editId=document.getElementById('st-edit-id').value;
+  
+  if(editId){
+    const idx=staff.findIndex(x=>x.id===editId);
+    if(idx>-1){staff[idx].nome=nome;staff[idx].cargo=cargo;staff[idx].desc=desc;if(imgUrl)staff[idx].img=imgUrl}
+  }else{
+    staff.push({id:Date.now().toString(),nome,cargo,desc,img:imgUrl});
+  }
+  
+  localStorage.setItem('aet_staff',JSON.stringify(staff));
+  document.getElementById('modal-staff').classList.remove('show');
+  carregarStaff();
+}
+
+function carregarStaff(){
+  const staff=JSON.parse(localStorage.getItem('aet_staff')||'[]');
+  const grid=document.getElementById('staff-grid');
+  grid.innerHTML=staff.length?staff.map(s=>`
+    <div class="staff-card">
+      <img src="${s.img||'https://ui-avatars.com/api/?background=10B981&color=fff&name='+encodeURIComponent(s.nome)}" alt="${s.nome}" />
+      <h3>${s.nome}</h3>
+      <div class="cargo">${s.cargo}</div>
+      <p>${s.desc||''}</p>
+      <div class="actions">
+        <button class="btn-edit" onclick="abrirFormStaff('${s.id}')">Editar</button>
+        <button class="btn-del" onclick="excluirStaff('${s.id}')">Excluir</button>
+      </div>
+    </div>
+  `).join(''):'<p style="text-align:center;color:#64748B;">Nenhum funcionário cadastrado.</p>';
+}
+
+function excluirStaff(id){
+  if(!confirm('Excluir?'))return;
+  const staff=JSON.parse(localStorage.getItem('aet_staff')||'[]').filter(x=>x.id!==id);
+  localStorage.setItem('aet_staff',JSON.stringify(staff));
+  carregarStaff();
+}
+
+// Fechar modais
+document.querySelectorAll('.modal').forEach(m=>{m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')})});
+
+// Preview imagem
+document.getElementById('st-img').addEventListener('change',function(){
+  const f=this.files[0];if(!f)return;
+  const r=new FileReader();r.onload=e=>{document.getElementById('st-preview').src=e.target.result;document.getElementById('st-preview').style.display=''};r.readAsDataURL(f);
+});
 </script>
 </body>
 </html>
