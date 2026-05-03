@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AeT Studios - Tecnologia e Inovação</title>
+  <title>Políticos Ladrões - Denuncie a Corrupção</title>
   <link rel="icon" href="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -11,7 +11,7 @@
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Sora',sans-serif;background:#fff;color:#1E293B;overflow-x:hidden;line-height:1.5}
     
-    /* NAVBAR - Faixa preta */
+    /* NAVBAR */
     .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:#0F172A;padding:10px 0}
     .nav-container{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between}
     .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer}
@@ -19,75 +19,78 @@
     .nav-logo span{font-weight:800;font-size:16px;color:#fff}
     .nav-links{display:flex;gap:24px;list-style:none}
     .nav-links a{text-decoration:none;color:#94A3B8;font-weight:500;font-size:13px;transition:color 0.2s}
-    .nav-links a:hover{color:#10B981}
-    .nav-btn{background:#10B981;color:#fff;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px}
+    .nav-links a:hover{color:#EF4444}
+    .nav-btn{background:#EF4444;color:#fff;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px}
     .menu-toggle{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:#fff}
     
     /* HERO */
     .hero{min-height:90vh;display:flex;align-items:center;padding:100px 20px 60px;max-width:1100px;margin:0 auto;gap:40px}
     .hero-content{flex:1}
-    .hero-badge{display:inline-block;background:rgba(16,185,129,0.1);color:#10B981;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:16px}
-    .hero h1{font-size:clamp(30px,4vw,44px);font-weight:800;line-height:1.15;margin-bottom:12px}
-    .hero h1 span{color:#10B981}
+    .hero-badge{display:inline-block;background:rgba(239,68,68,0.1);color:#EF4444;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:16px}
+    .hero h1{font-size:clamp(28px,4vw,42px);font-weight:800;line-height:1.15;margin-bottom:12px}
+    .hero h1 span{color:#EF4444}
     .hero p{font-size:15px;color:#64748B;margin-bottom:24px;max-width:450px}
     .hero-buttons{display:flex;gap:10px;flex-wrap:wrap}
-    .btn-primary{background:#10B981;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s}
-    .btn-primary:hover{background:#059669;transform:translateY(-2px)}
+    .btn-primary{background:#EF4444;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s}
+    .btn-primary:hover{background:#DC2626;transform:translateY(-2px)}
     .btn-outline{background:transparent;color:#1E293B;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;border:2px solid #E2E8F0;transition:all 0.2s}
-    .btn-outline:hover{border-color:#10B981;color:#10B981}
-    .hero-graphic{width:300px;height:300px;background:linear-gradient(135deg,#10B981,#3B82F6);border-radius:50%;flex-shrink:0}
+    .btn-outline:hover{border-color:#EF4444;color:#EF4444}
+    .hero-graphic{width:280px;height:280px;background:linear-gradient(135deg,#EF4444,#DC2626);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:100px}
     
     /* SECTION */
     section{padding:60px 20px}
     .section-container{max-width:1100px;margin:0 auto}
     .section-header{text-align:center;margin-bottom:40px}
-    .section-tag{display:inline-block;background:rgba(16,185,129,0.1);color:#10B981;padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;margin-bottom:8px}
+    .section-tag{display:inline-block;background:rgba(239,68,68,0.1);color:#EF4444;padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;margin-bottom:8px}
     .section-header h2{font-size:clamp(24px,3vw,32px);font-weight:800;margin-bottom:6px}
     .section-header p{color:#64748B;font-size:14px}
     
     /* SOBRE */
     .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
-    .about-text h3{font-size:20px;font-weight:700;margin-bottom:10px}
+    .about-text h3{font-size:20px;font-weight:700;margin-bottom:10px;color:#EF4444}
     .about-text p{color:#64748B;margin-bottom:16px;font-size:14px}
-    .about-image img{width:100%;max-width:350px;border-radius:16px}
+    .about-image{display:flex;align-items:center;justify-content:center}
+    .about-image .icon-grande{font-size:180px;opacity:0.15}
     
-    /* SERVIÇOS */
-    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-    .service-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;transition:all 0.3s}
-    .service-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.08);border-color:#10B981}
-    .service-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
-    .service-icon.green{background:rgba(16,185,129,0.1);color:#10B981}
-    .service-icon.blue{background:rgba(59,130,246,0.1);color:#3B82F6}
-    .service-card h3{font-size:15px;font-weight:700;margin-bottom:4px}
-    .service-card p{color:#64748B;font-size:12px}
+    /* POLÍTICOS */
+    .politicos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+    .politico-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;text-align:center;transition:all 0.3s;position:relative;overflow:hidden}
+    .politico-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.1);border-color:#EF4444}
+    .politico-card .nivel{position:absolute;top:10px;right:10px;background:#EF4444;color:#fff;padding:3px 10px;border-radius:10px;font-size:10px;font-weight:700}
+    .politico-card img{width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:12px;border:3px solid #FEE2E2}
+    .politico-card h3{font-size:15px;font-weight:700}
+    .politico-card .cargo{color:#EF4444;font-size:11px;font-weight:600;margin:4px 0}
+    .politico-card .crime{background:#FEF2F2;color:#DC2626;padding:4px 10px;border-radius:6px;font-size:11px;display:inline-block;margin:6px 0}
+    .politico-card .valor{font-size:20px;font-weight:800;color:#EF4444;margin:8px 0}
+    .politico-card .valor span{font-size:11px;color:#64748B}
+    .politico-card .votos{display:flex;gap:8px;justify-content:center;margin-top:8px}
+    .politico-card .votos button{padding:6px 14px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-family:'Sora',sans-serif;font-weight:600;transition:all 0.2s}
+    .btn-roubou{background:#FEE2E2;color:#EF4444}
+    .btn-roubou:hover{background:#EF4444;color:#fff}
+    .btn-denuncia{background:#FEF3C7;color:#92400E}
+    .btn-denuncia:hover{background:#F59E0B;color:#fff}
     
-    /* PORTFÓLIO */
-    .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-    .portfolio-card{border-radius:12px;overflow:hidden;border:1px solid #E2E8F0;transition:all 0.3s}
-    .portfolio-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.08)}
-    .portfolio-card img{width:100%;height:180px;object-fit:cover}
-    .portfolio-info{padding:14px}
-    .portfolio-info h3{font-size:14px;font-weight:700;margin-bottom:2px}
-    .portfolio-info p{color:#64748B;font-size:12px}
+    /* ESTATÍSTICAS */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:40px}
+    .stat-card{background:#FEF2F2;border:2px solid #FEE2E2;border-radius:12px;padding:20px;text-align:center}
+    .stat-card .num{font-size:32px;font-weight:800;color:#EF4444}
+    .stat-card .lbl{font-size:12px;color:#64748B;margin-top:4px}
     
     /* CONTATO */
     .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
     .contact-item{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px}
-    .contact-item i{width:36px;height:36px;border-radius:50%;background:rgba(16,185,129,0.1);color:#10B981;display:flex;align-items:center;justify-content:center;font-size:16px}
+    .contact-item i{width:36px;height:36px;border-radius:50%;background:rgba(239,68,68,0.1);color:#EF4444;display:flex;align-items:center;justify-content:center;font-size:16px}
     .contact-form{background:#F8FAFC;padding:24px;border-radius:12px;border:1px solid #E2E8F0}
     .contact-form input,.contact-form textarea{width:100%;padding:10px;border:2px solid #E2E8F0;border-radius:8px;font-family:'Sora',sans-serif;font-size:13px;outline:none;margin-bottom:10px;background:#fff}
-    .contact-form input:focus,.contact-form textarea:focus{border-color:#10B981}
+    .contact-form input:focus,.contact-form textarea:focus{border-color:#EF4444}
     .contact-form textarea{resize:vertical;min-height:80px}
     .contact-form button{width:100%}
     
     /* FOOTER */
     footer{background:#0F172A;padding:30px 20px;text-align:center;color:#94A3B8}
-    .footer-logo{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}
-    .footer-logo img{height:30px;border-radius:4px}
-    .footer-logo span{font-weight:800;font-size:14px;color:#fff}
     .footer-links{display:flex;gap:18px;justify-content:center;margin-bottom:10px;flex-wrap:wrap}
     .footer-links a{color:#94A3B8;text-decoration:none;font-size:12px}
-    .footer-links a:hover{color:#10B981}
+    .footer-links a:hover{color:#EF4444}
     .footer-copy{font-size:10px;color:#64748B}
     
     /* MODAL PAINEL */
@@ -96,23 +99,13 @@
     .modal-box{background:#fff;border-radius:16px;padding:30px;width:90%;max-width:380px;text-align:center}
     .modal-box h3{font-size:18px;margin-bottom:16px}
     .modal-box input{width:100%;padding:10px;border:2px solid #E2E8F0;border-radius:8px;font-family:'Sora',sans-serif;font-size:14px;outline:none;margin-bottom:10px}
-    .modal-box button{width:100%;padding:10px;background:#10B981;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:'Sora',sans-serif}
+    .modal-box button{width:100%;padding:10px;background:#EF4444;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:'Sora',sans-serif}
     .modal-error{color:#EF4444;font-size:12px;margin-top:8px;display:none}
     
     /* PAINEL */
     #painel-screen{display:none;padding:80px 20px 40px;max-width:900px;margin:0 auto}
     .painel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
-    .painel-header h2{font-size:20px}
-    .staff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
-    .staff-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:20px;text-align:center}
-    .staff-card img{width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:10px}
-    .staff-card h3{font-size:14px;font-weight:700}
-    .staff-card .cargo{color:#10B981;font-size:11px;font-weight:600;margin:4px 0}
-    .staff-card p{color:#64748B;font-size:12px}
-    .staff-card .actions{display:flex;gap:6px;justify-content:center;margin-top:10px}
-    .staff-card .actions button{padding:4px 10px;border-radius:4px;border:none;cursor:pointer;font-size:11px;font-family:'Sora',sans-serif;font-weight:600}
-    .btn-edit{background:#3B82F6;color:#fff}
-    .btn-del{background:#EF4444;color:#fff}
+    .painel-header h2{font-size:20px;color:#EF4444}
     
     @media(max-width:768px){
       .nav-links{display:none;position:fixed;top:56px;left:0;right:0;background:#0F172A;flex-direction:column;padding:16px;gap:12px;border-top:1px solid #334155}
@@ -120,7 +113,7 @@
       .menu-toggle{display:block}
       .hero{flex-direction:column;text-align:center;padding-top:120px}
       .hero p{margin:0 auto 24px}
-      .hero-graphic{width:200px;height:200px}
+      .hero-graphic{width:180px;height:180px;font-size:70px}
       .about-grid{grid-template-columns:1fr}
       .contact-grid{grid-template-columns:1fr}
     }
@@ -132,17 +125,16 @@
 <nav class="navbar">
   <div class="nav-container">
     <a class="nav-logo" id="logo-click">
-      <img src="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" alt="AeT Studios" />
-      <span>AeT Studios</span>
+      <span>🚫 Políticos Ladrões</span>
     </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#home">Home</a></li>
       <li><a href="#sobre">Sobre</a></li>
-      <li><a href="#servicos">Serviços</a></li>
-      <li><a href="#portfolio">Portfólio</a></li>
-      <li><a href="#contato">Contato</a></li>
+      <li><a href="#politicos">Políticos</a></li>
+      <li><a href="#stats">Estatísticas</a></li>
+      <li><a href="#contato">Denunciar</a></li>
     </ul>
-    <a href="#contato" class="nav-btn">Orçamento</a>
+    <a href="#politicos" class="nav-btn">Ver Lista</a>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
   </div>
 </nav>
@@ -150,51 +142,50 @@
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-content">
-    <span class="hero-badge">🚀 Tecnologia e Inovação</span>
-    <h1>Criamos o <span>futuro digital</span> do seu negócio</h1>
-    <p>Sites, aplicativos e sistemas web com design moderno e tecnologia de ponta.</p>
+    <span class="hero-badge">🔴 ATENÇÃO BRASIL</span>
+    <h1>Chega de <span>corrupção</span>! Conheça os políticos que roubaram nosso dinheiro</h1>
+    <p>Um site dedicado a expor a verdade sobre políticos corruptos que desviaram dinheiro público.</p>
     <div class="hero-buttons">
-      <a href="#contato" class="btn-primary">Solicitar Orçamento <i class="fas fa-arrow-right"></i></a>
-      <a href="#portfolio" class="btn-outline">Ver Projetos</a>
+      <a href="#politicos" class="btn-primary">Ver Políticos <i class="fas fa-arrow-right"></i></a>
+      <a href="#contato" class="btn-outline">Denunciar</a>
     </div>
   </div>
-  <div class="hero-graphic"></div>
+  <div class="hero-graphic">🏛️</div>
 </section>
 
 <!-- SOBRE -->
 <section id="sobre">
   <div class="section-container">
-    <div class="section-header"><span class="section-tag">Quem Somos</span><h2>Conheça a AeT Studios</h2><p>Transformamos ideias em soluções digitais</p></div>
+    <div class="section-header"><span class="section-tag">Nossa Missão</span><h2>Por que este site existe?</h2><p>Transparência e informação para o povo brasileiro</p></div>
     <div class="about-grid">
       <div class="about-text">
-        <h3>Tecnologia com propósito</h3>
-        <p>A AeT Studios é uma empresa nova no mercado, mas com muita vontade de fazer a diferença. Nosso primeiro grande projeto, o <strong>Sexta-Feira Studies</strong>, já está no ar e em constante evolução.</p>
-        <p>Buscamos criar soluções que realmente ajudem pessoas e empresas a crescerem no mundo digital.</p>
+        <h3>O povo merece saber a verdade</h3>
+        <p>Milhões de reais são desviados todos os anos por políticos corruptos. Este site tem como objetivo expor esses casos e manter a população informada.</p>
+        <p><strong>Não temos vínculo partidário.</strong> Aqui, todos os políticos comprovadamente corruptos são listados, independente de partido.</p>
+        <p>Ajude-nos a manter esta lista atualizada. <strong>Denuncie!</strong></p>
       </div>
-      <div class="about-image"><img src="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" alt="AeT Studios" /></div>
+      <div class="about-image"><div class="icon-grande">🚫</div></div>
     </div>
   </div>
 </section>
 
-<!-- SERVIÇOS -->
-<section id="servicos" style="background:#F8FAFC;">
+<!-- POLÍTICOS -->
+<section id="politicos" style="background:#F8FAFC;">
   <div class="section-container">
-    <div class="section-header"><span class="section-tag">O que fazemos</span><h2>Nossos Serviços</h2><p>Soluções digitais para o seu negócio</p></div>
-    <div class="services-grid">
-      <div class="service-card"><div class="service-icon green"><i class="fas fa-globe"></i></div><h3>Sites e Landing Pages</h3><p>Sites modernos, rápidos e responsivos</p></div>
-      <div class="service-card"><div class="service-icon blue"><i class="fas fa-mobile-alt"></i></div><h3>Apps Mobile</h3><p>Aplicativos para Android e iOS</p></div>
-      <div class="service-card"><div class="service-icon green"><i class="fas fa-robot"></i></div><h3>IA e Automação</h3><p>Chatbots e soluções inteligentes</p></div>
-      <div class="service-card"><div class="service-icon blue"><i class="fas fa-paint-brush"></i></div><h3>UI/UX Design</h3><p>Interfaces bonitas e funcionais</p></div>
-    </div>
+    <div class="section-header"><span class="section-tag">Lista da Vergonha</span><h2>Políticos Ladrões</h2><p>Casos comprovados de corrupção</p></div>
+    <div class="politicos-grid" id="politicos-grid"></div>
   </div>
 </section>
 
-<!-- PORTFÓLIO -->
-<section id="portfolio">
+<!-- ESTATÍSTICAS -->
+<section id="stats">
   <div class="section-container">
-    <div class="section-header"><span class="section-tag">Projetos</span><h2>Nosso Portfólio</h2><p>O que já criamos</p></div>
-    <div class="portfolio-grid">
-      <div class="portfolio-card"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600" alt="Sexta-Feira Studies" /><div class="portfolio-info"><h3>Sexta-Feira Studies</h3><p>Plataforma gamificada de estudos</p></div></div>
+    <div class="section-header"><span class="section-tag">Números</span><h2>Estatísticas da Corrupção</h2></div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="num" id="total-politicos">0</div><div class="lbl">Políticos Listados</div></div>
+      <div class="stat-card"><div class="num" id="total-desviado">R$ 0</div><div class="lbl">Total Desviado</div></div>
+      <div class="stat-card"><div class="num" id="total-denuncias">0</div><div class="lbl">Denúncias Recebidas</div></div>
+      <div class="stat-card"><div class="num" id="total-presos">0</div><div class="lbl">Presos</div></div>
     </div>
   </div>
 </section>
@@ -202,17 +193,19 @@
 <!-- CONTATO -->
 <section id="contato" style="background:#F8FAFC;">
   <div class="section-container">
-    <div class="section-header"><span class="section-tag">Contato</span><h2>Vamos conversar?</h2><p>Preencha o formulário e retornaremos</p></div>
+    <div class="section-header"><span class="section-tag">Denuncie</span><h2>Envie uma Denúncia</h2><p>Saiba de algum caso? Nos conte!</p></div>
     <div class="contact-grid">
       <div class="contact-info">
-        <div class="contact-item"><i class="fas fa-envelope"></i><span>contato@aetstudios.com</span></div>
-        <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>São Paulo, Brasil</span></div>
+        <div class="contact-item"><i class="fas fa-shield-halved"></i><span>Denúncia 100% anônima</span></div>
+        <div class="contact-item"><i class="fas fa-lock"></i><span>Seus dados estão seguros</span></div>
+        <div class="contact-item"><i class="fas fa-check-circle"></i><span>Todas denúncias são verificadas</span></div>
       </div>
-      <form class="contact-form" id="contactForm" onsubmit="salvarContato(event)">
-        <input type="text" id="ct-nome" placeholder="Seu nome" required />
-        <input type="email" id="ct-email" placeholder="Seu e-mail" required />
-        <textarea id="ct-msg" placeholder="Sua mensagem..." required></textarea>
-        <button type="submit" class="btn-primary">Enviar <i class="fas fa-paper-plane"></i></button>
+      <form class="contact-form" id="contactForm" onsubmit="salvarDenuncia(event)">
+        <input type="text" id="ct-nome-politico" placeholder="Nome do político" required />
+        <input type="text" id="ct-crime" placeholder="Crime cometido" required />
+        <input type="text" id="ct-valor" placeholder="Valor desviado (aproximado)" />
+        <input type="text" id="ct-fonte" placeholder="Fonte da informação (link)" />
+        <button type="submit" class="btn-primary">Enviar Denúncia <i class="fas fa-paper-plane"></i></button>
       </form>
     </div>
   </div>
@@ -220,15 +213,16 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo"><img src="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" alt="AeT Studios" /><span>AeT Studios</span></div>
-  <div class="footer-links"><a href="#home">Home</a><a href="#sobre">Sobre</a><a href="#servicos">Serviços</a><a href="#portfolio">Portfólio</a><a href="#contato">Contato</a></div>
-  <p class="footer-copy">&copy; 2025 AeT Studios. Todos os direitos reservados.</p>
+  <div class="footer-links">
+    <a href="#home">Home</a><a href="#sobre">Sobre</a><a href="#politicos">Políticos</a><a href="#stats">Estatísticas</a><a href="#contato">Denunciar</a>
+  </div>
+  <p class="footer-copy">&copy; 2025 Políticos Ladrões. Todos os direitos reservados. Este site não possui vínculo partidário.</p>
 </footer>
 
 <!-- MODAL LOGIN PAINEL -->
 <div class="modal" id="modal-login">
   <div class="modal-box">
-    <h3>🔒 Acesso ao Painel</h3>
+    <h3>🔒 Acesso ao Painel Admin</h3>
     <input type="password" id="painel-senha" placeholder="Senha de acesso" />
     <button onclick="verificarPainel()">Entrar</button>
     <p class="modal-error" id="modal-error">Senha incorreta!</p>
@@ -238,24 +232,36 @@
 <!-- PAINEL ADMIN -->
 <div id="painel-screen">
   <div class="painel-header">
-    <h2>⚙️ Painel Administrativo</h2>
-    <button class="btn-primary" onclick="abrirFormStaff()">+ Adicionar</button>
+    <h2>⚙️ Painel Administrativo - Gerenciar Políticos</h2>
+    <button class="btn-primary" onclick="abrirFormPolitico()">+ Adicionar Político</button>
   </div>
-  <div class="staff-grid" id="staff-grid"></div>
+  <div class="politicos-grid" id="painel-grid"></div>
+  <br>
+  <h3 style="margin-top:20px;">📨 Denúncias Recebidas</h3>
+  <div id="denuncias-list" style="margin-top:10px;"></div>
   <button class="btn-outline" onclick="fecharPainel()" style="margin-top:20px;">← Voltar ao site</button>
 </div>
 
-<!-- MODAL STAFF -->
-<div class="modal" id="modal-staff">
+<!-- MODAL POLÍTICO -->
+<div class="modal" id="modal-politico">
   <div class="modal-box">
-    <h3 id="staff-modal-title">Adicionar Pessoa</h3>
-    <input type="text" id="st-nome" placeholder="Nome" />
-    <input type="text" id="st-cargo" placeholder="Cargo" />
-    <input type="text" id="st-desc" placeholder="Descrição" />
-    <input type="file" id="st-img" accept="image/*" />
-    <img id="st-preview" style="max-width:100px;max-height:100px;border-radius:8px;margin:8px 0;display:none;" />
-    <button class="btn-primary" onclick="salvarStaff()">Salvar</button>
-    <input type="hidden" id="st-edit-id" />
+    <h3 id="modal-politico-title">Adicionar Político</h3>
+    <input type="text" id="pt-nome" placeholder="Nome do político" />
+    <input type="text" id="pt-cargo" placeholder="Cargo (ex: Deputado Federal)" />
+    <input type="text" id="pt-crime" placeholder="Crime cometido" />
+    <input type="text" id="pt-valor" placeholder="Valor desviado (ex: R$ 50 milhões)" />
+    <input type="text" id="pt-partido" placeholder="Partido" />
+    <div style="font-size:11px;color:#64748B;margin-bottom:6px;">Status:</div>
+    <select id="pt-status" style="width:100%;padding:8px;border:2px solid #E2E8F0;border-radius:6px;margin-bottom:8px;font-family:'Sora',sans-serif;">
+      <option value="investigado">🔍 Investigado</option>
+      <option value="condenado">⚖️ Condenado</option>
+      <option value="preso">🔒 Preso</option>
+      <option value="foragido">🏃 Foragido</option>
+    </select>
+    <input type="file" id="pt-img" accept="image/*" />
+    <img id="pt-preview" style="max-width:100px;max-height:100px;border-radius:50%;margin:8px 0;display:none;" />
+    <button class="btn-primary" onclick="salvarPolitico()">Salvar</button>
+    <input type="hidden" id="pt-edit-id" />
   </div>
 </div>
 
@@ -266,10 +272,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
 
 // ═══════════════ PAINEL SECRETO ═══════════════
 let clickCount=0,clickTimer=null;
-const ADMIN_PASSWORD="aet2025";
+const ADMIN_PASSWORD="brasil2025";
 
 document.getElementById('logo-click').addEventListener('click',function(e){
-  e.preventDefault();
   clickCount++;
   if(clickCount===1)clickTimer=setTimeout(()=>{clickCount=0},2000);
   if(clickCount>=5){clearTimeout(clickTimer);clickCount=0;document.getElementById('modal-login').classList.add('show')}
@@ -281,7 +286,8 @@ function verificarPainel(){
     document.getElementById('painel-screen').style.display='block';
     document.querySelector('.navbar').style.display='none';
     document.querySelectorAll('section,footer').forEach(el=>el.style.display='none');
-    carregarStaff();
+    carregarPainel();
+    carregarDenuncias();
   }else{
     document.getElementById('modal-error').style.display='block';
   }
@@ -293,50 +299,55 @@ function fecharPainel(){
   document.querySelectorAll('section,footer').forEach(el=>el.style.display='');
 }
 
-// ═══════════════ CONTATOS ═══════════════
-function salvarContato(e){
+// ═══════════════ DENÚNCIAS ═══════════════
+function salvarDenuncia(e){
   e.preventDefault();
-  const contatos=JSON.parse(localStorage.getItem('aet_contatos')||'[]');
-  contatos.push({
-    nome:document.getElementById('ct-nome').value,
-    email:document.getElementById('ct-email').value,
-    msg:document.getElementById('ct-msg').value,
+  const denuncias=JSON.parse(localStorage.getItem('politicos_denuncias')||'[]');
+  denuncias.push({
+    politico:document.getElementById('ct-nome-politico').value,
+    crime:document.getElementById('ct-crime').value,
+    valor:document.getElementById('ct-valor').value,
+    fonte:document.getElementById('ct-fonte').value,
     data:new Date().toISOString()
   });
-  localStorage.setItem('aet_contatos',JSON.stringify(contatos));
-  alert('✅ Mensagem enviada! Entraremos em contato.');
+  localStorage.setItem('politicos_denuncias',JSON.stringify(denuncias));
+  alert('✅ Denúncia enviada com sucesso! Obrigado por contribuir.');
   document.getElementById('contactForm').reset();
+  atualizarStats();
 }
 
-// ═══════════════ STAFF (Painel) ═══════════════
-function abrirFormStaff(editId=null){
-  document.getElementById('modal-staff').classList.add('show');
-  document.getElementById('staff-modal-title').textContent=editId?'Editar Pessoa':'Adicionar Pessoa';
-  document.getElementById('st-edit-id').value=editId||'';
+// ═══════════════ POLÍTICOS ═══════════════
+function abrirFormPolitico(editId=null){
+  document.getElementById('modal-politico').classList.add('show');
+  document.getElementById('modal-politico-title').textContent=editId?'Editar Político':'Adicionar Político';
+  document.getElementById('pt-edit-id').value=editId||'';
   if(editId){
-    const staff=JSON.parse(localStorage.getItem('aet_staff')||'[]');
-    const s=staff.find(x=>x.id===editId);
-    if(s){
-      document.getElementById('st-nome').value=s.nome;
-      document.getElementById('st-cargo').value=s.cargo;
-      document.getElementById('st-desc').value=s.desc;
-      if(s.img){document.getElementById('st-preview').src=s.img;document.getElementById('st-preview').style.display=''};
+    const politicos=JSON.parse(localStorage.getItem('politicos_lista')||'[]');
+    const p=politicos.find(x=>x.id===editId);
+    if(p){
+      document.getElementById('pt-nome').value=p.nome;
+      document.getElementById('pt-cargo').value=p.cargo;
+      document.getElementById('pt-crime').value=p.crime;
+      document.getElementById('pt-valor').value=p.valor;
+      document.getElementById('pt-partido').value=p.partido||'';
+      document.getElementById('pt-status').value=p.status||'investigado';
+      if(p.img){document.getElementById('pt-preview').src=p.img;document.getElementById('pt-preview').style.display=''};
     }
   }else{
-    ['st-nome','st-cargo','st-desc'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('st-img').value='';
-    document.getElementById('st-preview').style.display='none';
+    ['pt-nome','pt-cargo','pt-crime','pt-valor','pt-partido'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('pt-img').value='';
+    document.getElementById('pt-preview').style.display='none';
   }
 }
 
-async function salvarStaff(){
-  const nome=document.getElementById('st-nome').value.trim();
-  const cargo=document.getElementById('st-cargo').value.trim();
-  const desc=document.getElementById('st-desc').value.trim();
-  if(!nome||!cargo)return alert('Preencha nome e cargo');
+async function salvarPolitico(){
+  const nome=document.getElementById('pt-nome').value.trim();
+  const cargo=document.getElementById('pt-cargo').value.trim();
+  const crime=document.getElementById('pt-crime').value.trim();
+  if(!nome||!cargo||!crime)return alert('Preencha nome, cargo e crime');
   
   let imgUrl='';
-  const file=document.getElementById('st-img').files[0];
+  const file=document.getElementById('pt-img').files[0];
   if(file){
     const form=new FormData();form.append('image',file);
     const r=await fetch('https://api.imgbb.com/1/upload?key=86427cccd2a94fb42a0754ffd7f19e79',{method:'POST',body:form});
@@ -344,53 +355,124 @@ async function salvarStaff(){
     imgUrl=d.data?d.data.url:'';
   }
   
-  const staff=JSON.parse(localStorage.getItem('aet_staff')||'[]');
-  const editId=document.getElementById('st-edit-id').value;
+  const politicos=JSON.parse(localStorage.getItem('politicos_lista')||'[]');
+  const editId=document.getElementById('pt-edit-id').value;
   
   if(editId){
-    const idx=staff.findIndex(x=>x.id===editId);
-    if(idx>-1){staff[idx].nome=nome;staff[idx].cargo=cargo;staff[idx].desc=desc;if(imgUrl)staff[idx].img=imgUrl}
+    const idx=politicos.findIndex(x=>x.id===editId);
+    if(idx>-1){
+      politicos[idx].nome=nome;politicos[idx].cargo=cargo;politicos[idx].crime=crime;
+      politicos[idx].valor=document.getElementById('pt-valor').value;
+      politicos[idx].partido=document.getElementById('pt-partido').value;
+      politicos[idx].status=document.getElementById('pt-status').value;
+      if(imgUrl)politicos[idx].img=imgUrl;
+    }
   }else{
-    staff.push({id:Date.now().toString(),nome,cargo,desc,img:imgUrl});
+    politicos.push({
+      id:Date.now().toString(),nome,cargo,crime,
+      valor:document.getElementById('pt-valor').value,
+      partido:document.getElementById('pt-partido').value,
+      status:document.getElementById('pt-status').value,
+      img:imgUrl,votos:0,denuncias:0
+    });
   }
   
-  localStorage.setItem('aet_staff',JSON.stringify(staff));
-  document.getElementById('modal-staff').classList.remove('show');
-  carregarStaff();
+  localStorage.setItem('politicos_lista',JSON.stringify(politicos));
+  document.getElementById('modal-politico').classList.remove('show');
+  carregarPainel();
+  carregarPoliticos();
+  atualizarStats();
 }
 
-function carregarStaff(){
-  const staff=JSON.parse(localStorage.getItem('aet_staff')||'[]');
-  const grid=document.getElementById('staff-grid');
-  grid.innerHTML=staff.length?staff.map(s=>`
-    <div class="staff-card">
-      <img src="${s.img||'https://ui-avatars.com/api/?background=10B981&color=fff&name='+encodeURIComponent(s.nome)}" alt="${s.nome}" />
-      <h3>${s.nome}</h3>
-      <div class="cargo">${s.cargo}</div>
-      <p>${s.desc||''}</p>
-      <div class="actions">
-        <button class="btn-edit" onclick="abrirFormStaff('${s.id}')">Editar</button>
-        <button class="btn-del" onclick="excluirStaff('${s.id}')">Excluir</button>
+function carregarPoliticos(){
+  const politicos=JSON.parse(localStorage.getItem('politicos_lista')||'[]');
+  const grid=document.getElementById('politicos-grid');
+  const statusMap={investigado:'🔍 Investigado',condenado:'⚖️ Condenado',preso:'🔒 Preso',foragido:'🏃 Foragido'};
+  const statusClass={investigado:'',condenado:'background:#FEF3C7;',preso:'background:#D1FAE5;',foragido:'background:#FEE2E2;'};
+  grid.innerHTML=politicos.length?politicos.map(p=>`
+    <div class="politico-card">
+      <div class="nivel" style="${statusClass[p.status]||''}">${statusMap[p.status]||'🔍'}</div>
+      <img src="${p.img||'https://ui-avatars.com/api/?background=EF4444&color=fff&name='+encodeURIComponent(p.nome)}" alt="${p.nome}" />
+      <h3>${p.nome}</h3>
+      <div class="cargo">${p.cargo} ${p.partido?'· '+p.partido:''}</div>
+      <div class="crime">${p.crime}</div>
+      ${p.valor?`<div class="valor">${p.valor} <span>desviados</span></div>`:''}
+      <div class="votos">
+        <button class="btn-roubou" onclick="votarPolitico('${p.id}')">🔴 ${p.votos||0}</button>
       </div>
     </div>
-  `).join(''):'<p style="text-align:center;color:#64748B;">Nenhum funcionário cadastrado.</p>';
+  `).join(''):'<p style="text-align:center;color:#64748B;grid-column:1/-1;">Nenhum político cadastrado ainda.</p>';
+  atualizarStats();
 }
 
-function excluirStaff(id){
-  if(!confirm('Excluir?'))return;
-  const staff=JSON.parse(localStorage.getItem('aet_staff')||'[]').filter(x=>x.id!==id);
-  localStorage.setItem('aet_staff',JSON.stringify(staff));
-  carregarStaff();
+function votarPolitico(id){
+  const politicos=JSON.parse(localStorage.getItem('politicos_lista')||'[]');
+  const idx=politicos.findIndex(x=>x.id===id);
+  if(idx>-1){politicos[idx].votos=(politicos[idx].votos||0)+1;localStorage.setItem('politicos_lista',JSON.stringify(politicos));carregarPoliticos()}
+}
+
+function carregarPainel(){
+  const politicos=JSON.parse(localStorage.getItem('politicos_lista')||'[]');
+  const grid=document.getElementById('painel-grid');
+  grid.innerHTML=politicos.length?politicos.map(p=>`
+    <div class="politico-card">
+      <div class="nivel">${p.status||'investigado'}</div>
+      <img src="${p.img||'https://ui-avatars.com/api/?background=EF4444&color=fff&name='+encodeURIComponent(p.nome)}" alt="${p.nome}" />
+      <h3>${p.nome}</h3>
+      <div class="cargo">${p.cargo}</div>
+      <div class="crime">${p.crime}</div>
+      ${p.valor?`<div class="valor">${p.valor}</div>`:''}
+      <div class="votos">
+        <button class="btn-edit" onclick="abrirFormPolitico('${p.id}')" style="background:#3B82F6;color:#fff;padding:6px 14px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:600;">Editar</button>
+        <button class="btn-del" onclick="excluirPolitico('${p.id}')" style="background:#EF4444;color:#fff;padding:6px 14px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:600;">Excluir</button>
+      </div>
+    </div>
+  `).join(''):'<p style="text-align:center;color:#64748B;">Nenhum político cadastrado.</p>';
+}
+
+function excluirPolitico(id){
+  if(!confirm('Excluir este político?'))return;
+  const politicos=JSON.parse(localStorage.getItem('politicos_lista')||'[]').filter(x=>x.id!==id);
+  localStorage.setItem('politicos_lista',JSON.stringify(politicos));
+  carregarPainel();
+  carregarPoliticos();
+  atualizarStats();
+}
+
+function carregarDenuncias(){
+  const denuncias=JSON.parse(localStorage.getItem('politicos_denuncias')||'[]');
+  document.getElementById('denuncias-list').innerHTML=denuncias.length?denuncias.reverse().map(d=>`
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:12px;margin-bottom:8px;">
+      <strong>${d.politico}</strong> - ${d.crime}<br>
+      <span style="font-size:11px;color:#64748B;">Valor: ${d.valor||'N/A'} | Fonte: ${d.fonte||'N/A'} | ${new Date(d.data).toLocaleDateString('pt-BR')}</span>
+    </div>
+  `).join(''):'<p style="color:#64748B;">Nenhuma denúncia recebida.</p>';
+}
+
+function atualizarStats(){
+  const politicos=JSON.parse(localStorage.getItem('politicos_lista')||'[]');
+  const denuncias=JSON.parse(localStorage.getItem('politicos_denuncias')||'[]');
+  document.getElementById('total-politicos').textContent=politicos.length;
+  document.getElementById('total-denuncias').textContent=denuncias.length;
+  document.getElementById('total-presos').textContent=politicos.filter(p=>p.status==='preso').length;
+  // Calcular total desviado (simplificado)
+  let total=0;
+  politicos.forEach(p=>{const v=parseFloat((p.valor||'').replace(/[^0-9.]/g,''));if(v)total+=v});
+  document.getElementById('total-desviado').textContent='R$ '+(total>0?total.toLocaleString('pt-BR'):'0');
 }
 
 // Fechar modais
 document.querySelectorAll('.modal').forEach(m=>{m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')})});
 
 // Preview imagem
-document.getElementById('st-img').addEventListener('change',function(){
+document.getElementById('pt-img').addEventListener('change',function(){
   const f=this.files[0];if(!f)return;
-  const r=new FileReader();r.onload=e=>{document.getElementById('st-preview').src=e.target.result;document.getElementById('st-preview').style.display=''};r.readAsDataURL(f);
+  const r=new FileReader();r.onload=e=>{document.getElementById('pt-preview').src=e.target.result;document.getElementById('pt-preview').style.display=''};r.readAsDataURL(f);
 });
+
+// Init
+carregarPoliticos();
+atualizarStats();
 </script>
 </body>
 </html>
