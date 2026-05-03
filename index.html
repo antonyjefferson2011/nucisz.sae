@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AeT Studios - Tecnologia e Inovação</title>
+  <link rel="icon" href="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--bg:#FFFFFF;--bg2:#F8FAFC;--text:#1E293B;--text2:#64748B;--border:#E2E8F0;--primary:#10B981;--primary-dark:#059669;--accent:#3B82F6;--accent-dark:#2563EB;--shadow:0 1px 3px rgba(0,0,0,0.08);--shadow-lg:0 10px 40px rgba(0,0,0,0.1)}
+    body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+    
+    /* NAVBAR */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:12px 0;transition:all 0.3s}
+    .navbar.scrolled{box-shadow:var(--shadow-lg)}
+    .nav-container{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-logo img{height:40px;width:auto}
+    .nav-logo span{font-weight:800;font-size:18px;color:var(--text)}
+    .nav-links{display:flex;gap:32px;list-style:none}
+    .nav-links a{text-decoration:none;color:var(--text2);font-weight:500;font-size:14px;transition:color 0.2s}
+    .nav-links a:hover{color:var(--primary)}
+    .nav-btn{background:var(--primary);color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;transition:all 0.2s}
+    .nav-btn:hover{background:var(--primary-dark);transform:translateY(-1px)}
+    .menu-toggle{display:none;background:none;border:none;font-size:24px;cursor:pointer;color:var(--text)}
+    
+    /* HERO */
+    .hero{min-height:100vh;display:flex;align-items:center;padding:100px 24px 80px;max-width:1200px;margin:0 auto;gap:60px}
+    .hero-content{flex:1}
+    .hero-badge{display:inline-block;background:var(--primary);color:white;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:20px;animation:fadeInUp 0.6s ease}
+    .hero h1{font-size:clamp(36px,5vw,56px);font-weight:800;line-height:1.1;margin-bottom:20px;animation:fadeInUp 0.6s ease 0.1s both}
+    .hero h1 span{color:var(--primary)}
+    .hero p{font-size:18px;color:var(--text2);margin-bottom:32px;max-width:500px;animation:fadeInUp 0.6s ease 0.2s both}
+    .hero-buttons{display:flex;gap:12px;flex-wrap:wrap;animation:fadeInUp 0.6s ease 0.3s both}
+    .btn-primary{background:var(--primary);color:white;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
+    .btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 8px 25px rgba(16,185,129,0.3)}
+    .btn-outline{background:transparent;color:var(--text);padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;border:2px solid var(--border);transition:all 0.2s}
+    .btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+    .hero-image{flex:1;display:flex;align-items:center;justify-content:center;animation:fadeInUp 0.6s ease 0.4s both}
+    .hero-image img{max-width:100%;height:auto}
+    .hero-graphic{width:400px;height:400px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:50%;position:relative;overflow:hidden}
+    .hero-graphic::before{content:'';position:absolute;width:300px;height:300px;background:rgba(255,255,255,0.15);border-radius:50%;top:50px;left:50px}
+    .hero-graphic::after{content:'';position:absolute;width:150px;height:150px;background:rgba(255,255,255,0.2);border-radius:50%;top:125px;left:125px}
+    
+    /* SECTION */
+    section{padding:80px 24px}
+    .section-container{max-width:1200px;margin:0 auto}
+    .section-header{text-align:center;margin-bottom:60px}
+    .section-tag{display:inline-block;background:rgba(16,185,129,0.1);color:var(--primary);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:12px}
+    .section-header h2{font-size:clamp(28px,4vw,40px);font-weight:800;margin-bottom:12px}
+    .section-header p{color:var(--text2);font-size:16px;max-width:600px;margin:0 auto}
+    
+    /* ABOUT */
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .about-text h3{font-size:24px;font-weight:700;margin-bottom:16px}
+    .about-text p{color:var(--text2);margin-bottom:24px;font-size:15px}
+    .about-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+    .about-stat{background:var(--bg2);padding:20px;border-radius:12px;border:1px solid var(--border)}
+    .about-stat .num{font-size:28px;font-weight:800;color:var(--primary)}
+    .about-stat .lbl{font-size:13px;color:var(--text2)}
+    .about-image{display:flex;align-items:center;justify-content:center}
+    .about-image img{width:100%;max-width:450px;border-radius:20px}
+    
+    /* SERVICES */
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+    .service-card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:32px;transition:all 0.3s;cursor:pointer;position:relative;overflow:hidden}
+    .service-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--primary)}
+    .service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--accent));transform:scaleX(0);transition:transform 0.3s}
+    .service-card:hover::before{transform:scaleX(1)}
+    .service-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px}
+    .service-icon.green{background:rgba(16,185,129,0.1);color:var(--primary)}
+    .service-icon.blue{background:rgba(59,130,246,0.1);color:var(--accent)}
+    .service-card h3{font-size:18px;font-weight:700;margin-bottom:8px}
+    .service-card p{color:var(--text2);font-size:14px;line-height:1.7}
+    
+    /* PORTFOLIO */
+    .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+    .portfolio-card{border-radius:16px;overflow:hidden;border:1px solid var(--border);transition:all 0.3s}
+    .portfolio-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+    .portfolio-card img{width:100%;height:200px;object-fit:cover}
+    .portfolio-info{padding:20px}
+    .portfolio-info h3{font-size:16px;font-weight:700;margin-bottom:4px}
+    .portfolio-info p{color:var(--text2);font-size:13px}
+    
+    /* CONTACT */
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+    .contact-info h3{font-size:24px;font-weight:700;margin-bottom:16px}
+    .contact-info p{color:var(--text2);margin-bottom:24px}
+    .contact-item{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .contact-item i{width:40px;height:40px;border-radius:50%;background:rgba(16,185,129,0.1);color:var(--primary);display:flex;align-items:center;justify-content:center}
+    .contact-form{background:var(--bg2);padding:32px;border-radius:16px;border:1px solid var(--border)}
+    .contact-form input,.contact-form textarea{width:100%;padding:12px;border:2px solid var(--border);border-radius:10px;font-family:'Sora',sans-serif;font-size:14px;outline:none;margin-bottom:12px;transition:border 0.2s;background:white}
+    .contact-form input:focus,.contact-form textarea:focus{border-color:var(--primary)}
+    .contact-form textarea{resize:vertical;min-height:100px}
+    .contact-form button{width:100%}
+    
+    /* FOOTER */
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 24px;text-align:center}
+    .footer-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px}
+    .footer-logo img{height:36px}
+    .footer-logo span{font-weight:800;font-size:16px}
+    .footer-links{display:flex;gap:24px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+    .footer-links a{color:var(--text2);text-decoration:none;font-size:13px;transition:color 0.2s}
+    .footer-links a:hover{color:var(--primary)}
+    .footer-copy{color:var(--text2);font-size:12px}
+    
+    /* ANIMAÇÕES */
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .reveal{opacity:0;transform:translateY(30px);transition:all 0.6s ease}
+    .reveal.active{opacity:1;transform:translateY(0)}
+    
+    @media(max-width:768px){
+      .nav-links{display:none;position:fixed;top:70px;left:0;right:0;background:white;flex-direction:column;padding:20px;gap:16px;border-bottom:1px solid var(--border)}
+      .nav-links.show{display:flex}
+      .menu-toggle{display:block}
+      .hero{flex-direction:column;text-align:center;padding-top:120px}
+      .hero p{margin:0 auto 24px}
+      .hero-graphic{width:250px;height:250px}
+      .about-grid{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="#" class="nav-logo">
+      <img src="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" alt="AeT Studios" />
+      <span>AeT Studios</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#portfolio">Portfólio</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <a href="#contato" class="nav-btn">Fale Conosco</a>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <span class="hero-badge">🚀 Tecnologia e Inovação</span>
+    <h1>Transformamos ideias em <span>soluções digitais</span></h1>
+    <p>Criamos sites, aplicativos e sistemas que impulsionam o seu negócio com tecnologia de ponta e design excepcional.</p>
+    <div class="hero-buttons">
+      <a href="#contato" class="btn-primary">Solicitar Orçamento <i class="fas fa-arrow-right"></i></a>
+      <a href="#portfolio" class="btn-outline">Ver Portfólio</a>
+    </div>
+  </div>
+  <div class="hero-image">
+    <div class="hero-graphic"></div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="section-container">
+    <div class="section-header reveal">
+      <span class="section-tag">Quem Somos</span>
+      <h2>Conheça a AeT Studios</h2>
+      <p>Uma empresa focada em criar experiências digitais incríveis para nossos clientes</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <h3>Inovação e qualidade em cada projeto</h3>
+        <p>A AeT Studios nasceu da paixão por tecnologia e design. Somos especialistas em desenvolvimento web, aplicativos mobile e soluções de inteligência artificial.</p>
+        <p>Trabalhamos com as tecnologias mais modernas do mercado para entregar produtos de alta qualidade que realmente fazem a diferença.</p>
+        <div class="about-stats">
+          <div class="about-stat"><div class="num">50+</div><div class="lbl">Projetos Entregues</div></div>
+          <div class="about-stat"><div class="num">30+</div><div class="lbl">Clientes Satisfeitos</div></div>
+          <div class="about-stat"><div class="num">3</div><div class="lbl">Anos de Experiência</div></div>
+          <div class="about-stat"><div class="num">24/7</div><div class="lbl">Suporte Técnico</div></div>
+        </div>
+      </div>
+      <div class="about-image reveal">
+        <img src="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" alt="AeT Studios" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos" style="background:var(--bg2);">
+  <div class="section-container">
+    <div class="section-header reveal">
+      <span class="section-tag">O que fazemos</span>
+      <h2>Nossos Serviços</h2>
+      <p>Soluções completas para o seu negócio crescer no mundo digital</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon green"><i class="fas fa-globe"></i></div>
+        <h3>Desenvolvimento Web</h3>
+        <p>Sites institucionais, landing pages, e-commerce e sistemas web completos com as melhores tecnologias.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon blue"><i class="fas fa-mobile-alt"></i></div>
+        <h3>Apps Mobile</h3>
+        <p>Aplicativos nativos e híbridos para Android e iOS com experiência de usuário excepcional.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon green"><i class="fas fa-robot"></i></div>
+        <h3>Inteligência Artificial</h3>
+        <p>Soluções com IA para automatizar processos, chatbots inteligentes e análise de dados.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon blue"><i class="fas fa-paint-brush"></i></div>
+        <h3>UI/UX Design</h3>
+        <p>Design de interfaces modernas e intuitivas que encantam seus usuários e aumentam conversões.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon green"><i class="fas fa-cloud"></i></div>
+        <h3>Hospedagem Cloud</h3>
+        <p>Infraestrutura em nuvem escalável com alta disponibilidade e segurança para seus projetos.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon blue"><i class="fas fa-headset"></i></div>
+        <h3>Suporte Técnico</h3>
+        <p>Suporte dedicado 24/7 para garantir que seus sistemas estejam sempre funcionando perfeitamente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFÓLIO -->
+<section id="portfolio">
+  <div class="section-container">
+    <div class="section-header reveal">
+      <span class="section-tag">Trabalhos Recentes</span>
+      <h2>Nosso Portfólio</h2>
+      <p>Confira alguns dos projetos que desenvolvemos</p>
+    </div>
+    <div class="portfolio-grid">
+      <div class="portfolio-card reveal">
+        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600" alt="Projeto 1" />
+        <div class="portfolio-info"><h3>Sexta-Feira Studies</h3><p>Plataforma gamificada de estudos com IA</p></div>
+      </div>
+      <div class="portfolio-card reveal">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600" alt="Projeto 2" />
+        <div class="portfolio-info"><h3>E-commerce Premium</h3><p>Loja virtual com painel administrativo</p></div>
+      </div>
+      <div class="portfolio-card reveal">
+        <img src="https://images.unsplash.com/photo-1555421689-491a97ff2040?w=600" alt="Projeto 3" />
+        <div class="portfolio-info"><h3>App de Delivery</h3><p>Aplicativo completo para entregas</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato" style="background:var(--bg2);">
+  <div class="section-container">
+    <div class="section-header reveal">
+      <span class="section-tag">Fale Conosco</span>
+      <h2>Vamos conversar?</h2>
+      <p>Entre em contato e descubra como podemos ajudar seu negócio</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <h3>Informações de Contato</h3>
+        <p>Estamos prontos para atender você e sua empresa. Escolha o canal de sua preferência.</p>
+        <div class="contact-item"><i class="fas fa-envelope"></i><span>contato@aetstudios.com</span></div>
+        <div class="contact-item"><i class="fas fa-phone"></i><span>(11) 99999-9999</span></div>
+        <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>São Paulo, Brasil</span></div>
+      </div>
+      <form class="contact-form reveal" onsubmit="enviarContato(event)">
+        <input type="text" placeholder="Seu nome" required />
+        <input type="email" placeholder="Seu e-mail" required />
+        <input type="text" placeholder="Assunto" required />
+        <textarea placeholder="Sua mensagem..." required></textarea>
+        <button type="submit" class="btn-primary">Enviar Mensagem <i class="fas fa-paper-plane"></i></button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="https://i.ibb.co/1f8LWK9k/Chat-GPT-Image-3-de-mai-de-2026-13-31-06.png" alt="AeT Studios" />
+    <span>AeT Studios</span>
+  </div>
+  <div class="footer-links">
+    <a href="#home">Home</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#servicos">Serviços</a>
+    <a href="#portfolio">Portfólio</a>
+    <a href="#contato">Contato</a>
+  </div>
+  <p class="footer-copy">&copy; 2025 AeT Studios. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+// Toggle menu mobile
+function toggleMenu(){document.getElementById('navLinks').classList.toggle('show')}
+
+// Navbar scroll effect
+window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50)})
+
+// Reveal animations
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('active')})},{threshold:0.1})
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el))
+
+// Contato
+function enviarContato(e){e.preventDefault();alert('✅ Mensagem enviada com sucesso! Entraremos em contato em breve.');e.target.reset()}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',function(e){e.preventDefault();const t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});document.getElementById('navLinks').classList.remove('show')})})
+</script>
+</body>
+</html>
